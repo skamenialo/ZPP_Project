@@ -4,10 +4,27 @@ using ZPP_Project.States;
 
 namespace ZPP_Project.Models
 {
-    public class Model //TODO : DataContext
+    public abstract class Model //TODO : DataContext
     {
         public int ID;
         public string Name;
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null)
+                return false;
+
+            Model model = obj as Model;
+            if (model == null)
+                return false;
+
+            return this.ID.Equals(model.ID);
+        }
+
+        public override int GetHashCode()
+        {
+            return ID.GetHashCode();
+        }
     }
 
     public class UserModel : Model
@@ -28,23 +45,43 @@ namespace ZPP_Project.Models
             //TODO sprawdzanie hasla (sprawdzić zaimplementowane domyślnie Modele)
             throw new NotImplementedException();
         }
+
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj as UserModel);
+        }
     }
 
     public class CompanyModel : UserModel
     {
-        public IList<CourseModel> Courses;
-        public IList<LecturerModel> Lecturers;
+        public List<CourseModel> Courses;
+        public List<LecturerModel> Lecturers;
+
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj as CompanyModel);
+        }
     }
 
     public class LecturerModel : UserModel
     {
         public CompanyModel Company;
-        public IList<LectureModel> Lectures;
+        public List<LectureModel> Lectures;
+
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj as LecturerModel);
+        }
     }
 
     public class StudentModel : UserModel
     {
-        public IList<StudentInfo> Courses;
+        public List<StudentInfo> Courses;
+
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj as StudentModel);
+        }
     }
 
     public class StudentInfo
@@ -54,13 +91,32 @@ namespace ZPP_Project.Models
         public StudentState State;
         public int Rate;
         public string Comment;
+
+        public override bool Equals(object obj)
+        {
+            if (obj == null || this.GetType() != obj.GetType())
+                return false;
+
+            StudentInfo stInfo = (StudentInfo)obj;
+            return this.Student.Equals(stInfo.Student) && this.Course.Equals(stInfo.Course);
+        }
+
+        public override int GetHashCode()
+        {
+            return Student.GetHashCode() ^ Course.GetHashCode();
+        }
     }
 
-    public class DesctiptionModel : Model
+    public abstract class DesctiptionModel : Model
     {
         public DateTime StartDate;
         public DateTime EndDate;
         public string Description;
+
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj as DesctiptionModel);
+        }
     }
 
     public class CourseModel : DesctiptionModel
@@ -68,21 +124,57 @@ namespace ZPP_Project.Models
         public CompanyModel Company;
         public LecturerModel Leader;
         public CourseState State;
-        public IList<LectureModel> Lectures;
-        public IList<StudentInfo> Students;
+        public List<LectureModel> Lectures;
+        public List<StudentInfo> Students;
 
-        public IList<LectureModel> GetAttendance(int studentID)
+        public List<LectureModel> GetAttendance(int studentID)
         {
-            //TODO pobranie obecności dla konkretnego studenta
-            throw new NotImplementedException();
+            return Lectures.FindAll((l) => { return l.GetAttendance(studentID); });
+        }
+
+        public List<LectureModel> GetAttendance(StudentModel student)
+        {
+            return Lectures.FindAll((l) => { return l.GetAttendance(student); });
+        }
+
+        public List<LectureModel> GetAttendance(StudentInfo student)
+        {
+            return Lectures.FindAll((l) => { return l.GetAttendance(student); });
+        }
+
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj as CourseModel);
         }
     }
 
     public class LectureModel : DesctiptionModel
     {
-        public CompanyModel Company;
+        public CourseModel Course;
         public LecturerModel Lecturer;
         public LectureState State;
-        public IList<StudentInfo> Attendance;
+        public Dictionary<StudentInfo, bool> Attendance;
+
+        public bool GetAttendance(int studentID)
+        {
+            List<StudentInfo> students = new List<StudentInfo>(Attendance.Keys);
+            return GetAttendance(students.Find((s) => { return s.Student.ID == studentID; }));
+        }
+
+        public bool GetAttendance(StudentModel student)
+        {
+            List<StudentInfo> students = new List<StudentInfo>(Attendance.Keys);
+            return GetAttendance(students.Find((s) => { return s.Student.Equals(student); }));
+        }
+
+        public bool GetAttendance(StudentInfo student)
+        {
+            return Attendance[student];
+        }
+
+        public override bool Equals(object obj)
+        {
+            return base.Equals(obj as LectureModel);
+        }
     }
 }
