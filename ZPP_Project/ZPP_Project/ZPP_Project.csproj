@@ -43,6 +43,8 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -174,6 +176,24 @@
     <Compile Include="States\LectureState.cs" />
     <Compile Include="States\StudentState.cs" />
     <Compile Include="States\UserState.cs" />
+    <Compile Include="V_Courses.cs">
+      <DependentUpon>ZPPDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ZPPDB.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ZPPDB.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ZPPDB.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ZPPDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ZPPDB.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ZPPDB.edmx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
@@ -231,6 +251,23 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <EntityDeploy Include="ZPPDB.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>ZPPDB.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="ZPPDB.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ZPPDB.edmx</DependentUpon>
+      <LastGenOutput>ZPPDB.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="ZPPDB.edmx.diagram">
+      <DependentUpon>ZPPDB.edmx</DependentUpon>
+    </Content>
+    <Content Include="ZPPDB.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>ZPPDB.edmx</DependentUpon>
+      <LastGenOutput>ZPPDB.cs</LastGenOutput>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -241,6 +278,9 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
