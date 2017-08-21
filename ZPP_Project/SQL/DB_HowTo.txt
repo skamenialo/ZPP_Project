@@ -1,0 +1,17 @@
+Instalujemy SQL Server, moim przypadku było to SQL Server 2012 developer edition. Potrzebne będą (mniej więcej):
+Managment Tools - Complete
+Managment Tools - Basic
+Database Engine Services
+SQL Browser
+SQL Writer
+SQL Client Connectivity
+SQL Connect Connectivity SDK
+
+Wpisujecie nazwę serwera, albo ustawiacie taką, jaką podpowie Wam wizard (mój komputer nazywa się PIOTREK-PC i taką też nazwę mi podpowiedziało; nie ruszałem).
+Radośnie klikacie "next", aż wyskoczy okienko pytające o administratora bazy. Dodajecie jednego użyszkodnika, może być taki sam jak w windowsie.
+Po instalacji odpalacie SQL Managment Studio i logujecie się WindowsAuthentication'em (usługa SQLSERVERAGENT musi działać). Klikacie prawym na Databases (lista z lewej) i tworzycie nową bazę (nazwijmy ją oryginalnie "ZPP").
+
+Okej. Odpalamy VisualStudio (2012), uruchamiamy projekt.
+
+
+TODO: Dodałem też (zakomentowane) łączenie się z plikiem bazodanowym w formacie mdf, jak już będzie pełna baza danych można będzie używać go zamiast SQL Servera. Otwieramy Web.config, znajdujemy connectionStrings, lokalizujemy element o nazwie "ZPPEntities". Odpowiada on za połączenie z bazą. Jest w nim fragment wskazujący na serwer - ja robiłem, więc mamy PIOTREK-PC. Zmieńcie sobie na własną bazę i powinno śmigać. Jak sprawdzić? Kliknijcie dwa razy na ZPPDB.edmx w Solution Explorerze w Visual Studio, otworzy Wam się nowe okienko. W momencie kiedy piszę te słowa jest tam tylko jeden obiekt - V_Courses. Kliknijcie prawym gdziekolwiek i wybierzcie "Update Model from Database". Jeśli wszystko jest okej (baza działa, są w niej dane, connection string jest poprawny) będziecie mogli zobaczyć jakie tabele znajdują się w bazie. Jeśli jest pusto - trzeba będzie kombinować.
