@@ -26,7 +26,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;DATABASE_LOCAL</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -163,10 +163,12 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="DataAccess\ZppContext.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Course.cs" />
     <Compile Include="Models\DataModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -176,26 +178,70 @@
     <Compile Include="States\LectureState.cs" />
     <Compile Include="States\StudentState.cs" />
     <Compile Include="States\UserState.cs" />
-    <Compile Include="V_Courses.cs">
+    <Compile Include="EntityDataModel\V_Attendance.cs">
+      <DependentUpon>ZPPDB_NoDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityDataModel\V_Comments.cs">
+      <DependentUpon>ZPPDB_NoDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityDataModel\V_Companies.cs">
+      <DependentUpon>ZPPDB_NoDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityDataModel\V_Courses.cs">
       <DependentUpon>ZPPDB.tt</DependentUpon>
     </Compile>
-    <Compile Include="ZPPDB.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ZPPDB.Context.tt</DependentUpon>
+    <Compile Include="EntityDataModel\V_Grades.cs">
+      <DependentUpon>ZPPDB_NoDb.tt</DependentUpon>
     </Compile>
-    <Compile Include="ZPPDB.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
+    <Compile Include="EntityDataModel\V_Groups.cs">
+      <DependentUpon>ZPPDB_NoDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityDataModel\V_Lectures.cs">
+      <DependentUpon>ZPPDB_NoDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityDataModel\V_Students.cs">
+      <DependentUpon>ZPPDB_NoDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityDataModel\V_Teachers.cs">
+      <DependentUpon>ZPPDB_NoDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityDataModel\V_UserInfo.cs">
+      <DependentUpon>ZPPDB_NoDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityDataModel\V_UserLogin.cs">
+      <DependentUpon>ZPPDB_NoDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityDataModel\ZPPDB.cs">
       <DependentUpon>ZPPDB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="ZPPDB.Designer.cs">
-      <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="EntityDataModel\ZPPDB.Designer.cs">
       <DependentUpon>ZPPDB.edmx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="EntityDataModel\ZPPDB_NoDb.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ZPPDB_NoDb.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityDataModel\ZPPDB_NoDb.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ZPPDB_NoDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityDataModel\ZPPDB_NoDb.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ZPPDB_NoDb.edmx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\ZPP.mdf" />
+    <Content Include="App_Data\ZPP_log.ldf">
+      <DependentUpon>ZPP.mdf</DependentUpon>
+    </Content>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="favicon.ico" />
@@ -204,6 +250,11 @@
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="EntityDataModel\ZPPDB.tt">
+      <DependentUpon>ZPPDB.edmx</DependentUpon>
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ZPPDB.cs</LastGenOutput>
+    </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -251,27 +302,29 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <EntityDeploy Include="ZPPDB.edmx">
+    <EntityDeploy Include="EntityDataModel\ZPPDB.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>ZPPDB.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="ZPPDB.Context.tt">
+    <EntityDeploy Include="EntityDataModel\ZPPDB_NoDb.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>ZPPDB_NoDb.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="EntityDataModel\ZPPDB_NoDb.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>ZPPDB.edmx</DependentUpon>
-      <LastGenOutput>ZPPDB.Context.cs</LastGenOutput>
+      <DependentUpon>ZPPDB_NoDb.edmx</DependentUpon>
+      <LastGenOutput>ZPPDB_NoDb.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="ZPPDB.edmx.diagram">
-      <DependentUpon>ZPPDB.edmx</DependentUpon>
+    <Content Include="EntityDataModel\ZPPDB_NoDb.edmx.diagram">
+      <DependentUpon>ZPPDB_NoDb.edmx</DependentUpon>
     </Content>
-    <Content Include="ZPPDB.tt">
+    <Content Include="EntityDataModel\ZPPDB_NoDb.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>ZPPDB.edmx</DependentUpon>
-      <LastGenOutput>ZPPDB.cs</LastGenOutput>
+      <DependentUpon>ZPPDB_NoDb.edmx</DependentUpon>
+      <LastGenOutput>ZPPDB_NoDb.cs</LastGenOutput>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
