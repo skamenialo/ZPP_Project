@@ -16,59 +16,59 @@ CREATE VIEW V_UserInfo AS
   SELECT IdUser, UserType, Active, Banned
   FROM Users;
 GO
--- V_Students --
+-- V_Student --
 IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS
-        WHERE TABLE_NAME = 'V_Students')
-    DROP VIEW V_Students
+        WHERE TABLE_NAME = 'V_Student')
+    DROP VIEW V_Student
 GO
-CREATE VIEW V_Students AS
+CREATE VIEW V_Student AS
   SELECT u.IdUser, u.UserType, s.LastName, s.FirstName, s.Address, s.Email
   FROM Users u
   INNER JOIN Students s ON u.IdUser = s.IdUser;
 GO
--- V_Companies --
+-- V_Company --
 IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS
-        WHERE TABLE_NAME = 'V_Companies')
-    DROP VIEW V_Companies
+        WHERE TABLE_NAME = 'V_Company')
+    DROP VIEW V_Company
 GO
-CREATE VIEW V_Companies AS
+CREATE VIEW V_Company AS
   SELECT IdUser, Name, Address, Email, Website, Description
   FROM Companies;
 GO
--- V_Teachers --
+-- V_Teacher --
 IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS
-        WHERE TABLE_NAME = 'V_Teachers')
-    DROP VIEW V_Teachers
+        WHERE TABLE_NAME = 'V_Teacher')
+    DROP VIEW V_Teacher
 GO
-CREATE VIEW V_Teachers AS
+CREATE VIEW V_Teacher AS
   SELECT u.IdUser, u.UserType, t.LastName, t.FirstName, t.Address, t.Email
   FROM Users u
   INNER JOIN Teachers t ON u.IdUser = t.IdUser;
 GO
--- V_Courses --
+-- V_Course --
 IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS
-        WHERE TABLE_NAME = 'V_Courses')
-    DROP VIEW V_Courses
+        WHERE TABLE_NAME = 'V_Course')
+    DROP VIEW V_Course
 GO
-CREATE VIEW V_Courses AS
+CREATE VIEW V_Course AS
   SELECT IdCourse, IdTeacher, IdCompany, Name, Lectures, State, Description, DateStart, DateEnd
   FROM Courses;
 GO
--- V_Groups --
+-- V_Group --
 IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS
-        WHERE TABLE_NAME = 'V_Groups')
-    DROP VIEW V_Groups
+        WHERE TABLE_NAME = 'V_Group')
+    DROP VIEW V_Group
 GO
-CREATE VIEW V_Groups AS
+CREATE VIEW V_Group AS
   SELECT IdGroup, IdStudent, IdCourse
   FROM Groups;
 GO
--- V_Lectures --
+-- V_Lecture --
 IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS
-        WHERE TABLE_NAME = 'V_Lectures')
-    DROP VIEW V_Lectures
+        WHERE TABLE_NAME = 'V_Lecture')
+    DROP VIEW V_Lecture
 GO
-CREATE VIEW V_Lectures AS
+CREATE VIEW V_Lecture AS
   SELECT IdLecture, IdCourse, IdTeacher
   FROM Lectures;
 GO
@@ -81,21 +81,21 @@ CREATE VIEW V_Attendance AS
   SELECT IdLecture, IdStudent, Attended
   FROM Attendance;
 GO
--- V_Grades --
+-- V_Grade --
 IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS
-        WHERE TABLE_NAME = 'V_Grades')
-    DROP VIEW V_Grades
+        WHERE TABLE_NAME = 'V_Grade')
+    DROP VIEW V_Grade
 GO
-CREATE VIEW V_Grades AS
+CREATE VIEW V_Grade AS
   SELECT IdGrade, IdStudent, IdCourse, Grade, Date, IdTeacher, Comment
   FROM Grades;
 GO
--- V_Comments --
+-- V_Comment --
 IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS
-        WHERE TABLE_NAME = 'V_Comments')
-    DROP VIEW V_Comments
+        WHERE TABLE_NAME = 'V_Comment')
+    DROP VIEW V_Comment
 GO
-CREATE VIEW V_Comments AS
+CREATE VIEW V_Comment AS
   SELECT IdComment, IdStudent, IdCourse, Date, Content, State
   FROM Comments;
 GO
