@@ -164,6 +164,30 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="DataAccess\ZppContext.cs" />
+    <Compile Include="EntityDataModel\V_Comment.cs">
+      <DependentUpon>ZPPDB_NoDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityDataModel\V_Company.cs">
+      <DependentUpon>ZPPDB_NoDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityDataModel\V_Course.cs">
+      <DependentUpon>ZPPDB_NoDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityDataModel\V_Grade.cs">
+      <DependentUpon>ZPPDB_NoDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityDataModel\V_Group.cs">
+      <DependentUpon>ZPPDB_NoDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityDataModel\V_Lecture.cs">
+      <DependentUpon>ZPPDB_NoDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityDataModel\V_Student.cs">
+      <DependentUpon>ZPPDB_NoDb.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityDataModel\V_Teacher.cs">
+      <DependentUpon>ZPPDB_NoDb.tt</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -180,30 +204,6 @@
     <Compile Include="States\StudentState.cs" />
     <Compile Include="States\UserState.cs" />
     <Compile Include="EntityDataModel\V_Attendance.cs">
-      <DependentUpon>ZPPDB_NoDb.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntityDataModel\V_Comments.cs">
-      <DependentUpon>ZPPDB_NoDb.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntityDataModel\V_Companies.cs">
-      <DependentUpon>ZPPDB_NoDb.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntityDataModel\V_Courses.cs">
-      <DependentUpon>ZPPDB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntityDataModel\V_Grades.cs">
-      <DependentUpon>ZPPDB_NoDb.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntityDataModel\V_Groups.cs">
-      <DependentUpon>ZPPDB_NoDb.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntityDataModel\V_Lectures.cs">
-      <DependentUpon>ZPPDB_NoDb.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntityDataModel\V_Students.cs">
-      <DependentUpon>ZPPDB_NoDb.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntityDataModel\V_Teachers.cs">
       <DependentUpon>ZPPDB_NoDb.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityDataModel\V_UserInfo.cs">
@@ -269,7 +269,9 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </Content>

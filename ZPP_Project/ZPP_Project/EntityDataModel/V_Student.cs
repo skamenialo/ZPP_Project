@@ -12,7 +12,7 @@ namespace ZPP_Project.EntityDataModel
     using System;
     using System.Collections.Generic;
     
-    public partial class V_Teachers
+    public partial class V_Student
     {
         public int IdUser { get; set; }
         public int UserType { get; set; }

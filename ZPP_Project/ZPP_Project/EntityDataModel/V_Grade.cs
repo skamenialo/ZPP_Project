@@ -12,10 +12,14 @@ namespace ZPP_Project.EntityDataModel
     using System;
     using System.Collections.Generic;
     
-    public partial class V_Lectures
+    public partial class V_Grade
     {
-        public int IdLecture { get; set; }
+        public int IdGrade { get; set; }
+        public int IdStudent { get; set; }
         public int IdCourse { get; set; }
+        public decimal Grade { get; set; }
+        public System.DateTime Date { get; set; }
         public int IdTeacher { get; set; }
+        public string Comment { get; set; }
     }
 }

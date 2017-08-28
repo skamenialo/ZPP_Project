@@ -26,14 +26,14 @@ namespace ZPP_Project.EntityDataModel
         }
     
         public virtual DbSet<V_Attendance> V_Attendance { get; set; }
-        public virtual DbSet<V_Comments> V_Comments { get; set; }
-        public virtual DbSet<V_Companies> V_Companies { get; set; }
-        public virtual DbSet<V_Courses> V_Courses { get; set; }
-        public virtual DbSet<V_Grades> V_Grades { get; set; }
-        public virtual DbSet<V_Groups> V_Groups { get; set; }
-        public virtual DbSet<V_Lectures> V_Lectures { get; set; }
-        public virtual DbSet<V_Students> V_Students { get; set; }
-        public virtual DbSet<V_Teachers> V_Teachers { get; set; }
+        public virtual DbSet<V_Comment> V_Comment { get; set; }
+        public virtual DbSet<V_Company> V_Company { get; set; }
+        public virtual DbSet<V_Course> V_Course { get; set; }
+        public virtual DbSet<V_Grade> V_Grade { get; set; }
+        public virtual DbSet<V_Group> V_Group { get; set; }
+        public virtual DbSet<V_Lecture> V_Lecture { get; set; }
+        public virtual DbSet<V_Student> V_Student { get; set; }
+        public virtual DbSet<V_Teacher> V_Teacher { get; set; }
         public virtual DbSet<V_UserInfo> V_UserInfo { get; set; }
         public virtual DbSet<V_UserLogin> V_UserLogin { get; set; }
     }

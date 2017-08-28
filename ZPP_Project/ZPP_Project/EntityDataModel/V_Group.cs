@@ -12,13 +12,10 @@ namespace ZPP_Project.EntityDataModel
     using System;
     using System.Collections.Generic;
     
-    public partial class V_Comments
+    public partial class V_Group
     {
-        public int IdComment { get; set; }
+        public int IdGroup { get; set; }
         public int IdStudent { get; set; }
         public int IdCourse { get; set; }
-        public System.DateTime Date { get; set; }
-        public string Content { get; set; }
-        public int State { get; set; }
     }
 }

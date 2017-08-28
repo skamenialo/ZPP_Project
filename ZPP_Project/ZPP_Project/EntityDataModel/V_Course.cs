@@ -7,12 +7,12 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ZPP_Project
+namespace ZPP_Project.EntityDataModel
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class V_Courses
+    public partial class V_Course
     {
         public int IdCourse { get; set; }
         public int IdTeacher { get; set; }

@@ -5,17 +5,17 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="cc57647fb24347168071d6b9efed6cee" Name="Diagram1">
-        <EntityTypeShape EntityType="ZPPModel.V_Attendance" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ZPPModel.V_Comments" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ZPPModel.V_Companies" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ZPPModel.V_Courses" Width="1.5" PointX="2.75" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ZPPModel.V_Grades" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ZPPModel.V_Groups" Width="1.5" PointX="4.75" PointY="4.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ZPPModel.V_Lectures" Width="1.5" PointX="6.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ZPPModel.V_Students" Width="1.5" PointX="6.75" PointY="3.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ZPPModel.V_Teachers" Width="1.5" PointX="6.75" PointY="6.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ZPPModel.V_UserInfo" Width="1.5" PointX="0.75" PointY="7.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="ZPPModel.V_UserLogin" Width="1.5" PointX="2.75" PointY="7.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="ZPPModel.V_Attendance" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="ZPPModel.V_Comment" Width="1.5" PointX="2.75" PointY="0.75" />
+        <EntityTypeShape EntityType="ZPPModel.V_Company" Width="1.5" PointX="0.75" PointY="3.75" />
+        <EntityTypeShape EntityType="ZPPModel.V_Course" Width="1.5" PointX="2.75" PointY="3.75" />
+        <EntityTypeShape EntityType="ZPPModel.V_Grade" Width="1.5" PointX="4.75" PointY="0.75" />
+        <EntityTypeShape EntityType="ZPPModel.V_Group" Width="1.5" PointX="4.75" PointY="4.75" />
+        <EntityTypeShape EntityType="ZPPModel.V_Lecture" Width="1.5" PointX="6.75" PointY="0.75" />
+        <EntityTypeShape EntityType="ZPPModel.V_Student" Width="1.5" PointX="6.75" PointY="3.75" />
+        <EntityTypeShape EntityType="ZPPModel.V_Teacher" Width="1.5" PointX="6.75" PointY="6.75" />
+        <EntityTypeShape EntityType="ZPPModel.V_UserInfo" Width="1.5" PointX="0.75" PointY="7.75" />
+        <EntityTypeShape EntityType="ZPPModel.V_UserLogin" Width="1.5" PointX="2.75" PointY="7.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

@@ -4,17 +4,49 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="ZPPModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="ZPPModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <!--Errors Found During Generation:
-warning 6002: The table/view 'ZPP.dbo.V_Courses' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-        <EntityType Name="V_Courses">
+warning 6002: The table/view 'ZPP.dbo.V_Attendance' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="V_Attendance">
+          <Key>
+            <PropertyRef Name="IdLecture" />
+            <PropertyRef Name="IdStudent" />
+          </Key>
+          <Property Name="IdLecture" Type="int" Nullable="false" />
+          <Property Name="IdStudent" Type="int" Nullable="false" />
+          <Property Name="Attended" Type="bit" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'ZPP.dbo.V_Comment' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="V_Comment">
+          <Key>
+            <PropertyRef Name="IdComment" />
+          </Key>
+          <Property Name="IdComment" Type="int" Nullable="false" />
+          <Property Name="IdStudent" Type="int" Nullable="false" />
+          <Property Name="IdCourse" Type="int" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="Content" Type="varchar" MaxLength="1024" Nullable="false" />
+          <Property Name="State" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'ZPP.dbo.V_Company' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="V_Company">
+          <Key>
+            <PropertyRef Name="IdUser" />
+          </Key>
+          <Property Name="IdUser" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="256" Nullable="false" />
+          <Property Name="Address" Type="varchar" MaxLength="512" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="256" Nullable="false" />
+          <Property Name="Website" Type="varchar" MaxLength="256" />
+          <Property Name="Description" Type="varchar" MaxLength="4096" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'ZPP.dbo.V_Course' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="V_Course">
           <Key>
             <PropertyRef Name="IdCourse" />
-            <PropertyRef Name="IdTeacher" />
-            <PropertyRef Name="IdCompany" />
-            <PropertyRef Name="Name" />
-            <PropertyRef Name="Lectures" />
-            <PropertyRef Name="State" />
           </Key>
           <Property Name="IdCourse" Type="int" Nullable="false" />
           <Property Name="IdTeacher" Type="int" Nullable="false" />
@@ -26,66 +58,443 @@ warning 6002: The table/view 'ZPP.dbo.V_Courses' does not have a primary key def
           <Property Name="DateStart" Type="date" />
           <Property Name="DateEnd" Type="date" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'ZPP.dbo.V_Grade' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="V_Grade">
+          <Key>
+            <PropertyRef Name="IdGrade" />
+          </Key>
+          <Property Name="IdGrade" Type="int" Nullable="false" />
+          <Property Name="IdStudent" Type="int" Nullable="false" />
+          <Property Name="IdCourse" Type="int" Nullable="false" />
+          <Property Name="Grade" Type="numeric" Precision="2" Scale="1" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="IdTeacher" Type="int" Nullable="false" />
+          <Property Name="Comment" Type="varchar" MaxLength="256" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'ZPP.dbo.V_Group' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="V_Group">
+          <Key>
+            <PropertyRef Name="IdGroup" />
+          </Key>
+          <Property Name="IdGroup" Type="int" Nullable="false" />
+          <Property Name="IdStudent" Type="int" Nullable="false" />
+          <Property Name="IdCourse" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'ZPP.dbo.V_Lecture' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="V_Lecture">
+          <Key>
+            <PropertyRef Name="IdLecture" />
+          </Key>
+          <Property Name="IdLecture" Type="int" Nullable="false" />
+          <Property Name="IdCourse" Type="int" Nullable="false" />
+          <Property Name="IdTeacher" Type="int" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'ZPP.dbo.V_Student' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="V_Student">
+          <Key>
+            <PropertyRef Name="IdUser" />
+          </Key>
+          <Property Name="IdUser" Type="int" Nullable="false" />
+          <Property Name="UserType" Type="int" Nullable="false" />
+          <Property Name="LastName" Type="varchar" MaxLength="256" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="256" Nullable="false" />
+          <Property Name="Address" Type="varchar" MaxLength="512" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="256" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'ZPP.dbo.V_Teacher' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="V_Teacher">
+          <Key>
+            <PropertyRef Name="IdUser" />
+          </Key>
+          <Property Name="IdUser" Type="int" Nullable="false" />
+          <Property Name="UserType" Type="int" Nullable="false" />
+          <Property Name="LastName" Type="varchar" MaxLength="256" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="256" Nullable="false" />
+          <Property Name="Address" Type="varchar" MaxLength="512" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="256" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'ZPP.dbo.V_UserInfo' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="V_UserInfo">
+          <Key>
+            <PropertyRef Name="IdUser" />
+          </Key>
+          <Property Name="IdUser" Type="int" Nullable="false" />
+          <Property Name="UserType" Type="int" Nullable="false" />
+          <Property Name="Active" Type="bit" Nullable="false" />
+          <Property Name="Banned" Type="bit" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'ZPP.dbo.V_UserLogin' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="V_UserLogin">
+          <Key>
+            <PropertyRef Name="IdUser" />
+          </Key>
+          <Property Name="IdUser" Type="int" Nullable="false" />
+          <Property Name="Login" Type="varchar" MaxLength="64" Nullable="false" />
+          <Property Name="PasswordHash" Type="varchar" MaxLength="256" Nullable="false" />
+        </EntityType>
         <EntityContainer Name="ZPPModelStoreContainer">
-          <EntitySet Name="V_Courses" EntityType="Self.V_Courses" store:Type="Views" store:Schema="dbo">
+          <EntitySet Name="V_Attendance" EntityType="Self.V_Attendance" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
-    [V_Courses].[IdCourse] AS [IdCourse], 
-    [V_Courses].[IdTeacher] AS [IdTeacher], 
-    [V_Courses].[IdCompany] AS [IdCompany], 
-    [V_Courses].[Name] AS [Name], 
-    [V_Courses].[Lectures] AS [Lectures], 
-    [V_Courses].[State] AS [State], 
-    [V_Courses].[Description] AS [Description], 
-    [V_Courses].[DateStart] AS [DateStart], 
-    [V_Courses].[DateEnd] AS [DateEnd]
-    FROM [dbo].[V_Courses] AS [V_Courses]</DefiningQuery>
+    [V_Attendance].[IdLecture] AS [IdLecture], 
+    [V_Attendance].[IdStudent] AS [IdStudent], 
+    [V_Attendance].[Attended] AS [Attended]
+    FROM [dbo].[V_Attendance] AS [V_Attendance]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="V_Comment" EntityType="Self.V_Comment" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [V_Comment].[IdComment] AS [IdComment], 
+    [V_Comment].[IdStudent] AS [IdStudent], 
+    [V_Comment].[IdCourse] AS [IdCourse], 
+    [V_Comment].[Date] AS [Date], 
+    [V_Comment].[Content] AS [Content], 
+    [V_Comment].[State] AS [State]
+    FROM [dbo].[V_Comment] AS [V_Comment]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="V_Company" EntityType="Self.V_Company" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [V_Company].[IdUser] AS [IdUser], 
+    [V_Company].[Name] AS [Name], 
+    [V_Company].[Address] AS [Address], 
+    [V_Company].[Email] AS [Email], 
+    [V_Company].[Website] AS [Website], 
+    [V_Company].[Description] AS [Description]
+    FROM [dbo].[V_Company] AS [V_Company]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="V_Course" EntityType="Self.V_Course" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [V_Course].[IdCourse] AS [IdCourse], 
+    [V_Course].[IdTeacher] AS [IdTeacher], 
+    [V_Course].[IdCompany] AS [IdCompany], 
+    [V_Course].[Name] AS [Name], 
+    [V_Course].[Lectures] AS [Lectures], 
+    [V_Course].[State] AS [State], 
+    [V_Course].[Description] AS [Description], 
+    [V_Course].[DateStart] AS [DateStart], 
+    [V_Course].[DateEnd] AS [DateEnd]
+    FROM [dbo].[V_Course] AS [V_Course]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="V_Grade" EntityType="Self.V_Grade" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [V_Grade].[IdGrade] AS [IdGrade], 
+    [V_Grade].[IdStudent] AS [IdStudent], 
+    [V_Grade].[IdCourse] AS [IdCourse], 
+    [V_Grade].[Grade] AS [Grade], 
+    [V_Grade].[Date] AS [Date], 
+    [V_Grade].[IdTeacher] AS [IdTeacher], 
+    [V_Grade].[Comment] AS [Comment]
+    FROM [dbo].[V_Grade] AS [V_Grade]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="V_Group" EntityType="Self.V_Group" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [V_Group].[IdGroup] AS [IdGroup], 
+    [V_Group].[IdStudent] AS [IdStudent], 
+    [V_Group].[IdCourse] AS [IdCourse]
+    FROM [dbo].[V_Group] AS [V_Group]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="V_Lecture" EntityType="Self.V_Lecture" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [V_Lecture].[IdLecture] AS [IdLecture], 
+    [V_Lecture].[IdCourse] AS [IdCourse], 
+    [V_Lecture].[IdTeacher] AS [IdTeacher]
+    FROM [dbo].[V_Lecture] AS [V_Lecture]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="V_Student" EntityType="Self.V_Student" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [V_Student].[IdUser] AS [IdUser], 
+    [V_Student].[UserType] AS [UserType], 
+    [V_Student].[LastName] AS [LastName], 
+    [V_Student].[FirstName] AS [FirstName], 
+    [V_Student].[Address] AS [Address], 
+    [V_Student].[Email] AS [Email]
+    FROM [dbo].[V_Student] AS [V_Student]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="V_Teacher" EntityType="Self.V_Teacher" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [V_Teacher].[IdUser] AS [IdUser], 
+    [V_Teacher].[UserType] AS [UserType], 
+    [V_Teacher].[LastName] AS [LastName], 
+    [V_Teacher].[FirstName] AS [FirstName], 
+    [V_Teacher].[Address] AS [Address], 
+    [V_Teacher].[Email] AS [Email]
+    FROM [dbo].[V_Teacher] AS [V_Teacher]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="V_UserInfo" EntityType="Self.V_UserInfo" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [V_UserInfo].[IdUser] AS [IdUser], 
+    [V_UserInfo].[UserType] AS [UserType], 
+    [V_UserInfo].[Active] AS [Active], 
+    [V_UserInfo].[Banned] AS [Banned]
+    FROM [dbo].[V_UserInfo] AS [V_UserInfo]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="V_UserLogin" EntityType="Self.V_UserLogin" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [V_UserLogin].[IdUser] AS [IdUser], 
+    [V_UserLogin].[Login] AS [Login], 
+    [V_UserLogin].[PasswordHash] AS [PasswordHash]
+    FROM [dbo].[V_UserLogin] AS [V_UserLogin]</DefiningQuery>
           </EntitySet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="ZPPModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityType Name="V_Courses">
+        <EntityContainer Name="ZPPEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="V_Attendance" EntityType="ZPPModel.V_Attendance" />
+          <EntitySet Name="V_Comment" EntityType="ZPPModel.V_Comment" />
+          <EntitySet Name="V_Company" EntityType="ZPPModel.V_Company" />
+          <EntitySet Name="V_Course" EntityType="ZPPModel.V_Course" />
+          <EntitySet Name="V_Grade" EntityType="ZPPModel.V_Grade" />
+          <EntitySet Name="V_Group" EntityType="ZPPModel.V_Group" />
+          <EntitySet Name="V_Lecture" EntityType="ZPPModel.V_Lecture" />
+          <EntitySet Name="V_Student" EntityType="ZPPModel.V_Student" />
+          <EntitySet Name="V_Teacher" EntityType="ZPPModel.V_Teacher" />
+          <EntitySet Name="V_UserInfo" EntityType="ZPPModel.V_UserInfo" />
+          <EntitySet Name="V_UserLogin" EntityType="ZPPModel.V_UserLogin" />
+        </EntityContainer>
+        <EntityType Name="V_Attendance">
+          <Key>
+            <PropertyRef Name="IdLecture" />
+            <PropertyRef Name="IdStudent" />
+          </Key>
+          <Property Name="IdLecture" Type="Int32" Nullable="false" />
+          <Property Name="IdStudent" Type="Int32" Nullable="false" />
+          <Property Name="Attended" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="V_Comment">
+          <Key>
+            <PropertyRef Name="IdComment" />
+          </Key>
+          <Property Name="IdComment" Type="Int32" Nullable="false" />
+          <Property Name="IdStudent" Type="Int32" Nullable="false" />
+          <Property Name="IdCourse" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Content" Type="String" Nullable="false" MaxLength="1024" FixedLength="false" Unicode="false" />
+          <Property Name="State" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="V_Company">
+          <Key>
+            <PropertyRef Name="IdUser" />
+          </Key>
+          <Property Name="IdUser" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="Address" Type="String" Nullable="false" MaxLength="512" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="Website" Type="String" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="4096" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="V_Course">
           <Key>
             <PropertyRef Name="IdCourse" />
-            <PropertyRef Name="IdTeacher" />
-            <PropertyRef Name="IdCompany" />
-            <PropertyRef Name="Name" />
-            <PropertyRef Name="Lectures" />
-            <PropertyRef Name="State" />
           </Key>
           <Property Name="IdCourse" Type="Int32" Nullable="false" />
           <Property Name="IdTeacher" Type="Int32" Nullable="false" />
           <Property Name="IdCompany" Type="Int32" Nullable="false" />
-          <Property Name="Name" Type="String" MaxLength="256" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="false" />
           <Property Name="Lectures" Type="Int32" Nullable="false" />
           <Property Name="State" Type="Int32" Nullable="false" />
           <Property Name="Description" Type="String" MaxLength="4096" FixedLength="false" Unicode="false" />
           <Property Name="DateStart" Type="DateTime" Precision="0" />
           <Property Name="DateEnd" Type="DateTime" Precision="0" />
         </EntityType>
-        <EntityContainer Name="ZPPEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="V_Courses" EntityType="Self.V_Courses" />
-        </EntityContainer>
+        <EntityType Name="V_Grade">
+          <Key>
+            <PropertyRef Name="IdGrade" />
+          </Key>
+          <Property Name="IdGrade" Type="Int32" Nullable="false" />
+          <Property Name="IdStudent" Type="Int32" Nullable="false" />
+          <Property Name="IdCourse" Type="Int32" Nullable="false" />
+          <Property Name="Grade" Type="Decimal" Nullable="false" Precision="2" Scale="1" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="IdTeacher" Type="Int32" Nullable="false" />
+          <Property Name="Comment" Type="String" MaxLength="256" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="V_Group">
+          <Key>
+            <PropertyRef Name="IdGroup" />
+          </Key>
+          <Property Name="IdGroup" Type="Int32" Nullable="false" />
+          <Property Name="IdStudent" Type="Int32" Nullable="false" />
+          <Property Name="IdCourse" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="V_Lecture">
+          <Key>
+            <PropertyRef Name="IdLecture" />
+          </Key>
+          <Property Name="IdLecture" Type="Int32" Nullable="false" />
+          <Property Name="IdCourse" Type="Int32" Nullable="false" />
+          <Property Name="IdTeacher" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="V_Student">
+          <Key>
+            <PropertyRef Name="IdUser" />
+          </Key>
+          <Property Name="IdUser" Type="Int32" Nullable="false" />
+          <Property Name="UserType" Type="Int32" Nullable="false" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="Address" Type="String" Nullable="false" MaxLength="512" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="V_Teacher">
+          <Key>
+            <PropertyRef Name="IdUser" />
+          </Key>
+          <Property Name="IdUser" Type="Int32" Nullable="false" />
+          <Property Name="UserType" Type="Int32" Nullable="false" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="Address" Type="String" Nullable="false" MaxLength="512" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="V_UserInfo">
+          <Key>
+            <PropertyRef Name="IdUser" />
+          </Key>
+          <Property Name="IdUser" Type="Int32" Nullable="false" />
+          <Property Name="UserType" Type="Int32" Nullable="false" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <Property Name="Banned" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="V_UserLogin">
+          <Key>
+            <PropertyRef Name="IdUser" />
+          </Key>
+          <Property Name="IdUser" Type="Int32" Nullable="false" />
+          <Property Name="Login" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="false" />
+          <Property Name="PasswordHash" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="false" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="ZPPModelStoreContainer" CdmEntityContainer="ZPPEntities">
-          <EntitySetMapping Name="V_Courses">
-            <EntityTypeMapping TypeName="ZPPModel.V_Courses">
-              <MappingFragment StoreEntitySet="V_Courses">
-                <ScalarProperty Name="IdCourse" ColumnName="IdCourse" />
-                <ScalarProperty Name="IdTeacher" ColumnName="IdTeacher" />
-                <ScalarProperty Name="IdCompany" ColumnName="IdCompany" />
-                <ScalarProperty Name="Name" ColumnName="Name" />
-                <ScalarProperty Name="Lectures" ColumnName="Lectures" />
+          <EntitySetMapping Name="V_Attendance">
+            <EntityTypeMapping TypeName="ZPPModel.V_Attendance">
+              <MappingFragment StoreEntitySet="V_Attendance">
+                <ScalarProperty Name="Attended" ColumnName="Attended" />
+                <ScalarProperty Name="IdStudent" ColumnName="IdStudent" />
+                <ScalarProperty Name="IdLecture" ColumnName="IdLecture" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="V_Comment">
+            <EntityTypeMapping TypeName="ZPPModel.V_Comment">
+              <MappingFragment StoreEntitySet="V_Comment">
                 <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="IdCourse" ColumnName="IdCourse" />
+                <ScalarProperty Name="IdStudent" ColumnName="IdStudent" />
+                <ScalarProperty Name="IdComment" ColumnName="IdComment" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="V_Company">
+            <EntityTypeMapping TypeName="ZPPModel.V_Company">
+              <MappingFragment StoreEntitySet="V_Company">
                 <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="DateStart" ColumnName="DateStart" />
+                <ScalarProperty Name="Website" ColumnName="Website" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="IdUser" ColumnName="IdUser" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="V_Course">
+            <EntityTypeMapping TypeName="ZPPModel.V_Course">
+              <MappingFragment StoreEntitySet="V_Course">
                 <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
+                <ScalarProperty Name="DateStart" ColumnName="DateStart" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Lectures" ColumnName="Lectures" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="IdCompany" ColumnName="IdCompany" />
+                <ScalarProperty Name="IdTeacher" ColumnName="IdTeacher" />
+                <ScalarProperty Name="IdCourse" ColumnName="IdCourse" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="V_Grade">
+            <EntityTypeMapping TypeName="ZPPModel.V_Grade">
+              <MappingFragment StoreEntitySet="V_Grade">
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+                <ScalarProperty Name="IdTeacher" ColumnName="IdTeacher" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Grade" ColumnName="Grade" />
+                <ScalarProperty Name="IdCourse" ColumnName="IdCourse" />
+                <ScalarProperty Name="IdStudent" ColumnName="IdStudent" />
+                <ScalarProperty Name="IdGrade" ColumnName="IdGrade" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="V_Group">
+            <EntityTypeMapping TypeName="ZPPModel.V_Group">
+              <MappingFragment StoreEntitySet="V_Group">
+                <ScalarProperty Name="IdCourse" ColumnName="IdCourse" />
+                <ScalarProperty Name="IdStudent" ColumnName="IdStudent" />
+                <ScalarProperty Name="IdGroup" ColumnName="IdGroup" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="V_Lecture">
+            <EntityTypeMapping TypeName="ZPPModel.V_Lecture">
+              <MappingFragment StoreEntitySet="V_Lecture">
+                <ScalarProperty Name="IdTeacher" ColumnName="IdTeacher" />
+                <ScalarProperty Name="IdCourse" ColumnName="IdCourse" />
+                <ScalarProperty Name="IdLecture" ColumnName="IdLecture" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="V_Student">
+            <EntityTypeMapping TypeName="ZPPModel.V_Student">
+              <MappingFragment StoreEntitySet="V_Student">
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="UserType" ColumnName="UserType" />
+                <ScalarProperty Name="IdUser" ColumnName="IdUser" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="V_Teacher">
+            <EntityTypeMapping TypeName="ZPPModel.V_Teacher">
+              <MappingFragment StoreEntitySet="V_Teacher">
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="UserType" ColumnName="UserType" />
+                <ScalarProperty Name="IdUser" ColumnName="IdUser" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="V_UserInfo">
+            <EntityTypeMapping TypeName="ZPPModel.V_UserInfo">
+              <MappingFragment StoreEntitySet="V_UserInfo">
+                <ScalarProperty Name="Banned" ColumnName="Banned" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="UserType" ColumnName="UserType" />
+                <ScalarProperty Name="IdUser" ColumnName="IdUser" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="V_UserLogin">
+            <EntityTypeMapping TypeName="ZPPModel.V_UserLogin">
+              <MappingFragment StoreEntitySet="V_UserLogin">
+                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+                <ScalarProperty Name="Login" ColumnName="Login" />
+                <ScalarProperty Name="IdUser" ColumnName="IdUser" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
