@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
+using ZPP_Project.EntityDataModel;
 using ZPP_Project.Models;
 
 namespace ZPP_Project.DataAccess
@@ -11,7 +12,10 @@ namespace ZPP_Project.DataAccess
 
 #region Properties
 
-        public DbSet<Course> Courses { get; set; }
+        public DbSet<V_Course> Courses { get; set; }
+        public DbSet<V_Teacher> Teachers { get; set; }
+        public DbSet<V_Company> Companies { get; set; }
+        public DbSet<V_Student> Students { get; set; }
 
 #endregion
 
@@ -30,7 +34,6 @@ namespace ZPP_Project.DataAccess
 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            modelBuilder.Conventions.Remove<PluralizingEntitySetNameConvention>();
         }
     }
 

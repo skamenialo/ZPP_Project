@@ -1,0 +1,42 @@
+﻿@using ZPP_Project.Helpers;
+@model ZPP_Project.EntityDataModel.V_Teacher
+
+@if (Model == null)
+{
+    <div class="container">
+        <div class="row">
+            This teacher does not exist.
+        </div>
+    </div>
+}
+else
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                @TeacherHelper.Display(Model)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <!-- Company -->
+                <div class="row">Employed by</div>
+                <div class="row">@CompanyHelper.Display(@Model.IdCompany)<!-- TODO link to  company--></div>
+            </div>
+            <div class="col-md-4">
+                <!-- Website -->
+                <div class="row"><a href="@Model.Website" target="_blank">Website</a></div>
+            </div>
+            <div class="col-md-4">
+                <!-- Email -->
+                <div class="row"></div>
+                <div class="row"><a href="mailto:@Model.Email">Contact</a></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                @Model.Description
+            </div>
+        </div>
+    </div>
+}

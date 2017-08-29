@@ -26,7 +26,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;DATABASE_LOCAL</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;DATABASE_REMOTE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -161,42 +161,47 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CourseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\TeacherController.cs" />
     <Compile Include="DataAccess\ZppContext.cs" />
     <Compile Include="EntityDataModel\V_Comment.cs">
-      <DependentUpon>ZPPDB_NoDb.tt</DependentUpon>
+      <DependentUpon>ZPPDB.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityDataModel\V_Company.cs">
-      <DependentUpon>ZPPDB_NoDb.tt</DependentUpon>
+      <DependentUpon>ZPPDB.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityDataModel\V_Course.cs">
-      <DependentUpon>ZPPDB_NoDb.tt</DependentUpon>
+      <DependentUpon>ZPPDB.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityDataModel\V_Grade.cs">
-      <DependentUpon>ZPPDB_NoDb.tt</DependentUpon>
+      <DependentUpon>ZPPDB.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityDataModel\V_Group.cs">
-      <DependentUpon>ZPPDB_NoDb.tt</DependentUpon>
+      <DependentUpon>ZPPDB.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityDataModel\V_Lecture.cs">
-      <DependentUpon>ZPPDB_NoDb.tt</DependentUpon>
+      <DependentUpon>ZPPDB.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityDataModel\V_Student.cs">
-      <DependentUpon>ZPPDB_NoDb.tt</DependentUpon>
+      <DependentUpon>ZPPDB.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityDataModel\V_Teacher.cs">
-      <DependentUpon>ZPPDB_NoDb.tt</DependentUpon>
+      <DependentUpon>ZPPDB.tt</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\CompanyHelper.cs" />
+    <Compile Include="Helpers\TeacherHelper.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Course.cs" />
     <Compile Include="Models\DataModels.cs" />
     <Compile Include="Models\GlobalData.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\Teacher.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="States\CourseState.cs" />
@@ -204,13 +209,13 @@
     <Compile Include="States\StudentState.cs" />
     <Compile Include="States\UserState.cs" />
     <Compile Include="EntityDataModel\V_Attendance.cs">
-      <DependentUpon>ZPPDB_NoDb.tt</DependentUpon>
+      <DependentUpon>ZPPDB.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityDataModel\V_UserInfo.cs">
-      <DependentUpon>ZPPDB_NoDb.tt</DependentUpon>
+      <DependentUpon>ZPPDB.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityDataModel\V_UserLogin.cs">
-      <DependentUpon>ZPPDB_NoDb.tt</DependentUpon>
+      <DependentUpon>ZPPDB.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityDataModel\ZPPDB.cs">
       <DependentUpon>ZPPDB.tt</DependentUpon>
@@ -327,6 +332,11 @@
       <DependentUpon>ZPPDB_NoDb.edmx</DependentUpon>
       <LastGenOutput>ZPPDB_NoDb.cs</LastGenOutput>
     </Content>
+    <Content Include="Views\Course\CourseDisplay.cshtml" />
+    <Content Include="Views\Course\Index.cshtml" />
+    <Content Include="Views\Teacher\Index.cshtml" />
+    <Content Include="Views\Teacher\TeacherDisplay.cshtml" />
+    <Content Include="Views\Teacher\Details.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

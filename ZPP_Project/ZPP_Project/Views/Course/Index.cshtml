@@ -1,0 +1,13 @@
+﻿@model List<ZPP_Project.EntityDataModel.V_Course>
+
+<div class="container">
+    @foreach (var item in Model)
+    {
+        @Html.Partial("CourseDisplay", item)
+    }
+</div>
+@*
+    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+*@

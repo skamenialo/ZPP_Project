@@ -41,7 +41,7 @@ IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS
     DROP VIEW V_Teacher
 GO
 CREATE VIEW V_Teacher AS
-  SELECT u.IdUser, u.UserType, t.LastName, t.FirstName, t.Address, t.Email
+  SELECT u.IdUser, u.UserType, t.IdCompany, t.LastName, t.FirstName, t.Address, t.Email, t.Degree, t.Website, t.Description
   FROM Users u
   INNER JOIN Teachers t ON u.IdUser = t.IdUser;
 GO
