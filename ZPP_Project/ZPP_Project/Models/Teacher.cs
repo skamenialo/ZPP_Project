@@ -11,6 +11,7 @@ namespace ZPP_Project.Models
     [Bind(Exclude = "IdUser")]
     public class Teacher
     {
+        public Teacher() { throw new NotSupportedException(); }
         [Key]
         public int IdUser { get; set; }
         [Required]
