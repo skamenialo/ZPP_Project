@@ -57,8 +57,22 @@ namespace ZPP_Project.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
-            ViewBag.ReturnUrl = returnUrl;
-            return View();
+            try
+            {
+                // Verification.    
+                if (this.Request.IsAuthenticated)
+                {
+                    // Info.    
+                    return this.RedirectToLocal(returnUrl);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Info    
+                Console.Write(ex);
+            }
+            // Info.    
+            return this.View();    
         }
 
         //
@@ -75,7 +89,7 @@ namespace ZPP_Project.Controllers
 
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            var result = await SignInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, shouldLockout: false);
+            SignInStatus result = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: false);
             switch (result)
             {
                 case SignInStatus.Success:
@@ -151,7 +165,7 @@ namespace ZPP_Project.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ZppUser { UserName = model.UserName, Email = model.Email, UserType = 2};
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -181,7 +195,7 @@ namespace ZPP_Project.Controllers
             {
                 return View("Error");
             }
-            var result = await UserManager.ConfirmEmailAsync(userId, code);
+            var result = await UserManager.ConfirmEmailAsync(int.Parse(userId), code);
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
 
@@ -288,7 +302,7 @@ namespace ZPP_Project.Controllers
         public async Task<ActionResult> SendCode(string returnUrl, bool rememberMe)
         {
             var userId = await SignInManager.GetVerifiedUserIdAsync();
-            if (userId == null)
+            if (userId < 1)
             {
                 return View("Error");
             }
@@ -367,7 +381,7 @@ namespace ZPP_Project.Controllers
                 {
                     return View("ExternalLoginFailure");
                 }
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ZppUser { UserName = model.UserName, Email = model.Email, UserType = 2};
                 var result = await UserManager.CreateAsync(user);
                 if (result.Succeeded)
                 {

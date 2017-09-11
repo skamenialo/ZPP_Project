@@ -32,6 +32,11 @@ namespace ZPP_Project.DataAccess
 
 #endregion
 
+        public static ZppContext Create()
+        {
+            return new ZppContext();
+        }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
         }

@@ -205,6 +205,7 @@
     </Compile>
     <Compile Include="Helpers\CompanyHelper.cs" />
     <Compile Include="Helpers\TeacherHelper.cs" />
+    <Compile Include="Helpers\Utils.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Course.cs" />
     <Compile Include="Models\DataModels.cs" />
@@ -365,7 +366,6 @@
     <Content Include="Views\Teacher\TeacherDisplay.cshtml" />
     <Content Include="Views\Teacher\Details.cshtml" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />

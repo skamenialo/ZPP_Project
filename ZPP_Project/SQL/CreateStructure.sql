@@ -10,7 +10,11 @@ DROP TABLE SL_CourseStates;
 DROP TABLE Teachers;
 DROP TABLE Companies;
 DROP TABLE Students;
+DROP TABLE EF_UserLogins;
+DROP TABLE EF_UserClaims;
+DROP TABLE EF_UserRoles;
 DROP TABLE Users;
+DROP TABLE EF_Roles;
 DROP TABLE SL_UserType;
 
 -- ## CREATE ## --
@@ -24,17 +28,24 @@ CREATE TABLE SL_UserType(
 
 -- Users --
 CREATE TABLE Users(
-  IdUser INTEGER,
+  IdUser INTEGER IDENTITY(1,1) NOT NULL,	--known as Id in Identity.EntityFramework
   UserType INTEGER NOT NULL,
-  Active BIT NOT NULL,
-  Banned BIT,
-  Login VARCHAR(64) NOT NULL,
+  Active BIT NOT NULL,						--known as EmailConfirmed in Identity.EntityFramework
+  Banned BIT,								--known as LockoutEnabled in Identity.EntityFramework
+  Login VARCHAR(64) NOT NULL,				--known as UserName in Identity.EntityFramework
   PasswordHash VARCHAR(256) NOT NULL,
+  Email VARCHAR(256) NOT NULL,
+  --needed by Identity.EntityFramework
+  EF_SecurityStamp VARCHAR(256),
+  EF_PhoneNumber VARCHAR(128),
+  EF_PhoneNumberConfirmed BIT NOT NULL,
+  EF_TwoFactorEnabled BIT NOT NULL,
+  EF_LockoutEndDateUtc DATETIME,
+  EF_AccessFailedCount INTEGER NOT NULL, 
   CONSTRAINT User_PK PRIMARY KEY (IdUser),
   CONSTRAINT User_UserType_FK FOREIGN KEY (UserType) REFERENCES SL_UserType(IdUserType),
   CONSTRAINT User_Login_UQ UNIQUE (Login),
 );
-
 
 -- Students --
 CREATE TABLE Students(
@@ -42,7 +53,6 @@ CREATE TABLE Students(
   LastName VARCHAR(256) NOT NULL,
   FirstName VARCHAR(256) NOT NULL,
   Address VARCHAR(512) NOT NULL,
-  Email VARCHAR(256) NOT NULL,
   CONSTRAINT Student_IdUser_FK FOREIGN KEY (IdUser) REFERENCES Users(IdUser),
   CONSTRAINT Student_IdUser_UQ UNIQUE (IdUser),
 );
@@ -52,7 +62,7 @@ CREATE TABLE Companies(
   IdUser INTEGER NOT NULL,
   Name VARCHAR(256) NOT NULL,
   Address VARCHAR(512) NOT NULL,
-  Email VARCHAR(256) NOT NULL,
+  Email VARCHAR(256) NOT NULL,		--contact email
   Website VARCHAR(256),
   Description VARCHAR(4096),
   CONSTRAINT Company_IdUser_FK FOREIGN KEY (IdUser) REFERENCES Users(IdUser),
@@ -66,7 +76,6 @@ CREATE TABLE Teachers(
   LastName VARCHAR(256) NOT NULL,
   FirstName VARCHAR(256) NOT NULL,
   Address VARCHAR(512) NOT NULL,
-  Email VARCHAR(256) NOT NULL,
   Degree VARCHAR(128),
   Website VARCHAR(256),
   Description VARCHAR(4096),
@@ -164,3 +173,50 @@ CREATE TABLE Comments(
   CONSTRAINT Comments_IdCourse_FK FOREIGN KEY (IdCourse) REFERENCES Courses(IdCourse),
   CONSTRAINT Comments_StateFK FOREIGN KEY (State) REFERENCES SL_CommentState(IdState)
 );
+
+--needed by Identity.EntityFramework--
+CREATE TABLE EF_Roles(
+    Id INTEGER NOT NULL,
+    Name NVARCHAR(256) NOT NULL,
+    CONSTRAINT EF_Roles_PK PRIMARY KEY CLUSTERED (Id ASC)
+);
+GO
+CREATE UNIQUE NONCLUSTERED INDEX EF_Roles_Name_IX
+    ON EF_Roles(Name ASC);
+
+CREATE TABLE EF_UserRoles(
+    UserId INTEGER NOT NULL,
+    RoleId INTEGER NOT NULL,
+    CONSTRAINT EF_UserRoles_PK PRIMARY KEY CLUSTERED (UserId ASC, RoleId ASC),
+    CONSTRAINT EF_UserRoles_RoleId_FK FOREIGN KEY (RoleId) REFERENCES EF_Roles(Id) ON DELETE CASCADE,
+    CONSTRAINT EF_UserRoles_UserId_FK FOREIGN KEY (UserId) REFERENCES Users(IdUser) ON DELETE CASCADE
+);
+GO
+CREATE NONCLUSTERED INDEX EF_UserRoles_UserId_IX
+    ON EF_UserRoles(UserId ASC);
+GO
+CREATE NONCLUSTERED INDEX EF_UserRoles_RoleId_IX
+    ON EF_UserRoles(RoleId ASC);
+
+CREATE TABLE EF_UserClaims(
+    Id INTEGER IDENTITY (1, 1) NOT NULL,
+    UserId INTEGER NOT NULL,
+    ClaimType NVARCHAR(MAX) NULL,
+    ClaimValue NVARCHAR(MAX) NULL,
+    CONSTRAINT EF_UserClaims_PK PRIMARY KEY CLUSTERED (Id ASC),
+    CONSTRAINT EF_UserClaims_UserId_FK FOREIGN KEY (UserId) REFERENCES Users(IdUser) ON DELETE CASCADE
+);
+GO
+CREATE NONCLUSTERED INDEX EF_UserClaims_UserId_IX
+    ON EF_UserClaims(UserId ASC);
+
+CREATE TABLE EF_UserLogins(
+    UserId INTEGER NOT NULL,
+    LoginProvider NVARCHAR(128) NOT NULL,
+    ProviderKey NVARCHAR(128) NOT NULL,
+    CONSTRAINT EF_UserLogins_PK PRIMARY KEY CLUSTERED (UserId ASC, LoginProvider ASC, ProviderKey ASC),
+    CONSTRAINT EF_UserLogins_UserId_FK FOREIGN KEY (UserId) REFERENCES Users(IdUser) ON DELETE CASCADE
+);
+GO
+CREATE NONCLUSTERED INDEX EF_UserLogins_UserId_IX
+    ON EF_UserLogins(UserId ASC);

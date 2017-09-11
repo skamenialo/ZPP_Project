@@ -1,4 +1,6 @@
-﻿using System.Data.Entity;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
@@ -7,9 +9,12 @@ using Microsoft.AspNet.Identity.EntityFramework;
 namespace ZPP_Project.Models
 {
     // You can add profile data for the user by adding more properties to your ApplicationUser class, please visit http://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
-    public class ApplicationUser : IdentityUser
+    public class ZppUser : IdentityUser<int, ZPPUserLogin, ZPPUserRole, ZPPUserClaim>
     {
-        public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
+        [Required]
+        public int UserType { get; set; }
+
+        public async Task<ClaimsIdentity> GenerateUserIdentityAsync(ApplicationUserManager manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
@@ -18,16 +23,57 @@ namespace ZPP_Project.Models
         }
     }
 
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
+    public class ZPPRole : IdentityRole<int, ZPPUserRole> { }
+
+    public class ZPPUserRole : IdentityUserRole<int> { }
+
+    public class ZPPUserClaim : IdentityUserClaim<int> { }
+
+    public class ZPPUserLogin : IdentityUserLogin<int> { }
+
+    public class ZppIdentityContext : IdentityDbContext<ZppUser, ZPPRole, int, ZPPUserLogin, ZPPUserRole, ZPPUserClaim>
     {
-        public ApplicationDbContext()
-            : base("DefaultConnection", throwIfV1Schema: false)
+        //Identity and Authorization
+        public DbSet<ZPPUserLogin> UserLogins { get; set; }
+        public DbSet<ZPPUserClaim> UserClaims { get; set; }
+        public DbSet<ZPPUserRole> UserRoles { get; set; }
+
+        #region Constructor
+
+        public ZppIdentityContext()
+            : base("InitialConnection")
+        { }
+
+        #endregion
+
+        public static ZppIdentityContext Create()
         {
+            return new ZppIdentityContext();
         }
 
-        public static ApplicationDbContext Create()
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
-            return new ApplicationDbContext();
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<ZppUser>().ToTable("Users");//.HasMany(user => user.Logins).WithRequired(x => x.UserId);
+            modelBuilder.Entity<ZPPRole>().ToTable("EF_Roles");
+            modelBuilder.Entity<ZPPUserRole>().ToTable("EF_UserRoles");
+            modelBuilder.Entity<ZPPUserClaim>().ToTable("EF_UserClaims");
+            modelBuilder.Entity<ZPPUserLogin>().ToTable("EF_UserLogins");//.HasKey(userLogin => userLogin.UserId).Property(userLogin => userLogin.UserId).HasColumnName("Id");
+
+            modelBuilder.Entity<ZppUser>().Property(u => u.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            modelBuilder.Entity<ZPPRole>().Property(r => r.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+            modelBuilder.Entity<ZPPUserClaim>().Property(c => c.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
+
+            modelBuilder.Entity<ZppUser>().Property(p => p.Id).HasColumnName("IdUser");
+            modelBuilder.Entity<ZppUser>().Property(p => p.EmailConfirmed).HasColumnName("Active");
+            modelBuilder.Entity<ZppUser>().Property(p => p.AccessFailedCount).HasColumnName("EF_AccessFailedCount");
+            modelBuilder.Entity<ZppUser>().Property(p => p.LockoutEnabled).HasColumnName("Banned");
+            modelBuilder.Entity<ZppUser>().Property(p => p.LockoutEndDateUtc).HasColumnName("EF_LockoutEndDateUtc");
+            modelBuilder.Entity<ZppUser>().Property(p => p.PhoneNumber).HasColumnName("EF_PhoneNumber");
+            modelBuilder.Entity<ZppUser>().Property(p => p.PhoneNumberConfirmed).HasColumnName("EF_PhoneNumberConfirmed");
+            modelBuilder.Entity<ZppUser>().Property(p => p.SecurityStamp).HasColumnName("EF_SecurityStamp");
+            modelBuilder.Entity<ZppUser>().Property(p => p.TwoFactorEnabled).HasColumnName("EF_TwoFactorEnabled");
+            modelBuilder.Entity<ZppUser>().Property(p => p.UserName).HasColumnName("Login");
         }
     }
 }
