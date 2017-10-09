@@ -17,22 +17,26 @@ namespace ZPP_Project.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private ApplicationRoleManager _roleManager;
 
         public AccountController()
         {
         }
 
-        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager )
+        public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, ApplicationRoleManager roleManager)
         {
             UserManager = userManager;
             SignInManager = signInManager;
+            RoleManager = roleManager;
         }
 
         public ApplicationSignInManager SignInManager
         {
             get
             {
-                return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
+                if(_signInManager == null)
+                    _signInManager = HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
+                return _signInManager;
             }
             private set 
             { 
@@ -44,12 +48,25 @@ namespace ZPP_Project.Controllers
         {
             get
             {
-                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+                if(_userManager == null)
+                    _userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
+                return _userManager;
             }
             private set
             {
                 _userManager = value;
             }
+        }
+
+        public ApplicationRoleManager RoleManager
+        {
+            get
+            {
+                if(_roleManager == null)
+                    _roleManager = HttpContext.GetOwinContext().Get<ApplicationRoleManager>();
+                return _roleManager;
+            }
+            private set { _roleManager = value; }
         }
 
         //

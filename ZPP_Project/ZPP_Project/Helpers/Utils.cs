@@ -25,4 +25,12 @@ namespace ZPP_Project.Helpers
             return hex.ToString();
         }
     }
+
+    public class Roles
+    {
+        public const string ADMINISTRATOR = "Administrator";
+        public const string STUDENT = "Student";
+        public const string COMPANY = "Firma";
+        public const string TEACHER = "Wykladowca";
+    }
 }

@@ -54,11 +54,11 @@ namespace ZPP_Project.Models
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<ZppUser>().ToTable("Users");//.HasMany(user => user.Logins).WithRequired(x => x.UserId);
-            modelBuilder.Entity<ZPPRole>().ToTable("EF_Roles");
+            modelBuilder.Entity<ZppUser>().ToTable("Users");
+            modelBuilder.Entity<ZPPRole>().ToTable("SL_UserType");
             modelBuilder.Entity<ZPPUserRole>().ToTable("EF_UserRoles");
             modelBuilder.Entity<ZPPUserClaim>().ToTable("EF_UserClaims");
-            modelBuilder.Entity<ZPPUserLogin>().ToTable("EF_UserLogins");//.HasKey(userLogin => userLogin.UserId).Property(userLogin => userLogin.UserId).HasColumnName("Id");
+            modelBuilder.Entity<ZPPUserLogin>().ToTable("EF_UserLogins");
 
             modelBuilder.Entity<ZppUser>().Property(u => u.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             modelBuilder.Entity<ZPPRole>().Property(r => r.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
@@ -74,6 +74,8 @@ namespace ZPP_Project.Models
             modelBuilder.Entity<ZppUser>().Property(p => p.SecurityStamp).HasColumnName("EF_SecurityStamp");
             modelBuilder.Entity<ZppUser>().Property(p => p.TwoFactorEnabled).HasColumnName("EF_TwoFactorEnabled");
             modelBuilder.Entity<ZppUser>().Property(p => p.UserName).HasColumnName("Login");
+
+            modelBuilder.Entity<ZPPRole>().Property(p => p.Id).HasColumnName("IdUserType");
         }
     }
 }

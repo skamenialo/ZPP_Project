@@ -14,18 +14,20 @@ DROP TABLE EF_UserLogins;
 DROP TABLE EF_UserClaims;
 DROP TABLE EF_UserRoles;
 DROP TABLE Users;
-DROP TABLE EF_Roles;
 DROP TABLE SL_UserType;
 
 -- ## CREATE ## --
 
 -- SL_UserType --
-CREATE TABLE SL_UserType(
-  IdUserType INTEGER,
+CREATE TABLE SL_UserType(					--known as Roles in Identity.EntityFramework
+  IdUserType INTEGER,						--known as Id in Identity.EntityFramework
   Name VARCHAR(64) NOT NULL,
-  CONSTRAINT SL_UserType_PK PRIMARY KEY (IdUserType)
+  CONSTRAINT SL_UserType_PK PRIMARY KEY CLUSTERED (IdUserType ASC)
 );
-
+GO
+CREATE UNIQUE NONCLUSTERED INDEX SL_UserType_Name_IX
+    ON SL_UserType(Name ASC);
+	
 -- Users --
 CREATE TABLE Users(
   IdUser INTEGER IDENTITY(1,1) NOT NULL,	--known as Id in Identity.EntityFramework
@@ -175,20 +177,12 @@ CREATE TABLE Comments(
 );
 
 --needed by Identity.EntityFramework--
-CREATE TABLE EF_Roles(
-    Id INTEGER NOT NULL,
-    Name NVARCHAR(256) NOT NULL,
-    CONSTRAINT EF_Roles_PK PRIMARY KEY CLUSTERED (Id ASC)
-);
-GO
-CREATE UNIQUE NONCLUSTERED INDEX EF_Roles_Name_IX
-    ON EF_Roles(Name ASC);
 
 CREATE TABLE EF_UserRoles(
     UserId INTEGER NOT NULL,
     RoleId INTEGER NOT NULL,
     CONSTRAINT EF_UserRoles_PK PRIMARY KEY CLUSTERED (UserId ASC, RoleId ASC),
-    CONSTRAINT EF_UserRoles_RoleId_FK FOREIGN KEY (RoleId) REFERENCES EF_Roles(Id) ON DELETE CASCADE,
+    CONSTRAINT EF_UserRoles_RoleId_FK FOREIGN KEY (RoleId) REFERENCES SL_UserType(IdUserType) ON DELETE CASCADE,
     CONSTRAINT EF_UserRoles_UserId_FK FOREIGN KEY (UserId) REFERENCES Users(IdUser) ON DELETE CASCADE
 );
 GO

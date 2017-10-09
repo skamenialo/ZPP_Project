@@ -15,7 +15,6 @@ DELETE FROM EF_UserLogins;
 DELETE FROM EF_UserClaims;
 DELETE FROM EF_UserRoles;
 DELETE FROM Users;
-DELETE FROM EF_Roles;
 DELETE FROM SL_UserType;
 
 -- ## INSERT ## --
@@ -305,3 +304,23 @@ INSERT INTO Comments VALUES
 (22, 4,  6, '20171116', 'Curabitur nisi metus, bibendum eu elementum eu, mattis vel diam. Proin elementum in metus eu vestibulum. Cras bibendum tellus sem, id lobortis sem molestie sit amet. Suspendisse mollis id nisi eget finibus. Nullam tempus nisl at nisi mollis varius. Vestibulum placerat purus sed mi condimentum dapibus. Donec eu porttitor risus.', 1),
 (23, 12, 6, '20171116', 'Mauris finibus est sit amet magna porttitor, ac sagittis purus luctus. Aliquam consequat facilisis orci, ut interdum orci eleifend quis. Etiam elementum magna a mi cursus auctor. Phasellus quis lectus finibus, egestas arcu ac, suscipit neque. Donec aliquet nibh risus, et lobortis ligula viverra sed. Donec mattis felis ac nunc ornare, vitae hendrerit odio mattis. Sed convallis leo turpis, id pellentesque justo ultricies vitae.', 3),
 (24, 13, 6, '20171116', 'In ut elit odio. Nunc nec risus vitae elit convallis condimentum. Etiam justo sem, molestie eget posuere sed, porta at diam. Maecenas tempus, magna at fermentum congue, mauris orci auctor nisi, at tempor leo nibh nec lectus. Aliquam consequat consequat facilisis. Morbi porta id turpis ac iaculis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Maecenas elementum aliquam gravida.', 2);
+
+-- EF_UserRoles --
+INSERT INTO EF_UserRoles VALUES
+(1,1),
+(2,1),
+(3,2),
+(4,2),
+(5,2),
+(6,3),
+(7,3),
+(8,3),
+(9,4),
+(10,4),
+(11,4),
+(12,2),
+(12,4),
+(13,2),
+(13,4),
+(14,2),
+(14,4);

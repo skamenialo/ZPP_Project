@@ -110,4 +110,18 @@ namespace ZPP_Project
             return new ApplicationSignInManager(context.GetUserManager<ApplicationUserManager>(), context.Authentication);
         }
     }
+
+    // Configure the application role manager which is used in this application.
+    public class ApplicationRoleManager : RoleManager<ZPPRole, int>
+    {
+        public ApplicationRoleManager(IRoleStore<ZPPRole, int> roleStore)
+            : base(roleStore)
+        {
+        }
+
+        public static ApplicationRoleManager Create(IdentityFactoryOptions<ApplicationRoleManager> options, IOwinContext context)
+        {
+            return new ApplicationRoleManager(new RoleStore<ZPPRole, int, ZPPUserRole>(context.Get<ZppIdentityContext>()));
+        }
+    }
 }

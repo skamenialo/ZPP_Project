@@ -18,6 +18,7 @@ namespace ZPP_Project
             app.CreatePerOwinContext(ZppIdentityContext.Create);
             app.CreatePerOwinContext<ApplicationUserManager>(ApplicationUserManager.Create);
             app.CreatePerOwinContext<ApplicationSignInManager>(ApplicationSignInManager.Create);
+            app.CreatePerOwinContext<ApplicationRoleManager>(ApplicationRoleManager.Create);
 
             // Enable the application to use a cookie to store information for the signed in user
             // and to use a cookie to temporarily store information about a user logging in with a third party login provider
@@ -33,7 +34,7 @@ namespace ZPP_Project
                     OnValidateIdentity = SecurityStampValidator.OnValidateIdentity<ApplicationUserManager, ZppUser, int>(
                          TimeSpan.FromMinutes(30),
                          (manager, user) => user.GenerateUserIdentityAsync(manager),
-                         (claimsIdentity) => int.Parse(claimsIdentity.FindFirstValue(System.Security.Claims.ClaimTypes.Sid)))
+                         (claimsIdentity) => int.Parse(claimsIdentity.FindFirstValue(System.Security.Claims.ClaimTypes.Sid)??"0"))
                 }
             });            
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
