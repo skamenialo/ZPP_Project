@@ -3,4 +3,15 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Error</h2>
+<div class="container">
+    <div class="row">
+        <div class="text-center">
+            <h1>Ooops!</h1>
+            <h3>Looks like you found a dead link.</h3>
+            <div>
+                <img src="~/Content/Images/dead_link.png" alt="Dead link" style="max-width: 50%;" />
+            </div>
+            <h3>Better turn @Html.ActionLink("back", "Index", "Home") while you still can!</h3>
+        </div>
+    </div>
+</div>
