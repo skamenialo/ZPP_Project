@@ -369,6 +369,7 @@
     <Content Include="Views\Teacher\TeacherDisplay.cshtml" />
     <Content Include="Views\Teacher\Details.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />
+    <Content Include="Views\Account\SelectRole.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

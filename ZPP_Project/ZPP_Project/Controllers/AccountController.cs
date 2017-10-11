@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using ZPP_Project.Models;
+using System.Collections.Generic;
 
 namespace ZPP_Project.Controllers
 {
@@ -89,6 +90,7 @@ namespace ZPP_Project.Controllers
         [AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
+            TempData.Remove(Helpers.Keys.LOGIN_MODEL);
             try
             {
                 // Verification.    
@@ -103,7 +105,8 @@ namespace ZPP_Project.Controllers
                 // Info    
                 Console.Write(ex);
             }
-            // Info.    
+            Session.Remove(Helpers.Keys.CURRENT_ROLE);
+            ViewBag.ReturnUrl = returnUrl;
             return this.View();    
         }
 
@@ -114,17 +117,77 @@ namespace ZPP_Project.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
+            ViewBag.ReturnUrl = returnUrl;
+            if (!ModelState.IsValid)
+            {
+                TempData.Remove(Helpers.Keys.LOGIN_MODEL);
+                return View(model);
+            }
+
+            ZppUser user = await UserManager.FindByNameAsync(model.UserName);
+            if (user != null)
+            {
+                if (user.Roles.Count > 1)
+                {
+                    List<SelectListItem> roles = new List<SelectListItem>();
+                    for (int i = 0; i < user.Roles.Count; i++)
+                    {
+                        ZPPUserRole ur = user.Roles.ElementAt(i);
+                        roles.AddRange(RoleManager.Roles.Where(role => role.Id == ur.RoleId).Select(r => new SelectListItem
+                        {
+                            Text = r.Name,
+                            Value = i.ToString()
+                        }));
+                    }
+                    TempData[Helpers.Keys.LOGIN_MODEL] = model;
+                    return View("SelectRole", new SelectRoleViewModel() { SelectedId = "-1", Roles = roles });
+                }
+                return await SignIn(model, 0, returnUrl);
+            }
+            else
+            {
+                ModelState.AddModelError("", "Invalid login attempt.");
+                ViewBag.ReturnUrl = returnUrl;
+                return View("Login", model);
+            }
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> LoginWithRole(SelectRoleViewModel model, string returnUrl)
+        {
+            ViewBag.ReturnUrl = returnUrl;
             if (!ModelState.IsValid)
             {
                 return View(model);
             }
 
+            LoginViewModel loginModel = TempData[Helpers.Keys.LOGIN_MODEL] as LoginViewModel;
+            if (loginModel == null)
+            {
+                ModelState.AddModelError("", "Invalid login attempt.");
+                ViewBag.ReturnUrl = returnUrl;
+                return View("Login");
+            }
+
+            int roleNr = 0;
+            Int32.TryParse(model.SelectedId, out roleNr);
+            return await SignIn(loginModel, roleNr, returnUrl);
+        }
+
+        private async Task<ActionResult> SignIn(LoginViewModel model, int roleNr, string returnUrl)
+        {
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
-            SignInStatus result = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: false);
+            SignInStatus result = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: true);
             switch (result)
             {
                 case SignInStatus.Success:
+                    IEnumerable<ZPPUserRole> roles = UserManager.FindByName(model.UserName).Roles;
+                    int rolesCount = roles.Count();
+                    if(rolesCount > 0)
+                        Session[Helpers.Keys.CURRENT_ROLE] = roleNr >= rolesCount ? roles.ElementAt(0) : roles.ElementAt(roleNr);
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
@@ -133,6 +196,7 @@ namespace ZPP_Project.Controllers
                 case SignInStatus.Failure:
                 default:
                     ModelState.AddModelError("", "Invalid login attempt.");
+                    ViewBag.ReturnUrl = returnUrl;
                     return View(model);
             }
         }
@@ -168,7 +232,7 @@ namespace ZPP_Project.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ZppUser { UserName = model.UserName, Email = model.Email, UserType = 2};
+                var user = new ZppUser { UserName = model.UserName, Email = model.Email, UserType = 2 };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {

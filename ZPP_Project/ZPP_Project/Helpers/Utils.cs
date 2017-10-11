@@ -33,4 +33,10 @@ namespace ZPP_Project.Helpers
         public const string COMPANY = "Firma";
         public const string TEACHER = "Wykladowca";
     }
+
+    public class Keys
+    {
+        public const string CURRENT_ROLE = "CURRENT_ROLE";
+        public const string LOGIN_MODEL = "LOGIN_MODEL";
+    }
 }

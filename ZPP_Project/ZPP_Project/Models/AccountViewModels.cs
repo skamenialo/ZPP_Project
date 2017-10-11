@@ -65,6 +65,14 @@ namespace ZPP_Project.Models
         public bool RememberMe { get; set; }
     }
 
+    public class SelectRoleViewModel
+    {
+        public string SelectedId { get; set; }
+
+        [Display(Name = "Select your role")]
+        public IEnumerable<System.Web.Mvc.SelectListItem> Roles { get; set; }
+    }
+
     public class RegisterViewModel
     {
         [Required]

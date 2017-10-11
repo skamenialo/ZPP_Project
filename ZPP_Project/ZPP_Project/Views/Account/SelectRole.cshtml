@@ -1,0 +1,22 @@
+﻿@model ZPP_Project.Models.SelectRoleViewModel
+@{
+    ViewBag.Title = "Role selection";
+}
+
+<h2>@ViewBag.Title.</h2>
+
+<div class="roles">
+    <section id="selectRoleForm">
+        @using (Html.BeginForm("LoginWithRole", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-group col-md-12">
+                @Html.LabelFor(m => m.Roles, new { @class = "col-md-2 control-label" })
+                <div class="col-md-10">
+                    @Html.DropDownListFor(m => m.SelectedId, new SelectList(Model.Roles, "Value", "Text"), new { @class = "form-control"})
+                    <input type="submit" class="btn btn-default" value="Confirm" />
+                </div>
+            </div>
+        }
+    </section>
+</div>
