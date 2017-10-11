@@ -90,6 +90,12 @@ namespace ZPP_Project
             }
             return manager;
         }
+
+        public async Task<bool> IsEmailConfirmedAsync(string userName)
+        {
+            ZppUser user = await FindByNameAsync(userName);
+            return user != null && await IsEmailConfirmedAsync(user.Id);
+        }
     }
 
     // Configure the application sign-in manager which is used in this application.

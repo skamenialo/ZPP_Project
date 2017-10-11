@@ -178,6 +178,21 @@ namespace ZPP_Project.Controllers
 
         private async Task<ActionResult> SignIn(LoginViewModel model, int roleNr, string returnUrl)
         {
+            if (!await UserManager.IsEmailConfirmedAsync(model.UserName))
+            {
+                if (UserManager.FindByName(model.UserName) != null)
+                {
+                    string callbackUrl = Url.Action("GenerateEmailConfirmation", "Account", new { userName = model.UserName }, protocol: Request.Url.Scheme);
+                    ModelState.AddModelError("", "You need to confirm your email. Click <a href=\"" + callbackUrl + "\">here</a> to generate new one");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Invalid login attempt.");
+                }
+                ViewBag.ReturnUrl = returnUrl;
+                return View(model);
+            }
+
             // This doesn't count login failures towards account lockout
             // To enable password failures to trigger account lockout, change to shouldLockout: true
             SignInStatus result = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, shouldLockout: true);
@@ -236,15 +251,11 @@ namespace ZPP_Project.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);
-                    
-                    // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-                    // Send an email with this link
-                    // string code = await UserManager.GenerateEmailConfirmationTokenAsync(user.Id);
-                    // var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);
-                    // await UserManager.SendEmailAsync(user.Id, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
 
-                    return RedirectToAction("Index", "Home");
+                    //await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false
+                    //return RedirectToAction("Index", "Home");
+
+                    return await GenerateEmailConfirmation(user.Id);
                 }
                 AddErrors(result);
             }
@@ -254,16 +265,64 @@ namespace ZPP_Project.Controllers
         }
 
         //
+        // GET: /Account/GenerateEmailConfirmation
+        [AllowAnonymous]
+        public async Task<ActionResult> GenerateEmailConfirmation(string userName)
+        {
+            ZppUser user = await UserManager.FindByNameAsync(userName);
+            if (user != null)
+                return await GenerateEmailConfirmation(user.Id);
+            else
+                return View("Error");
+        }
+
+        private async Task<ActionResult> GenerateEmailConfirmation(int userId)
+        {
+            // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
+            // Send an email with this link
+            string code = await UserManager.GenerateEmailConfirmationTokenAsync(userId);
+            var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = userId, code = code }, protocol: Request.Url.Scheme);
+            await UserManager.SendEmailAsync(userId, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+
+            ViewBag.Link = callbackUrl;
+            return View("DisplayEmail");
+        }
+
+        //
         // GET: /Account/ConfirmEmail
         [AllowAnonymous]
         public async Task<ActionResult> ConfirmEmail(string userId, string code)
         {
-            if (userId == null || code == null)
+            int id = 0;
+            if (!int.TryParse(userId, out id) || code == null)
             {
                 return View("Error");
             }
-            var result = await UserManager.ConfirmEmailAsync(int.Parse(userId), code);
-            return View(result.Succeeded ? "ConfirmEmail" : "Error");
+            var result = await UserManager.ConfirmEmailAsync(id, code);
+            if (result.Succeeded)
+            {
+                ZppUser user = await UserManager.FindByIdAsync(id);
+                switch (user.UserType)
+                {
+                    case 2:
+                        result = await UserManager.AddToRoleAsync(id, Helpers.Roles.STUDENT);
+                        break;
+                    case 3:
+                        result = await UserManager.AddToRoleAsync(id, Helpers.Roles.COMPANY);
+                        break;
+                    case 4:
+                        result = await UserManager.AddToRoleAsync(id, Helpers.Roles.TEACHER);
+                        break;
+                    case 5:
+                        result = await UserManager.AddToRoleAsync(id, Helpers.Roles.STUDENT);
+                        result = await UserManager.AddToRoleAsync(id, Helpers.Roles.TEACHER);
+                        break;
+                    default:
+                        break;
+                }
+                return View("ConfirmEmail");
+            }
+            return View("Error");
         }
 
         #endregion
