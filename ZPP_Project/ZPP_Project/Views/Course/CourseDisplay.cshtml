@@ -1,4 +1,6 @@
-﻿@using ZPP_Project.Helpers
+﻿@using Microsoft.AspNet.Identity
+@using ZPP_Project.Helpers
+@using ZPP_Project.Models
 @model  ZPP_Project.EntityDataModel.V_Course
 <div class="row">
 
@@ -13,7 +15,7 @@
         <!-- Who -->
         <div class="row">Offered by</div>
         <div class="row">@Html.ActionLink(TeacherHelper.Display(Model.IdTeacher), "Details", "Teacher", new { id=Model.IdTeacher }, null)</div>
-        <div class="row">@CompanyHelper.Display(@Model.IdCompany)<!-- TODO link to  company--></div>
+        <div class="row">@Html.ActionLink(CompanyHelper.Display(Model.IdCompany), "Details", "Company", new { id = Model.IdCompany }, null)</div>
     </div>
     <div class="col-md-4">
         <!-- When -->
@@ -26,5 +28,6 @@
         <div class="row">Lectures</div>
         <div class="row">@Model.Lectures</div>
     </div>
+        
 
 </div>

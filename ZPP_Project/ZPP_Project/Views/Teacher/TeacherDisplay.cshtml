@@ -12,7 +12,7 @@
     <div class="col-md-4">
         <!-- Company -->
         <div class="row">Employed by</div>
-        <div class="row">@CompanyHelper.Display(@Model.IdCompany)<!-- TODO link to  company--></div>
+        <div class="row">@Html.ActionLink(CompanyHelper.Display(Model.IdCompany), "Details", "Company", new { id = Model.IdCompany }, null)</div>
     </div>
     <div class="col-md-4">
         <!-- Website -->

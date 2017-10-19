@@ -23,5 +23,10 @@ namespace ZPP_Project.Helpers
             }
             return c.Name;
         }
+
+        public static string Display(V_Company c)
+        {
+            return c.Name;
+        }
     }
 }

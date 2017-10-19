@@ -1,0 +1,40 @@
+﻿@using ZPP_Project.Helpers;
+@model ZPP_Project.EntityDataModel.V_Company
+
+@if (Model == null)
+{
+    <div class="container">
+        <div class="row">
+            This company does not exist.
+        </div>
+    </div>
+}
+else
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                @CompanyHelper.Display(Model)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <!-- Company -->
+                <div class="row">@Model.Address</div>
+            </div>
+            <div class="col-md-4">
+                <!-- Website -->
+                <div class="row"><a href="@Model.Website" target="_blank">Website</a></div>
+            </div>
+            <div class="col-md-4">
+                <!-- Email -->
+                <div class="row"><a href="mailto:@Model.Email">Contact</a></div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                @Model.Description
+            </div>
+        </div>
+    </div>
+}

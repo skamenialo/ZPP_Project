@@ -22,6 +22,7 @@ namespace ZPP_Project.Helpers
             }
             return Display(t);
         }
+
         public static string Display(V_Teacher t)
         {
             return String.Format("{0} {1} {2}", t.Degree, t.FirstName, t.LastName);
