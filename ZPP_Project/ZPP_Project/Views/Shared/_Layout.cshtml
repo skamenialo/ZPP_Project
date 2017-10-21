@@ -21,7 +21,7 @@
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
-                <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                @*<li>@Html.ActionLink("Home", "Index", "Home")</li>*@
                 <li>@Html.ActionLink("Courses", "Index", "Course")</li>
                 <li>@Html.ActionLink("Teachers", "Index", "Teacher")</li>
                 <li>@Html.ActionLink("Companies", "Index", "Company")</li>
@@ -33,7 +33,9 @@
     </div>
 </div>
 <div class="text-center">
-    <img src="../../Content/Images/Logo.png" alt="Website logo" style="max-width: 100%;" />
+    <a href="/">
+        <img src="../../Content/Images/Logo.png" alt="Website logo" style="max-width: 100%;" />
+    </a>
 </div>
 <div class="container body-content">
     @RenderBody()
