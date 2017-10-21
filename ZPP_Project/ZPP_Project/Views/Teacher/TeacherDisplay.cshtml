@@ -1,26 +1,30 @@
 ﻿@using ZPP_Project.Helpers
 @model ZPP_Project.EntityDataModel.V_Teacher
+
+@{ string blockName = "TeacherDisplay_" + Model.IdUser; }
 <div class="row">
 
 
     <div class="col-md-12">
         <div>
-            <!-- TODO show/collapse icon here -->
+            @HtmlHelperZpp.RenderColapseIcon(blockName)
+            @Html.ActionLink(TeacherHelper.Display(Model), "Details", new { id = Model.IdUser })
         </div>
-        @Html.ActionLink(TeacherHelper.Display(Model), "Details", new { id = Model.IdUser })
     </div>
-    <div class="col-md-4">
-        <!-- Company -->
-        <div class="row">Employed by</div>
-        <div class="row">@Html.ActionLink(CompanyHelper.Display(Model.IdCompany), "Details", "Company", new { id = Model.IdCompany }, null)</div>
-    </div>
-    <div class="col-md-4">
-        <!-- Website -->
-        <div class="row"><a href="@Model.Website" target="_blank">Website</a></div>
-    </div>
-    <div class="col-md-4">
-        <!-- Email -->
-        <div class="row"></div>
-        <div class="row"><a href="mailto:@Model.Email">Contact</a></div>
+    <div id="@blockName">
+        <div class="col-md-4">
+            <!-- Company -->
+            <div class="row">Employed by</div>
+            <div class="row">@Html.ActionLink(CompanyHelper.Display(Model.IdCompany), "Details", "Company", new { id = Model.IdCompany }, null)</div>
+        </div>
+        <div class="col-md-4">
+            <!-- Website -->
+            <div class="row"><a href="@Model.Website" target="_blank">Website</a></div>
+        </div>
+        <div class="col-md-4">
+            <!-- Email -->
+            <div class="row"></div>
+            <div class="row"><a href="mailto:@Model.Email">Contact</a></div>
+        </div>
     </div>
 </div>

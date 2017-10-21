@@ -1,31 +1,36 @@
 ﻿@using Microsoft.AspNet.Identity
 @using ZPP_Project.Helpers
 @using ZPP_Project.Models
+@using ZPP_Project.Helpers
 @model  ZPP_Project.EntityDataModel.V_Course
+
+@{ string blockName = "CourseDisplay_" + Model.IdCourse; }
 <div class="row">
 
 
     <div class="col-md-12">
         <div>
-            <!-- TODO show/collapse icon here -->
+            @HtmlHelperZpp.RenderColapseIcon(blockName)
+            @Html.ActionLink(Model.Name, "Details", "Course", new { id = Model.IdCourse }, null)
         </div>
-        @Html.ActionLink(Model.Name, "Details", "Course", new { id = Model.IdCourse }, null)
     </div>
-    <div class="col-md-4">
-        <!-- Who -->
-        <div class="row">Offered by</div>
-        <div class="row">@Html.ActionLink(TeacherHelper.Display(Model.IdTeacher), "Details", "Teacher", new { id=Model.IdTeacher }, null)</div>
-        <div class="row">@Html.ActionLink(CompanyHelper.Display(Model.IdCompany), "Details", "Company", new { id = Model.IdCompany }, null)</div>
-    </div>
-    <div class="col-md-4">
-        <!-- When -->
-        <div class="row">Duration</div>
-        <div class="row">From @Model.DateStart.Value.Date.ToShortDateString()</div>
-        <div class="row">To @Model.DateEnd.Value.Date.ToShortDateString()</div>
-    </div>
-    <div class="col-md-4">
-        <!-- How many lectures -->
-        <div class="row">Lectures</div>
-        <div class="row">@Model.Lectures</div>
+    <div id="@blockName">
+        <div class="col-md-4">
+            <!-- Who -->
+            <div class="row">Offered by</div>
+            <div class="row">@Html.ActionLink(TeacherHelper.Display(Model.IdTeacher), "Details", "Teacher", new { id = Model.IdTeacher }, null)</div>
+            <div class="row">@Html.ActionLink(CompanyHelper.Display(Model.IdCompany), "Details", "Company", new { id = Model.IdCompany }, null)</div>
+        </div>
+        <div class="col-md-4">
+            <!-- When -->
+            <div class="row">Duration</div>
+            <div class="row">From @Model.DateStart.Value.Date.ToShortDateString()</div>
+            <div class="row">To @Model.DateEnd.Value.Date.ToShortDateString()</div>
+        </div>
+        <div class="col-md-4">
+            <!-- How many lectures -->
+            <div class="row">Lectures</div>
+            <div class="row">@Model.Lectures</div>
+        </div>
     </div>
 </div>
