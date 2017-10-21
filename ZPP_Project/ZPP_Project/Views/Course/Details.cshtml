@@ -1,0 +1,45 @@
+﻿@using ZPP_Project.Helpers;
+@model ZPP_Project.EntityDataModel.V_Course
+
+@if (Model == null)
+{
+    <div class="container">
+        <div class="row">
+            This course does not exist.
+        </div>
+    </div>
+}
+else
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                @Model.Name
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <!-- Who -->
+                <div class="row">Offered by</div>
+                <div class="row">@Html.ActionLink(TeacherHelper.Display(Model.IdTeacher), "Details", "Teacher", new { id = Model.IdTeacher }, null)</div>
+                <div class="row">@Html.ActionLink(CompanyHelper.Display(Model.IdCompany), "Details", "Company", new { id = Model.IdCompany }, null)</div>
+            </div>
+            <div class="col-md-4">
+                <!-- When -->
+                <div class="row">Duration</div>
+                <div class="row">From @Model.DateStart.Value.Date.ToShortDateString()</div>
+                <div class="row">To @Model.DateEnd.Value.Date.ToShortDateString()</div>
+            </div>
+            <div class="col-md-4">
+                <!-- How many lectures -->
+                <div class="row">Lectures</div>
+                <div class="row">@Model.Lectures</div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                @Model.Description
+            </div>
+        </div>
+    </div>
+}

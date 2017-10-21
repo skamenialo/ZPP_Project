@@ -16,5 +16,10 @@ namespace ZPP_Project.Controllers
         {
             return View("Index", context.Courses.ToList());
         }
+
+        public ActionResult Details(int id)
+        {
+            return View("Details", context.Courses.Where(c => c.IdCourse == id).FirstOrDefault());
+        }
     }
 }

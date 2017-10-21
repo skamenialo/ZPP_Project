@@ -9,7 +9,7 @@
         <div>
             <!-- TODO show/collapse icon here -->
         </div>
-        @Model.Name<!-- TODO link to course details -->
+        @Html.ActionLink(Model.Name, "Details", "Course", new { id = Model.IdCourse }, null)
     </div>
     <div class="col-md-4">
         <!-- Who -->
@@ -20,14 +20,12 @@
     <div class="col-md-4">
         <!-- When -->
         <div class="row">Duration</div>
-        <div class="row">From @Model.DateStart.Value.Date</div>
-        <div class="row">To @Model.DateEnd.Value.Date</div>
+        <div class="row">From @Model.DateStart.Value.Date.ToShortDateString()</div>
+        <div class="row">To @Model.DateEnd.Value.Date.ToShortDateString()</div>
     </div>
     <div class="col-md-4">
         <!-- How many lectures -->
         <div class="row">Lectures</div>
         <div class="row">@Model.Lectures</div>
     </div>
-        
-
 </div>

@@ -376,6 +376,7 @@
     <Content Include="Views\Company\Index.cshtml" />
     <Content Include="Views\Company\CompanyDisplay.cshtml" />
     <Content Include="Views\Company\Details.cshtml" />
+    <Content Include="Views\Course\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
