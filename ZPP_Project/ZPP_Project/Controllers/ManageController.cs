@@ -11,44 +11,17 @@ using ZPP_Project.Models;
 namespace ZPP_Project.Controllers
 {
     [Authorize]
-    public class ManageController : Controller
+    public class ManageController : ZPP_Project.Helpers.ZPPController
     {
-        private ApplicationSignInManager _signInManager;
-        private ApplicationUserManager _userManager;
+        #region Constructor
 
         public ManageController()
-        {
-        }
+            : base() { }
 
-        public ManageController(ApplicationUserManager userManager, ApplicationSignInManager signInManager)
-        {
-            UserManager = userManager;
-            SignInManager = signInManager;
-        }
+        public ManageController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, ApplicationRoleManager roleManager)
+            : base(userManager, signInManager, roleManager) { }
 
-        public ApplicationSignInManager SignInManager
-        {
-            get
-            {
-                return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
-            }
-            private set 
-            { 
-                _signInManager = value; 
-            }
-        }
-
-        public ApplicationUserManager UserManager
-        {
-            get
-            {
-                return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-            }
-            private set
-            {
-                _userManager = value;
-            }
-        }
+        #endregion
 
         //
         // GET: /Manage/Index
@@ -67,7 +40,7 @@ namespace ZPP_Project.Controllers
             var IntUserId = int.Parse(StringUserId);
             var model = new IndexViewModel
             {
-                HasPassword = HasPassword(),
+                HasPassword = await UserManager.HasPasswordAsync(IntUserId),
                 PhoneNumber = await UserManager.GetPhoneNumberAsync(IntUserId),
                 TwoFactor = await UserManager.GetTwoFactorEnabledAsync(IntUserId),
                 Logins = await UserManager.GetLoginsAsync(IntUserId),
@@ -191,7 +164,7 @@ namespace ZPP_Project.Controllers
                 return RedirectToAction("Index", new { Message = ManageMessageId.AddPhoneSuccess });
             }
             // If we got this far, something failed, redisplay form
-            ModelState.AddModelError("", "Failed to verify phone");
+            AddError("Failed to verify phone");
             return View(model);
         }
 
@@ -321,56 +294,7 @@ namespace ZPP_Project.Controllers
             return result.Succeeded ? RedirectToAction("ManageLogins") : RedirectToAction("ManageLogins", new { Message = ManageMessageId.Error });
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && _userManager != null)
-            {
-                _userManager.Dispose();
-                _userManager = null;
-            }
-
-            base.Dispose(disposing);
-        }
-
 #region Helpers
-        // Used for XSRF protection when adding external logins
-        private const string XsrfKey = "XsrfId";
-
-        private IAuthenticationManager AuthenticationManager
-        {
-            get
-            {
-                return HttpContext.GetOwinContext().Authentication;
-            }
-        }
-
-        private void AddErrors(IdentityResult result)
-        {
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError("", error);
-            }
-        }
-
-        private bool HasPassword()
-        {
-            var user = UserManager.FindById(User.Identity.GetUserId<int>());
-            if (user != null)
-            {
-                return user.PasswordHash != null;
-            }
-            return false;
-        }
-
-        private bool HasPhoneNumber()
-        {
-            var user = UserManager.FindById(User.Identity.GetUserId<int>());
-            if (user != null)
-            {
-                return user.PhoneNumber != null;
-            }
-            return false;
-        }
 
         public enum ManageMessageId
         {

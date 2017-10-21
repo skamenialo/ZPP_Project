@@ -6,8 +6,18 @@ using System.Web.Mvc;
 
 namespace ZPP_Project.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : ZPP_Project.Helpers.ZPPController
     {
+        #region Constructor
+
+        public HomeController()
+            : base() { }
+
+        public HomeController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, ApplicationRoleManager roleManager)
+            : base(userManager, signInManager, roleManager) { }
+
+        #endregion
+
         public ActionResult Index()
         {
             return View();

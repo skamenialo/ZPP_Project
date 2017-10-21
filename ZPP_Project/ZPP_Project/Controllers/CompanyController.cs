@@ -6,18 +6,27 @@ using ZPP_Project.DataAccess;
 
 namespace ZPP_Project.Controllers
 {
-    public class CompanyController : Controller
+    public class CompanyController : ZPP_Project.Helpers.ZPPController
     {
-        private ZppContext context = new ZppContext();
+        #region Constructor
+
+        public CompanyController()
+            : base() { }
+
+        public CompanyController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, ApplicationRoleManager roleManager)
+            : base(userManager, signInManager, roleManager) { }
+
+        #endregion
+
         // GET: Company
         public ActionResult Index()
         {
-            return View("Index", context.Companies.ToList());
+            return View("Index", DbContext.Companies.ToList());
         }
 
         public ActionResult Details(int id)
         {
-            return View("Details", context.Companies.Where(t => t.IdUser == id).FirstOrDefault());
+            return View("Details", DbContext.Companies.Where(t => t.IdUser == id).FirstOrDefault());
         }
     }
 }

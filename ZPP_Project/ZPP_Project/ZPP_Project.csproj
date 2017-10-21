@@ -211,6 +211,7 @@
     <Compile Include="Helpers\CompanyHelper.cs" />
     <Compile Include="Helpers\TeacherHelper.cs" />
     <Compile Include="Helpers\Utils.cs" />
+    <Compile Include="Helpers\ZPPController.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\Course.cs" />
     <Compile Include="Models\DataModels.cs" />

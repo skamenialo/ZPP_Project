@@ -8,18 +8,27 @@ using ZPP_Project.Models;
 
 namespace ZPP_Project.Controllers
 {
-    public class CourseController : Controller
+    public class CourseController : ZPP_Project.Helpers.ZPPController
     {
-        private ZppContext context = new ZppContext();
+        #region Constructor
+
+        public CourseController()
+            : base() { }
+
+        public CourseController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, ApplicationRoleManager roleManager)
+            : base(userManager, signInManager, roleManager) { }
+
+        #endregion
+
         // GET: Course
         public ActionResult Index()
         {
-            return View("Index", context.Courses.ToList());
+            return View("Index", DbContext.Courses.ToList());
         }
 
         public ActionResult Details(int id)
         {
-            return View("Details", context.Courses.Where(c => c.IdCourse == id).FirstOrDefault());
+            return View("Details", DbContext.Courses.Where(c => c.IdCourse == id).FirstOrDefault());
         }
     }
 }

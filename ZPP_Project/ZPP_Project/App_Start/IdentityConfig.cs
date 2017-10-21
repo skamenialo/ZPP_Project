@@ -37,9 +37,7 @@ namespace ZPP_Project
     public class ApplicationUserManager : UserManager<ZppUser, int>
     {
         public ApplicationUserManager(IUserStore<ZppUser, int> store)
-            : base(store)
-        {
-        }
+            : base(store) { }
 
         public static ApplicationUserManager Create(IdentityFactoryOptions<ApplicationUserManager> options, IOwinContext context) 
         {
@@ -95,6 +93,16 @@ namespace ZPP_Project
         {
             ZppUser user = await FindByNameAsync(userName);
             return user != null && await IsEmailConfirmedAsync(user.Id);
+        }
+
+        private async Task<bool> HasPhoneNumberAsync(int userId)
+        {
+            ZppUser user = await FindByIdAsync(userId);
+            if (user != null)
+            {
+                return user.PhoneNumber != null;
+            }
+            return false;
         }
     }
 

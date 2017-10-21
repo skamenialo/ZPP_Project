@@ -7,18 +7,27 @@ using ZPP_Project.DataAccess;
 
 namespace ZPP_Project.Controllers
 {
-    public class TeacherController : Controller
+    public class TeacherController : ZPP_Project.Helpers.ZPPController
     {
-        private ZppContext context = new ZppContext();
+        #region Constructor
+
+        public TeacherController()
+            : base() { }
+
+        public TeacherController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, ApplicationRoleManager roleManager)
+            : base(userManager, signInManager, roleManager) { }
+
+        #endregion
+
         // GET: Teacher
         public ActionResult Index()
         {
-            return View("Index", context.Teachers.ToList());
+            return View("Index", DbContext.Teachers.ToList());
         }
 
         public ActionResult Details(int id)
         {
-            return View("Details", context.Teachers.Where(t => t.IdUser == id).FirstOrDefault());
+            return View("Details", DbContext.Teachers.Where(t => t.IdUser == id).FirstOrDefault());
         }
     }
 }

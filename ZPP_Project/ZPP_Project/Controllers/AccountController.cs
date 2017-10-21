@@ -14,72 +14,15 @@ using System.Collections.Generic;
 namespace ZPP_Project.Controllers
 {
     [Authorize]
-    public class AccountController : Controller
+    public class AccountController : ZPP_Project.Helpers.ZPPController
     {
-
-        #region Private members
-
-        private ApplicationSignInManager _signInManager;
-        private ApplicationUserManager _userManager;
-        private ApplicationRoleManager _roleManager;
-
-        #endregion
-
         #region Constructor
 
         public AccountController()
-        {
-        }
+            : base() { }
 
         public AccountController(ApplicationUserManager userManager, ApplicationSignInManager signInManager, ApplicationRoleManager roleManager)
-        {
-            UserManager = userManager;
-            SignInManager = signInManager;
-            RoleManager = roleManager;
-        }
-
-        #endregion
-
-        #region Public members
-
-        public ApplicationSignInManager SignInManager
-        {
-            get
-            {
-                if(_signInManager == null)
-                    _signInManager = HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
-                return _signInManager;
-            }
-            private set 
-            { 
-                _signInManager = value; 
-            }
-        }
-
-        public ApplicationUserManager UserManager
-        {
-            get
-            {
-                if(_userManager == null)
-                    _userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-                return _userManager;
-            }
-            private set
-            {
-                _userManager = value;
-            }
-        }
-
-        public ApplicationRoleManager RoleManager
-        {
-            get
-            {
-                if(_roleManager == null)
-                    _roleManager = HttpContext.GetOwinContext().Get<ApplicationRoleManager>();
-                return _roleManager;
-            }
-            private set { _roleManager = value; }
-        }
+            : base(userManager, signInManager, roleManager) { }
 
         #endregion
 
@@ -105,7 +48,6 @@ namespace ZPP_Project.Controllers
                 // Info    
                 Console.Write(ex);
             }
-            Session.Remove(Helpers.Keys.CURRENT_ROLE);
             ViewBag.ReturnUrl = returnUrl;
             return this.View();    
         }
@@ -146,7 +88,7 @@ namespace ZPP_Project.Controllers
             }
             else
             {
-                ModelState.AddModelError("", "Invalid login attempt.");
+                AddError("Invalid login attempt.");
                 ViewBag.ReturnUrl = returnUrl;
                 return View("Login", model);
             }
@@ -166,7 +108,7 @@ namespace ZPP_Project.Controllers
             LoginViewModel loginModel = TempData[Helpers.Keys.LOGIN_MODEL] as LoginViewModel;
             if (loginModel == null)
             {
-                ModelState.AddModelError("", "Invalid login attempt.");
+                AddError("Invalid login attempt.");
                 ViewBag.ReturnUrl = returnUrl;
                 return View("Login");
             }
@@ -183,11 +125,11 @@ namespace ZPP_Project.Controllers
                 if (UserManager.FindByName(model.UserName) != null)
                 {
                     string callbackUrl = Url.Action("GenerateEmailConfirmation", "Account", new { userName = model.UserName }, protocol: Request.Url.Scheme);
-                    ModelState.AddModelError("", "You need to confirm your email. Click <a href=\"" + callbackUrl + "\">here</a> to generate new one");
+                    AddError("You need to confirm your email. Click <a href=\"" + callbackUrl + "\">here</a> to generate new one");
                 }
                 else
                 {
-                    ModelState.AddModelError("", "Invalid login attempt.");
+                    AddError("Invalid login attempt.");
                 }
                 ViewBag.ReturnUrl = returnUrl;
                 return View(model);
@@ -199,10 +141,7 @@ namespace ZPP_Project.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    IEnumerable<ZPPUserRole> roles = UserManager.FindByName(model.UserName).Roles;
-                    int rolesCount = roles.Count();
-                    if(rolesCount > 0)
-                        Session[Helpers.Keys.CURRENT_ROLE] = roleNr >= rolesCount ? roles.ElementAt(0) : roles.ElementAt(roleNr);
+                    await SetUserRole(model.UserName, roleNr);
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
@@ -210,7 +149,7 @@ namespace ZPP_Project.Controllers
                     return RedirectToAction("SendCode", new { ReturnUrl = returnUrl, RememberMe = model.RememberMe });
                 case SignInStatus.Failure:
                 default:
-                    ModelState.AddModelError("", "Invalid login attempt.");
+                    AddError("Invalid login attempt.");
                     ViewBag.ReturnUrl = returnUrl;
                     return View(model);
             }
@@ -404,7 +343,7 @@ namespace ZPP_Project.Controllers
             }
             if (model.Password.Equals(model.ConfirmPassword))
             {
-                ModelState.AddModelError("", "Confirmation password does not match.");
+                AddError("Confirmation password does not match.");
 
                 var user = await UserManager.FindByEmailAsync(model.Email);
                 if (user == null)
@@ -474,7 +413,7 @@ namespace ZPP_Project.Controllers
         //            return View("Lockout");
         //        case SignInStatus.Failure:
         //        default:
-        //            ModelState.AddModelError("", "Invalid code.");
+        //            AddError("Invalid code.");
         //            return View(model);
         //    }
         //}
@@ -607,55 +546,7 @@ namespace ZPP_Project.Controllers
 
         #endregion
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                if (_userManager != null)
-                {
-                    _userManager.Dispose();
-                    _userManager = null;
-                }
-
-                if (_signInManager != null)
-                {
-                    _signInManager.Dispose();
-                    _signInManager = null;
-                }
-            }
-
-            base.Dispose(disposing);
-        }
-
         #region Helpers
-
-        // Used for XSRF protection when adding external logins
-        private const string XsrfKey = "XsrfId";
-
-        private IAuthenticationManager AuthenticationManager
-        {
-            get
-            {
-                return HttpContext.GetOwinContext().Authentication;
-            }
-        }
-
-        private void AddErrors(IdentityResult result)
-        {
-            foreach (var error in result.Errors)
-            {
-                ModelState.AddModelError("", error);
-            }
-        }
-
-        private ActionResult RedirectToLocal(string returnUrl)
-        {
-            if (Url.IsLocalUrl(returnUrl))
-            {
-                return Redirect(returnUrl);
-            }
-            return RedirectToAction("Index", "Home");
-        }
 
         internal class ChallengeResult : HttpUnauthorizedResult
         {
