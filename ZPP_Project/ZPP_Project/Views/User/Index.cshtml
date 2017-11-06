@@ -1,0 +1,39 @@
+﻿@model IEnumerable<ZPP_Project.Models.ZppUser>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<div class="row">
+    <div class="col-md-1">
+        @Html.DisplayNameFor(model => model.UserType)
+    </div>
+    <div class="col-md-2">
+        @Html.DisplayNameFor(model => model.UserName)
+    </div>
+    <div class="col-md-2">
+        @Html.DisplayNameFor(model => model.Email)
+    </div>
+    <div class="col-md-2">
+        @Html.DisplayNameFor(model => model.EmailConfirmed)
+    </div>
+    <div class="col-md-2">
+        @Html.DisplayNameFor(model => model.PhoneNumberConfirmed)
+    </div>
+    <div class="col-md-1">
+        @Html.DisplayNameFor(model => model.Banned)
+    </div>
+    <div class="col-md-1">
+        Locked
+    </div>
+</div>
+
+@foreach (var item in Model)
+{
+    @Html.Partial("UserDisplay", item)
+}

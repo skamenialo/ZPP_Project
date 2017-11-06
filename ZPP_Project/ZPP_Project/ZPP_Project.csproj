@@ -177,6 +177,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\TeacherController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="DataAccess\ZppContext.cs" />
     <Compile Include="EntityDataModel\V_Comment.cs">
       <DependentUpon>ZPPDB.tt</DependentUpon>
@@ -382,6 +383,9 @@
     <Content Include="Views\Company\CompanyDisplay.cshtml" />
     <Content Include="Views\Company\Details.cshtml" />
     <Content Include="Views\Course\Details.cshtml" />
+    <Content Include="Views\User\Details.cshtml" />
+    <Content Include="Views\User\Index.cshtml" />
+    <Content Include="Views\User\UserDisplay.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

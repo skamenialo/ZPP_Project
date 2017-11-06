@@ -111,22 +111,22 @@ namespace ZPP_Project.Helpers
 
     public class ZPPUserRoleHelper
     {
-        public static async Task<bool> IsUserInRoleAsync(string roleName)
+        public static async Task<bool> IsUserInRoleAsync(string roleName, bool supressAdmin = false)
         {
             if (string.IsNullOrEmpty(roleName))
                 return false;
             IOwinContext context = HttpContext.Current.GetOwinContext();
-            return await IsUserInRoleAsync(context, roleName, context.Authentication.User.Identity.Name);
+            return await IsUserInRoleAsync(context, roleName, context.Authentication.User.Identity.Name, supressAdmin);
         }
 
-        public static async Task<bool> IsUserInRoleAsync(string roleName, string userName)
+        public static async Task<bool> IsUserInRoleAsync(string roleName, string userName, bool supressAdmin = false)
         {
             if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(roleName))
                 return false;
-            return await IsUserInRoleAsync(HttpContext.Current.GetOwinContext(), roleName, userName);
+            return await IsUserInRoleAsync(HttpContext.Current.GetOwinContext(), roleName, userName, supressAdmin);
         }
 
-        private static async Task<bool> IsUserInRoleAsync(IOwinContext context, string roleName, string userName)
+        private static async Task<bool> IsUserInRoleAsync(IOwinContext context, string roleName, string userName, bool supressAdmin = false)
         {
             ApplicationUserManager userManager = context.GetUserManager<ApplicationUserManager>();
             ApplicationRoleManager roleManager = context.Get<ApplicationRoleManager>();
@@ -140,39 +140,42 @@ namespace ZPP_Project.Helpers
                 return false;
 
             if (!await userManager.IsInRoleAsync(user.Id, roleName))
-                return false;
+            {
+                if (supressAdmin || !await userManager.IsInRoleAsync(user.Id, Roles.ADMINISTRATOR))
+                    return false;
+            }
 
             if (HttpContext.Current.Session[Keys.CURRENT_ROLE] == null)
                 return false;
 
-            string r = (string)HttpContext.Current.Session[Keys.CURRENT_ROLE];
-            if (string.IsNullOrEmpty(r))
+            int? roleNr = (int?)HttpContext.Current.Session[Keys.CURRENT_ROLE];
+            if (roleNr == null)
                 return false;
-
-            int roleNr = 0;
-            Int32.TryParse(r, out roleNr);
 
             List<ZPPUserRole> roles = new List<ZPPUserRole>(user.Roles);
 
-            return roles[roleNr].RoleId == role.Id;
+            return roles[roleNr.Value].RoleId == role.Id;
         }
 
-        public static bool IsUserInRole(string roleName)
+        public static bool IsUserInRole(string roleName, bool supressAdmin = false)
         {
             if (string.IsNullOrEmpty(roleName))
                 return false;
             IOwinContext context = HttpContext.Current.GetOwinContext();
-            return IsUserInRole(context, roleName, context.Authentication.User.Identity.Name);
+            string userName = context.Authentication.User.Identity.Name;
+            if (string.IsNullOrEmpty(userName))
+                return false;
+            return IsUserInRole(context, roleName, userName, supressAdmin);
         }
 
-        public static bool IsUserInRole(string roleName, string userName)
+        public static bool IsUserInRole(string roleName, string userName, bool supressAdmin = false)
         {
             if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(roleName))
                 return false;
-            return IsUserInRole(HttpContext.Current.GetOwinContext(), roleName, userName);
+            return IsUserInRole(HttpContext.Current.GetOwinContext(), roleName, userName, supressAdmin);
         }
 
-        private static bool IsUserInRole(IOwinContext context, string roleName, string userName)
+        private static bool IsUserInRole(IOwinContext context, string roleName, string userName, bool supressAdmin = false)
         {
             ApplicationUserManager userManager = context.GetUserManager<ApplicationUserManager>();
             ApplicationRoleManager roleManager = context.Get<ApplicationRoleManager>();
@@ -186,15 +189,40 @@ namespace ZPP_Project.Helpers
                 return false;
 
             if (!userManager.IsInRole(user.Id, roleName))
-                return false;
+            {
+                if (supressAdmin || !userManager.IsInRole(user.Id, Roles.ADMINISTRATOR))
+                    return false;
+            }
             
             if (HttpContext.Current.Session[Keys.CURRENT_ROLE] == null)
                 return false;
 
-            int roleNr = (int)HttpContext.Current.Session[Keys.CURRENT_ROLE];
+            int? roleNr = (int?)HttpContext.Current.Session[Keys.CURRENT_ROLE];
+            if (roleNr == null)
+                return false;
+
             List<ZPPUserRole> roles = new List<ZPPUserRole>(user.Roles);
 
-            return roles[roleNr].RoleId == role.Id;
+            return roles[roleNr.Value].RoleId == role.Id;
+        }
+
+        public static string GetUserRoleName(int roleNr)
+        {
+            switch (roleNr)
+            {
+                case 1:
+                    return Roles.ADMINISTRATOR;
+                case 2:
+                    return Roles.STUDENT;
+                case 3:
+                    return Roles.COMPANY;
+                case 4:
+                    return Roles.TEACHER;
+                case 5:
+                    return Roles.TEACHER + " | " + Roles.STUDENT;
+                default:
+                    return "None";
+            }
         }
     }
 

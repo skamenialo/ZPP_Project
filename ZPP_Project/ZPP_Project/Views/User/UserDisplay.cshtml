@@ -1,0 +1,72 @@
+﻿@model ZPP_Project.Models.ZppUser
+@using ZPP_Project.Helpers
+
+@{ string blockName = "UserDisplay_" + Model.Id; }
+<div class="row">
+    <div class="row">
+        <div class="col-md-1 text-right">
+            @HtmlHelperZpp.RenderColapseIcon(blockName)
+        </div>
+        <div class="col-md-2">
+            @Html.ActionLink(Model.UserName, "Details", "User", new { id = Model.Id }, null)
+        </div>
+        <div class="col-md-2">
+            @Html.DisplayFor(model => model.Email)
+        </div>
+        <div class="col-md-2">
+            @Html.DisplayFor(model => model.EmailConfirmed)
+        </div>
+        <div class="col-md-2">
+            @Html.DisplayFor(model => model.PhoneNumberConfirmed)
+        </div>
+        <div class="col-md-1">
+            @Html.DisplayFor(model => model.Banned)
+        </div>
+        <div class="col-md-1">
+            @Html.CheckBox("Locked", Model.LockoutEndDateUtc != null && Model.LockoutEndDateUtc > DateTime.UtcNow, new { disabled = "disabled" })
+        </div>
+    </div>
+    <div id="@blockName" class="row collapse">
+        <div class="col-md-1">
+        </div>
+        <div class="col-md-10">
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.DisplayNameFor(model => model.UserType)
+                </div>
+                <div class="col-md-1">
+                    @ZPPUserRoleHelper.GetUserRoleName(Model.UserType)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.DisplayNameFor(model => model.PhoneNumber):
+                </div>
+                <div class="col-md-1">
+                    @Html.DisplayFor(model => model.PhoneNumber)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.DisplayNameFor(model => model.LockoutEnabled):
+                </div>
+                <div class="col-md-1">
+                    @Html.DisplayFor(model => model.LockoutEnabled)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                    @Html.DisplayNameFor(model => model.LockoutEndDateUtc):
+                </div>
+                <div class="col-md-3">
+                    @Html.DisplayFor(model => model.LockoutEndDateUtc)
+                </div>
+            </div>
+        </div>
+        <div class="col-md-1">
+            @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+            @Html.ActionLink("Details", "Details", new { id = Model.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id = Model.Id })
+        </div>
+    </div>
+</div>
