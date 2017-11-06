@@ -33,7 +33,7 @@ CREATE TABLE Users(
   IdUser INTEGER IDENTITY(1,1) NOT NULL,	--known as Id in Identity.EntityFramework
   UserType INTEGER NOT NULL,
   Active BIT NOT NULL,						--known as EmailConfirmed in Identity.EntityFramework
-  Banned BIT,								--known as LockoutEnabled in Identity.EntityFramework
+  Banned BIT NOT NULL,
   Login VARCHAR(64) NOT NULL,				--known as UserName in Identity.EntityFramework
   PasswordHash VARCHAR(256) NOT NULL,
   Email VARCHAR(256) NOT NULL,
@@ -42,6 +42,7 @@ CREATE TABLE Users(
   EF_PhoneNumber VARCHAR(128),
   EF_PhoneNumberConfirmed BIT NOT NULL,
   EF_TwoFactorEnabled BIT NOT NULL,
+  EF_LockoutEnabled BIT NOT NULL,
   EF_LockoutEndDateUtc DATETIME,
   EF_AccessFailedCount INTEGER NOT NULL, 
   CONSTRAINT User_PK PRIMARY KEY (IdUser),

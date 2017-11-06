@@ -14,6 +14,9 @@ namespace ZPP_Project.Models
         [Required]
         public int UserType { get; set; }
 
+        [Required]
+        public bool Banned { get; set; } 
+
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(ApplicationUserManager manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
@@ -67,7 +70,7 @@ namespace ZPP_Project.Models
             modelBuilder.Entity<ZppUser>().Property(p => p.Id).HasColumnName("IdUser");
             modelBuilder.Entity<ZppUser>().Property(p => p.EmailConfirmed).HasColumnName("Active");
             modelBuilder.Entity<ZppUser>().Property(p => p.AccessFailedCount).HasColumnName("EF_AccessFailedCount");
-            modelBuilder.Entity<ZppUser>().Property(p => p.LockoutEnabled).HasColumnName("Banned");
+            modelBuilder.Entity<ZppUser>().Property(p => p.LockoutEnabled).HasColumnName("EF_LockoutEnabled");
             modelBuilder.Entity<ZppUser>().Property(p => p.LockoutEndDateUtc).HasColumnName("EF_LockoutEndDateUtc");
             modelBuilder.Entity<ZppUser>().Property(p => p.PhoneNumber).HasColumnName("EF_PhoneNumber");
             modelBuilder.Entity<ZppUser>().Property(p => p.PhoneNumberConfirmed).HasColumnName("EF_PhoneNumberConfirmed");

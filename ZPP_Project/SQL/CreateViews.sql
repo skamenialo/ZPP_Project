@@ -1,3 +1,15 @@
+DROP VIEW V_UserLogin
+DROP VIEW V_UserInfo
+DROP VIEW V_Student
+DROP VIEW V_Company
+DROP VIEW V_Teacher;
+DROP VIEW V_Course;
+DROP VIEW V_Group;
+DROP VIEW V_Lecture;
+DROP VIEW V_Attendance;
+DROP VIEW V_Grade;
+DROP VIEW V_Comment;
+
 -- V_UserLogin --
 IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS
         WHERE TABLE_NAME = 'V_UserLogin')
