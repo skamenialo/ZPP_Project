@@ -131,18 +131,22 @@ namespace ZPP_Project.Helpers
 
         #region Controller members
 
-        protected override async void Initialize(System.Web.Routing.RequestContext requestContext)
+        protected override void Initialize(System.Web.Routing.RequestContext requestContext)
         {
             base.Initialize(requestContext);
             //przywracanie sesji
             if (User.Identity.IsAuthenticated)
                 try
                 {
-                    await RestoreSession();
+                    RestoreSession();
                 }
                 catch (NullReferenceException)
                 {
                     ClearSession();
+                }
+                catch(Exception)
+                {
+
                 }
             else
                 ClearSession();
@@ -150,7 +154,7 @@ namespace ZPP_Project.Helpers
 
         #endregion
 
-        protected async Task RestoreSession()
+        protected void RestoreSession()
         {
             if (Session[Helpers.Keys.CURRENT_ROLE] == null)
             {
@@ -161,7 +165,7 @@ namespace ZPP_Project.Helpers
                     Int32.TryParse(role, out roleNr);
                     if (roleNr < 0)
                         roleNr = 0;
-                    await SetUserRole(User.Identity.Name, roleNr);
+                    SetUserRole(User.Identity.Name, roleNr);
                 }
             }
         }
@@ -172,9 +176,20 @@ namespace ZPP_Project.Helpers
             Helpers.CookieStoreHelper.RemoveCookie(Helpers.Keys.CURRENT_ROLE);
         }
 
-        protected async Task SetUserRole(string userName, int roleNr)
+        protected void SetUserRole(string userName, int roleNr)
+        {
+            ZppUser user = UserManager.FindByName(userName);
+            SetUserRole(user, roleNr);
+        }
+
+        protected async Task SetUserRoleAsync(string userName, int roleNr)
         {
             ZppUser user = await UserManager.FindByNameAsync(userName);
+            SetUserRole(user, roleNr);
+        }
+
+        private void SetUserRole(ZppUser user, int roleNr)
+        {
             int rolesCount = user.Roles.Count();
             if (rolesCount > 0)
             {

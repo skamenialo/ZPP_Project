@@ -141,7 +141,7 @@ namespace ZPP_Project.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
-                    await SetUserRole(model.UserName, roleNr);
+                    await SetUserRoleAsync(model.UserName, roleNr);
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");

@@ -45,7 +45,7 @@ namespace ZPP_Project.Helpers
                 var cookieOld = HttpContext.Current.Response.Cookies[key];
                 cookieOld.Expires = DateTime.Now.Add(expires);
                 cookieOld.Value = encodedCookie.Value;
-                //HttpContext.Current.Response.Cookies.Add(cookieOld);
+                HttpContext.Current.Response.Cookies.Set(cookieOld);
             }
             else
             {
