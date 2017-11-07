@@ -3,8 +3,8 @@
 
 @{ string blockName = "UserDisplay_" + Model.Id; }
 <div class="row">
-    <div class="row">
-        <div class="col-md-1 text-right">
+    <div class="row" style="margin-left:-5px">
+        <div style="float: left">
             @HtmlHelperZpp.RenderColapseIcon(blockName)
         </div>
         <div class="col-md-2">
@@ -26,13 +26,11 @@
             @Html.CheckBox("Locked", Model.LockoutEndDateUtc != null && Model.LockoutEndDateUtc > DateTime.UtcNow, new { disabled = "disabled" })
         </div>
     </div>
-    <div id="@blockName" class="row collapse">
-        <div class="col-md-1">
-        </div>
-        <div class="col-md-10">
+    <div id="@blockName" class="row collapse" style="margin-left:0px">
+        <div class="col-md-9">
             <div class="row">
                 <div class="col-md-2">
-                    @Html.DisplayNameFor(model => model.UserType)
+                    @Html.DisplayNameFor(model => model.UserType):
                 </div>
                 <div class="col-md-1">
                     @ZPPUserRoleHelper.GetUserRoleName(Model.UserType)

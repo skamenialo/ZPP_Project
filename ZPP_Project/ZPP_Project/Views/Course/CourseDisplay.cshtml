@@ -6,15 +6,11 @@
 
 @{ string blockName = "CourseDisplay_" + Model.IdCourse; }
 <div class="row">
-
-
-    <div class="col-md-12">
-        <div>
-            @HtmlHelperZpp.RenderColapseIcon(blockName)
-            @Html.ActionLink(Model.Name, "Details", "Course", new { id = Model.IdCourse }, null)
-        </div>
+    <div class="row">
+        @HtmlHelperZpp.RenderColapseIcon(blockName)
+        @Html.ActionLink(Model.Name, "Details", "Course", new { id = Model.IdCourse }, null)
     </div>
-    <div id="@blockName">
+    <div id="@blockName" class="row collapse" style="margin-left:-5px">
         <div class="col-md-4">
             <!-- Who -->
             <div class="row">Offered by</div>

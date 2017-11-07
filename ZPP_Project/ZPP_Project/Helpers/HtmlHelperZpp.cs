@@ -10,7 +10,7 @@ namespace ZPP_Project.Helpers
     {
         public static MvcHtmlString RenderColapseIcon(string regionName)
         {
-            MvcHtmlString result = new MvcHtmlString("<i class=\"fa fa-angle-right\" aria-hidden=\"true\" id=\"" + regionName + "_toggle\" onclick=\"ToggleVisibilityState('" + regionName + "')\"></i>");
+            MvcHtmlString result = new MvcHtmlString("<span class=\"fa fa-angle-right\" data-toggle=\"collapse\" id=\"" + regionName + "_toggle\" data-target=\"#" + regionName + "\"></span>");
             return result;
         }
     }
