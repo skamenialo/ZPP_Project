@@ -44,7 +44,11 @@ namespace ZPP_Project.Models
         #region Constructor
 
         public ZppIdentityContext()
-            : base("InitialConnection")
+#if DATABASE_LOCAL
+            : base("IdentityConnection_NoDb")
+#elif DATABASE_REMOTE
+            : base("IdentityConnection")
+#endif
         { }
 
         #endregion

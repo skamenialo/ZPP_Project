@@ -14,6 +14,7 @@ namespace ZPP_Project.EntityDataModel
     
     public partial class V_Student
     {
+        public int IdStudent { get; set; }
         public int IdUser { get; set; }
         public int UserType { get; set; }
         public string LastName { get; set; }

@@ -1,11 +1,11 @@
 ﻿@using ZPP_Project.Helpers
 @model ZPP_Project.EntityDataModel.V_Teacher
 
-@{ string blockName = "TeacherDisplay_" + Model.IdUser; }
+@{ string blockName = "TeacherDisplay_" + Model.IdTeacher; }
 <div class="row">
     <div class="row">
         @HtmlHelperZpp.RenderColapseIcon(blockName)
-        @Html.ActionLink(TeacherHelper.Display(Model), "Details", new { id = Model.IdUser })
+        @Html.ActionLink(TeacherHelper.Display(Model), "Details", new { id = Model.IdTeacher })
     </div>
     <div id="@blockName" class="row collapse" style="margin-left:-5px">
         <div class="col-md-4">

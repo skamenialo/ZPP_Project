@@ -1,11 +1,11 @@
 ﻿@using ZPP_Project.Helpers
 @model ZPP_Project.EntityDataModel.V_Company
 
-@{ string blockName = "CompanyDisplay_" + Model.IdUser; }
+@{ string blockName = "CompanyDisplay_" + Model.IdCompany; }
 <div class="row">
     <div class="row">
         @HtmlHelperZpp.RenderColapseIcon(blockName)
-        @Html.ActionLink(CompanyHelper.Display(Model), "Details", "Company", new { id = Model.IdUser }, null)
+        @Html.ActionLink(CompanyHelper.Display(Model), "Details", "Company", new { id = Model.IdCompany }, null)
     </div>
     <div id="@blockName" class="row collapse" style="margin-left:-5px">
         <div class="col-md-4">

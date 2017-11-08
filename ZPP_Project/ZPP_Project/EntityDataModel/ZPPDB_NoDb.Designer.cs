@@ -1,4 +1,4 @@
-﻿// T4 code generation is enabled for model 'C:\Users\britenet\Documents\Visual Studio 2013\Projects\ZPP_Project_clean\ZPP_Project\ZPP_Project\EntityDataModel\ZPPDB_NoDb.edmx'. 
+﻿// T4 code generation is enabled for model '\ZPP_Project\ZPP_Project\EntityDataModel\ZPPDB_NoDb.edmx'. 
 // To enable legacy code generation, change the value of the 'Code Generation Strategy' designer
 // property to 'Legacy ObjectContext'. This property is available in the Properties Window when the model
 // is open in the designer.

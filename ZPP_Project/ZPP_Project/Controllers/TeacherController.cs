@@ -27,7 +27,7 @@ namespace ZPP_Project.Controllers
 
         public ActionResult Details(int id)
         {
-            return View("Details", DbContext.Teachers.Where(t => t.IdUser == id).FirstOrDefault());
+            return View("Details", DbContext.Teachers.Where(teacher => teacher.IdTeacher == id).FirstOrDefault());
         }
     }
 }

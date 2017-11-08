@@ -14,6 +14,7 @@ namespace ZPP_Project.EntityDataModel
     
     public partial class V_Attendance
     {
+        public int IdAttendance { get; set; }
         public int IdLecture { get; set; }
         public int IdStudent { get; set; }
         public bool Attended { get; set; }

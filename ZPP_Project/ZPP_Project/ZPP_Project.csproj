@@ -179,6 +179,9 @@
     <Compile Include="Controllers\TeacherController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="DataAccess\ZppContext.cs" />
+    <Compile Include="EntityDataModel\V_Attendance.cs">
+      <DependentUpon>ZPPDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="EntityDataModel\V_Comment.cs">
       <DependentUpon>ZPPDB.tt</DependentUpon>
     </Compile>
@@ -201,6 +204,12 @@
       <DependentUpon>ZPPDB.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityDataModel\V_Teacher.cs">
+      <DependentUpon>ZPPDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityDataModel\V_UserInfo.cs">
+      <DependentUpon>ZPPDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityDataModel\V_UserLogin.cs">
       <DependentUpon>ZPPDB.tt</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.cs">
@@ -226,15 +235,6 @@
     <Compile Include="States\LectureState.cs" />
     <Compile Include="States\StudentState.cs" />
     <Compile Include="States\UserState.cs" />
-    <Compile Include="EntityDataModel\V_Attendance.cs">
-      <DependentUpon>ZPPDB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntityDataModel\V_UserInfo.cs">
-      <DependentUpon>ZPPDB.tt</DependentUpon>
-    </Compile>
-    <Compile Include="EntityDataModel\V_UserLogin.cs">
-      <DependentUpon>ZPPDB.tt</DependentUpon>
-    </Compile>
     <Compile Include="EntityDataModel\ZPPDB.cs">
       <DependentUpon>ZPPDB.tt</DependentUpon>
       <DesignTime>True</DesignTime>

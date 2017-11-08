@@ -14,7 +14,7 @@ namespace ZPP_Project.Helpers
             V_Teacher t;
             try
             {
-                t = context.Teachers.First(obj => obj.IdUser == idTeacher);
+                t = context.Teachers.First(teacher => teacher.IdTeacher == idTeacher);
             }
             catch (InvalidOperationException)
             {

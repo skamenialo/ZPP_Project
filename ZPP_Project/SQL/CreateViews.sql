@@ -34,7 +34,7 @@ IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS
     DROP VIEW V_Student
 GO
 CREATE VIEW V_Student AS
-  SELECT u.IdUser, u.UserType, s.LastName, s.FirstName, s.Address, u.Email
+  SELECT s.IdStudent, u.IdUser, u.UserType, s.LastName, s.FirstName, s.Address, u.Email
   FROM Users u
   INNER JOIN Students s ON u.IdUser = s.IdUser;
 GO
@@ -44,7 +44,7 @@ IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS
     DROP VIEW V_Company
 GO
 CREATE VIEW V_Company AS
-  SELECT IdUser, Name, Address, Email, Website, Description
+  SELECT IdCompany, IdUser, Name, Address, Email, Website, Description
   FROM Companies;
 GO
 -- V_Teacher --
@@ -53,7 +53,7 @@ IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS
     DROP VIEW V_Teacher
 GO
 CREATE VIEW V_Teacher AS
-  SELECT u.IdUser, u.UserType, t.IdCompany, t.LastName, t.FirstName, t.Address, u.Email, t.Degree, t.Website, t.Description
+  SELECT t.IdTeacher, u.IdUser, u.UserType, t.IdCompany, t.LastName, t.FirstName, t.Address, u.Email, t.Degree, t.Website, t.Description
   FROM Users u
   INNER JOIN Teachers t ON u.IdUser = t.IdUser;
 GO
@@ -90,7 +90,7 @@ IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS
     DROP VIEW V_Attendance
 GO
 CREATE VIEW V_Attendance AS
-  SELECT IdLecture, IdStudent, Attended
+  SELECT IdAttendance, IdLecture, IdStudent, Attended
   FROM Attendance;
 GO
 -- V_Grade --

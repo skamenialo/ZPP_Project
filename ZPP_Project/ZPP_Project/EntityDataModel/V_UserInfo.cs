@@ -17,6 +17,6 @@ namespace ZPP_Project.EntityDataModel
         public int IdUser { get; set; }
         public int UserType { get; set; }
         public bool Active { get; set; }
-        public Nullable<bool> Banned { get; set; }
+        public bool Banned { get; set; }
     }
 }

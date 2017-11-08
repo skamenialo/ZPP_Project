@@ -15,7 +15,7 @@ namespace ZPP_Project.Helpers
             V_Company c;
             try
             {
-                c = context.Companies.First(obj => obj.IdUser == idCompany);
+                c = context.Companies.First(company => company.IdCompany == idCompany);
             }
             catch (InvalidOperationException)
             {

@@ -14,6 +14,7 @@ namespace ZPP_Project.EntityDataModel
     
     public partial class V_Company
     {
+        public int IdCompany { get; set; }
         public int IdUser { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }

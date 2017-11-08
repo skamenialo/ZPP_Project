@@ -14,13 +14,14 @@ namespace ZPP_Project.EntityDataModel
     
     public partial class V_Teacher
     {
+        public int IdTeacher { get; set; }
         public int IdUser { get; set; }
         public int UserType { get; set; }
+        public int IdCompany { get; set; }
         public string LastName { get; set; }
         public string FirstName { get; set; }
         public string Address { get; set; }
         public string Email { get; set; }
-        public int IdCompany { get; set; }
         public string Degree { get; set; }
         public string Website { get; set; }
         public string Description { get; set; }
