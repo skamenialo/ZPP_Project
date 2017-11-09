@@ -7,6 +7,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.AspNet.Identity;
 using ZPP_Project.Helpers;
 using ZPP_Project.Models;
 
@@ -41,7 +42,16 @@ namespace ZPP_Project.Controllers
         // GET: User/Create
         public ActionResult Create()
         {
-            return View();
+            List<SelectListItem> userTypes = new List<SelectListItem>();
+            foreach (ZPP_Project.EntityDataModel.SL_UserType type in DbContext.UserTypes.ToList())
+            {
+                userTypes.Add(new SelectListItem
+                {
+                    Text = type.Name,
+                    Value = type.IdUserType.ToString()
+                });
+            }
+            return View(new CreateUserViewModel() { LockoutEnabled = true, UserTypes = userTypes});
         }
 
         // POST: User/Create
@@ -49,16 +59,20 @@ namespace ZPP_Project.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,UserType,Banned,Email,EmailConfirmed,PasswordHash,SecurityStamp,PhoneNumber,PhoneNumberConfirmed,TwoFactorEnabled,LockoutEndDateUtc,LockoutEnabled,AccessFailedCount,UserName")] ZppUser zppUser)
+        public async Task<ActionResult> Create(CreateUserViewModel model)
         {
             if (ModelState.IsValid)
             {
-                db.Users.Add(zppUser);
-                await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                var user = new ZppUser { UserName = model.UserName, Email = model.Email, UserType = Int32.Parse(model.UserType), LockoutEnabled = model.LockoutEnabled };
+                var result = await UserManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    return View("Index");
+                }
+                AddErrors(result);
             }
 
-            return View(zppUser);
+            return View(model);
         }
 
         // GET: User/Edit/5

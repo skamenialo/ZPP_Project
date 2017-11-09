@@ -16,6 +16,7 @@ namespace ZPP_Project.DataAccess
         public DbSet<V_Teacher> Teachers { get; set; }
         public DbSet<V_Company> Companies { get; set; }
         public DbSet<V_Student> Students { get; set; }
+        public DbSet<SL_UserType> UserTypes { get; set; }
 
 #endregion
 

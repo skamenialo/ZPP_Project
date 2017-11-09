@@ -5,6 +5,13 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="ZPPModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="SL_UserType">
+          <Key>
+            <PropertyRef Name="IdUserType" />
+          </Key>
+          <Property Name="IdUserType" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="64" Nullable="false" />
+        </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'ZPP.dbo.V_Attendance' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="V_Attendance">
@@ -147,6 +154,7 @@ warning 6002: The table/view 'ZPP.dbo.V_UserLogin' does not have a primary key d
           <Property Name="PasswordHash" Type="varchar" MaxLength="256" Nullable="false" />
         </EntityType>
         <EntityContainer Name="ZPPModelStoreContainer">
+          <EntitySet Name="SL_UserType" EntityType="Self.SL_UserType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="V_Attendance" EntityType="Self.V_Attendance" store:Type="Views" Schema="dbo" />
           <EntitySet Name="V_Comment" EntityType="Self.V_Comment" store:Type="Views" Schema="dbo" />
           <EntitySet Name="V_Company" EntityType="Self.V_Company" store:Type="Views" Schema="dbo" />
@@ -175,6 +183,7 @@ warning 6002: The table/view 'ZPP.dbo.V_UserLogin' does not have a primary key d
           <EntitySet Name="V_Teacher" EntityType="ZPPModel.V_Teacher" />
           <EntitySet Name="V_UserInfo" EntityType="ZPPModel.V_UserInfo" />
           <EntitySet Name="V_UserLogin" EntityType="ZPPModel.V_UserLogin" />
+          <EntitySet Name="SL_UserType" EntityType="ZPPModel.SL_UserType" />
         </EntityContainer>
         <EntityType Name="V_Attendance">
           <Key>
@@ -294,6 +303,13 @@ warning 6002: The table/view 'ZPP.dbo.V_UserLogin' does not have a primary key d
           <Property Name="IdUser" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Login" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="false" />
           <Property Name="PasswordHash" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="SL_UserType">
+          <Key>
+            <PropertyRef Name="IdUserType" />
+          </Key>
+          <Property Name="IdUserType" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="false" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -428,6 +444,14 @@ warning 6002: The table/view 'ZPP.dbo.V_UserLogin' does not have a primary key d
                 <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
                 <ScalarProperty Name="Login" ColumnName="Login" />
                 <ScalarProperty Name="IdUser" ColumnName="IdUser" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SL_UserType">
+            <EntityTypeMapping TypeName="ZPPModel.SL_UserType">
+              <MappingFragment StoreEntitySet="SL_UserType">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="IdUserType" ColumnName="IdUserType" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

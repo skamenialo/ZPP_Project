@@ -16,6 +16,7 @@
         <EntityTypeShape EntityType="ZPPModel.V_Teacher" Width="1.5" PointX="0.75" PointY="7.75" />
         <EntityTypeShape EntityType="ZPPModel.V_UserInfo" Width="1.5" PointX="2.75" PointY="7.75" />
         <EntityTypeShape EntityType="ZPPModel.V_UserLogin" Width="1.5" PointX="4.75" PointY="7.75" />
+        <EntityTypeShape EntityType="ZPPModel.SL_UserType" Width="1.5" PointX="9.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
