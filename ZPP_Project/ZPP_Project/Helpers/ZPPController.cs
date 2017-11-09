@@ -205,6 +205,11 @@ namespace ZPP_Project.Helpers
             ModelState.AddModelError("", error);
         }
 
+        protected void AddError<TModel, TProperty>(TModel model, System.Linq.Expressions.Expression<Func<TModel, TProperty>> expression, string error)
+        {
+            ModelState.AddModelError(Helpers.HtmlExtensions.GetDisplayName<TModel, TProperty>(model, expression), error);
+        }
+
         protected void AddErrors(IdentityResult result)
         {
             foreach (var error in result.Errors)

@@ -42,16 +42,8 @@ namespace ZPP_Project.Controllers
         // GET: User/Create
         public ActionResult Create()
         {
-            List<SelectListItem> userTypes = new List<SelectListItem>();
-            foreach (ZPP_Project.EntityDataModel.SL_UserType type in DbContext.UserTypes.ToList())
-            {
-                userTypes.Add(new SelectListItem
-                {
-                    Text = type.Name,
-                    Value = type.IdUserType.ToString()
-                });
-            }
-            return View(new CreateUserViewModel() { LockoutEnabled = true, UserTypes = userTypes});
+            
+            return View(new CreateUserViewModel() { LockoutEnabled = true, UserTypes = GetUserTypes()});
         }
 
         // POST: User/Create
@@ -82,12 +74,88 @@ namespace ZPP_Project.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            ZppUser zppUser = await db.Users.FirstAsync(u => u.Id == id); ;
+            ZppUser zppUser = await UserManager.FindByIdAsync(id.Value);
             if (zppUser == null)
             {
                 return HttpNotFound();
             }
-            return View(zppUser);
+            EditUserViewModel model = EditUserViewModel.GetFromZppUser(zppUser);
+            model.UserTypes = GetUserTypes();
+            return View(model);
+        }
+
+        // POST: User/Edit/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Edit(EditUserViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                ZppUser user = UserManager.FindById(model.UserId);
+                if (user != null)
+                {
+                    ZppUser user2 = UserManager.FindByName(model.UserName);
+                    if (user2 == null || user2.Equals(user))
+                    {
+                        user2 = UserManager.FindByEmail(model.Email);
+                        if (user2 == null || user2.Equals(user))
+                        {
+                            user2 = new ZppUser()
+                            {
+                                Id = model.UserId,
+                                UserName = model.UserName,
+                                AccessFailedCount = 0,
+                                Banned = model.Banned,
+                                Email = model.Email,
+                                LockoutEnabled = model.LockoutEnabled,
+                                LockoutEndDateUtc = model.LockoutEndDateUtc,
+                                PhoneNumber = model.PhoneNumber,
+                                PhoneNumberConfirmed = model.PhoneNumberConfirmed,
+                                TwoFactorEnabled = model.TwoFactorEnabled
+                            };
+                            int userType = user.UserType;
+                            if (Int32.TryParse(model.UserType, out userType)
+                                && userType <= DbContext.UserTypes.Count())
+                            {
+                                if (userType != user.UserType)
+                                {
+                                    user2.UserType = userType;
+                                    user2.EmailConfirmed = false;
+                                }
+                            }
+                            else
+                                AddError("Wrong user role!");
+                            if (!string.IsNullOrEmpty(model.Password))
+                            {
+                                model.Password = new SHA512PasswordHasher().HashPassword(model.Password);
+                                if (!model.Password.Equals(user.PasswordHash))
+                                    user2.PasswordHash = model.Password;
+                                else
+                                {
+                                    AddError<EditUserViewModel, string>(model, m => m.Password, "Password must be different!");
+                                    model.Password = null;
+                                    model.ConfirmPassword = null;
+                                }
+                            }
+                            if (ModelState.IsValid)
+                            {
+                                UserManager.Update(user2);
+                                return RedirectToAction("Index");
+                            }
+                        }
+                        else
+                            AddError("User with given email already exists!");
+                    }
+                    else
+                        AddError("User with given name already exists!");
+                }
+                else
+                    AddError("Could not find user for edit!");
+            }
+            model.UserTypes = GetUserTypes();
+            return View(model);
         }
 
         // GET: User/Delete/5
@@ -114,6 +182,20 @@ namespace ZPP_Project.Controllers
             db.Users.Remove(zppUser);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
+        }
+
+        private List<SelectListItem> GetUserTypes()
+        {
+            List<SelectListItem> userTypes = new List<SelectListItem>();
+            foreach (ZPP_Project.EntityDataModel.SL_UserType type in DbContext.UserTypes.ToList())
+            {
+                userTypes.Add(new SelectListItem
+                {
+                    Text = ZPPUserRoleHelper.GetUserRoleName(type.IdUserType),
+                    Value = type.IdUserType.ToString()
+                });
+            }
+            return userTypes;
         }
 
         protected override void Dispose(bool disposing)
