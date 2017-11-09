@@ -13,14 +13,14 @@ using ZPP_Project.Models;
 namespace ZPP_Project.Controllers
 {
     [ZPPAuthorize(Roles = Helpers.Roles.ADMINISTRATOR)]
-    public class UserController : Controller
+    public class UserController : ZPPController
     {
         private ZppIdentityContext db = new ZppIdentityContext();
 
         // GET: User
-        public async Task<ActionResult> Index()
+        public ActionResult Index()
         {
-            return View(await db.Users.ToListAsync());
+            return View(db.Users.AsEnumerable().Select(user => DisplayUserViewModel.GetFromZppUser(user))); 
         }
 
         // GET: User/Details/5
@@ -35,7 +35,7 @@ namespace ZPP_Project.Controllers
             {
                 return HttpNotFound();
             }
-            return View(zppUser);
+            return View(DisplayUserViewModel.GetFromZppUser(zppUser));
         }
 
         // GET: User/Create

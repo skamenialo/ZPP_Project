@@ -1,13 +1,13 @@
-﻿@model IEnumerable<ZPP_Project.Models.ZppUser>
+﻿@model IEnumerable<ZPP_Project.Models.DisplayUserViewModel>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Users";
 }
 
-<h2>Index</h2>
+<h2>@ViewBag.Title</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-default" })
 </p>
 <div class="container">
     <div class="row">

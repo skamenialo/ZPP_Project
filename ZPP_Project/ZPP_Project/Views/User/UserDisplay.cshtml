@@ -1,14 +1,14 @@
-﻿@model ZPP_Project.Models.ZppUser
+﻿@model ZPP_Project.Models.DisplayUserViewModel
 @using ZPP_Project.Helpers
 
-@{ string blockName = "UserDisplay_" + Model.Id; }
+@{ string blockName = "UserDisplay_" + Model.UserId; }
 <div class="row">
     <div class="row" style="margin-left:-5px">
         <div style="float: left">
             @HtmlHelperZpp.RenderColapseIcon(blockName)
         </div>
         <div class="col-md-2">
-            @Html.ActionLink(Model.UserName, "Details", "User", new { id = Model.Id }, null)
+            @Html.ActionLink(Model.UserName, "Details", "User", new { id = Model.UserId }, null)
         </div>
         <div class="col-md-2">
             @Html.DisplayFor(model => model.Email)
@@ -52,19 +52,22 @@
                     @Html.DisplayFor(model => model.LockoutEnabled)
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-2">
-                    @Html.DisplayNameFor(model => model.LockoutEndDateUtc):
+            @if (Model.LockoutEndDateUtc != null)
+            { 
+                <div class="row">
+                    <div class="col-md-2">
+                        @Html.DisplayNameFor(model => model.LockoutEndDateUtc):
+                    </div>
+                    <div class="col-md-3">
+                        @Html.DisplayFor(model => model.LockoutEndDateUtc)
+                    </div>
                 </div>
-                <div class="col-md-3">
-                    @Html.DisplayFor(model => model.LockoutEndDateUtc)
-                </div>
-            </div>
+            }
         </div>
         <div class="col-md-1">
-            @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
-            @Html.ActionLink("Details", "Details", new { id = Model.Id }) |
-            @Html.ActionLink("Delete", "Delete", new { id = Model.Id })
+            @Html.ActionLink("Edit", "Edit", new { id = Model.UserId }) |
+            @Html.ActionLink("Details", "Details", new { id = Model.UserId }) |
+            @Html.ActionLink("Delete", "Delete", new { id = Model.UserId })
         </div>
     </div>
 </div>
