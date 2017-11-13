@@ -172,4 +172,11 @@ namespace ZPP_Project.Models
             };
         }
     }
+
+    public class BlockUserViewModel
+    {
+        public int UserId;
+
+        public string UserName;
+    }
 }

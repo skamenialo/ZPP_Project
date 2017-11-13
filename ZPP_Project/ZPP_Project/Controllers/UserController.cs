@@ -28,14 +28,12 @@ namespace ZPP_Project.Controllers
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            ZppUser zppUser = await db.Users.FirstAsync(u => u.Id == id);
+
+            ZppUser zppUser = await UserManager.FindByIdAsync(id.Value);
             if (zppUser == null)
-            {
                 return HttpNotFound();
-            }
+
             return View(DisplayUserViewModel.GetFromZppUser(zppUser));
         }
 
@@ -59,7 +57,7 @@ namespace ZPP_Project.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    return View("Index");
+                    return RedirectToAction("Index");
                 }
                 AddErrors(result);
             }
@@ -71,14 +69,12 @@ namespace ZPP_Project.Controllers
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
+
             ZppUser zppUser = await UserManager.FindByIdAsync(id.Value);
             if (zppUser == null)
-            {
                 return HttpNotFound();
-            }
+
             EditUserViewModel model = EditUserViewModel.GetFromZppUser(zppUser);
             model.UserTypes = GetUserTypes();
             return View(model);
@@ -158,29 +154,73 @@ namespace ZPP_Project.Controllers
             return View(model);
         }
 
-        // GET: User/Delete/5
-        public async Task<ActionResult> Delete(int? id)
+        // GET: User/Block/5
+        public async Task<ActionResult> Block(int? id)
         {
             if (id == null)
-            {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            ZppUser zppUser = await db.Users.FirstAsync(u => u.Id == id); ;
+
+            ZppUser zppUser = await UserManager.FindByIdAsync(id.Value);
             if (zppUser == null)
-            {
                 return HttpNotFound();
+
+            if (zppUser.Banned)
+            {
+                AddError("User already locked");
+                return RedirectToAction("Index");
             }
-            return View(zppUser);
+            return View(new BlockUserViewModel() { UserId = zppUser.Id, UserName = zppUser.UserName });
         }
 
-        // POST: User/Delete/5
-        [HttpPost, ActionName("Delete")]
+        // POST: User/Block/5
+        [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> DeleteConfirmed(int id)
+        public async Task<ActionResult> Block(int id)
         {
-            ZppUser zppUser = await db.Users.FirstAsync(u => u.Id == id); ;
-            db.Users.Remove(zppUser);
-            await db.SaveChangesAsync();
+            ZppUser zppUser = await UserManager.FindByIdAsync(id);
+            if (zppUser != null)
+            {
+                zppUser.Banned = true;
+                zppUser.LockoutEndDateUtc = DateTime.UtcNow.AddYears(1);
+                var result = await UserManager.UpdateAsync(zppUser);
+                if (!result.Succeeded)
+                    AddErrors(result);
+            }
+            return RedirectToAction("Index");
+        }
+
+        // GET: User/Unlock/5
+        public async Task<ActionResult> Unlock(int? id)
+        {
+            if (id == null)
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+
+            ZppUser zppUser = await UserManager.FindByIdAsync(id.Value);
+            if (zppUser == null)
+                return HttpNotFound();
+
+            if (!zppUser.Banned)
+            {
+                AddError("User already unlocked");
+                return RedirectToAction("Index");
+            }
+            return View(new BlockUserViewModel() { UserId = zppUser.Id, UserName = zppUser.UserName });
+        }
+
+        // POST: User/Unlock/5
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> Unlock(int id)
+        {
+            ZppUser zppUser = await UserManager.FindByIdAsync(id);
+            if (zppUser != null)
+            {
+                zppUser.Banned = false;
+                zppUser.LockoutEndDateUtc = null;
+                var result = await UserManager.UpdateAsync(zppUser);
+                if (!result.Succeeded)
+                    AddErrors(result);
+            }
             return RedirectToAction("Index");
         }
 

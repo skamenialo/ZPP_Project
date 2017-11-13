@@ -1,0 +1,20 @@
+﻿@model ZPP_Project.Models.BlockUserViewModel
+
+@{
+    ViewBag.Title = "Unlock user";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<p>Do you want to unlock user "@Model.UserName"?</p>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.UserId)
+    <div class="form-group">
+        <div>
+            <input type="submit" value="Yes" class="btn btn-default" />
+            @Html.ActionLink("No", "Index", "User", null, new { @class = "btn btn-default" })
+        </div>
+    </div>
+}

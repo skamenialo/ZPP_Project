@@ -98,4 +98,12 @@
 </div>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.UserId }, new { @class = "btn btn-default" })
+    @if (Model.Banned)
+    {
+        @Html.ActionLink("Unlock", "Unlock", new { id = Model.UserId }, new { @class = "btn btn-default" })
+    }
+    else
+    {
+        @Html.ActionLink("Block", "Block", new { id = Model.UserId }, new { @class = "btn btn-default" })
+    }
 </p>
