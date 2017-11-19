@@ -67,7 +67,7 @@ namespace ZPP_Project.Controllers
             }
 
             ZppUser user = await UserManager.FindByNameAsync(model.UserName);
-            if (user != null)
+            if (user != null && UserManager.CheckPassword(user, model.Password))
             {
                 if (user.Roles.Count > 1)
                 {

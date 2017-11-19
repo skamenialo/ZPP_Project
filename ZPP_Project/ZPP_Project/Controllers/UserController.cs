@@ -92,64 +92,126 @@ namespace ZPP_Project.Controllers
                 ZppUser user = UserManager.FindById(model.UserId);
                 if (user != null)
                 {
-                    ZppUser user2 = UserManager.FindByName(model.UserName);
-                    if (user2 == null || user2.Equals(user))
+                    ZppUser user2 = null;
+                    string[] removeRoles = null;
+
+                    if (!string.IsNullOrEmpty(model.UserName) && user.UserName != model.UserName)
+                    {
+                        user2 = UserManager.FindByName(model.UserName);
+                        if (user2 == null || user2.Equals(user))
+                        {
+                            user.UserName = model.UserName;
+                            user.EmailConfirmed = false;
+                        }
+                        else
+                            AddError("User with given name already exists!");
+                    }
+
+                    if (!string.IsNullOrEmpty(model.Email) && user.Email != model.Email)
                     {
                         user2 = UserManager.FindByEmail(model.Email);
                         if (user2 == null || user2.Equals(user))
                         {
-                            user2 = new ZppUser()
-                            {
-                                Id = model.UserId,
-                                UserName = model.UserName,
-                                AccessFailedCount = 0,
-                                Banned = model.Banned,
-                                Email = model.Email,
-                                LockoutEnabled = model.LockoutEnabled,
-                                LockoutEndDateUtc = model.LockoutEndDateUtc,
-                                PhoneNumber = model.PhoneNumber,
-                                PhoneNumberConfirmed = model.PhoneNumberConfirmed,
-                                TwoFactorEnabled = model.TwoFactorEnabled
-                            };
-                            int userType = user.UserType;
-                            if (Int32.TryParse(model.UserType, out userType)
-                                && userType <= DbContext.UserTypes.Count())
-                            {
-                                if (userType != user.UserType)
-                                {
-                                    user2.UserType = userType;
-                                    user2.EmailConfirmed = false;
-                                }
-                            }
-                            else
-                                AddError("Wrong user role!");
-                            if (!string.IsNullOrEmpty(model.Password))
-                            {
-                                model.Password = new SHA512PasswordHasher().HashPassword(model.Password);
-                                if (!model.Password.Equals(user.PasswordHash))
-                                    user2.PasswordHash = model.Password;
-                                else
-                                {
-                                    AddError<EditUserViewModel, string>(model, m => m.Password, "Password must be different!");
-                                    model.Password = null;
-                                    model.ConfirmPassword = null;
-                                }
-                            }
-                            if (ModelState.IsValid)
-                            {
-                                UserManager.Update(user2);
-                                return RedirectToAction("Index");
-                            }
+                            user.Email = model.Email;
+                            user.EmailConfirmed = false;
                         }
                         else
                             AddError("User with given email already exists!");
                     }
-                    else
-                        AddError("User with given name already exists!");
+
+                    if (!string.IsNullOrEmpty(model.UserType))
+                    {
+                        int userType = user.UserType;
+                        if (Int32.TryParse(model.UserType, out userType)
+                            && userType <= DbContext.UserTypes.Count())
+                        {
+                            if (userType != user.UserType)
+                            {
+                                if (userType > 1)
+                                {
+                                    switch (user.UserType)
+                                    {
+                                        case 2:
+                                            if (userType != 5)
+                                                removeRoles = new string[] { Helpers.Roles.STUDENT };
+                                            break;
+                                        case 3:
+                                            removeRoles = new string[] { Helpers.Roles.COMPANY };
+                                            break;
+                                        case 4:
+                                            if (userType != 5)
+                                                removeRoles = new string[] { Helpers.Roles.TEACHER };
+                                            break;
+                                        case 5:
+                                            if (userType == 2)
+                                                removeRoles = new string[] { Helpers.Roles.TEACHER };
+                                            else if (userType == 4)
+                                                removeRoles = new string[] { Helpers.Roles.STUDENT };
+                                            else
+                                                removeRoles = new string[] { Helpers.Roles.STUDENT, Helpers.Roles.TEACHER };
+                                            break;
+                                    }
+
+                                    user.UserType = userType;
+                                    user.EmailConfirmed = false;
+                                }
+                                else
+                                    AddError("Could not change" + (user.UserType == 1 ? " " : " to ") + "administrator role!");
+                            }
+                        }
+                        else
+                            AddError("Wrong user role!");
+                    }
+
+                    if (!string.IsNullOrEmpty(model.Password))
+                    {
+                        model.Password = new SHA512PasswordHasher().HashPassword(model.Password);
+                        if (!model.Password.Equals(user.PasswordHash))
+                            user.PasswordHash = model.Password;
+                        else
+                        {
+                            ModelState.AddModelError("Password", "Password must be different!");
+                            model.Password = null;
+                            model.ConfirmPassword = null;
+                        }
+                    }
+
+                    if (!string.IsNullOrEmpty(model.PhoneNumber) && user.PhoneNumber != model.PhoneNumber)
+                    {
+                        user.PhoneNumber = model.PhoneNumber;
+                        user.PhoneNumberConfirmed = model.PhoneNumberConfirmed;
+                    }
+
+                    if (model.LockoutEndDateUtc != null && model.LockoutEndDateUtc < DateTime.UtcNow)
+                        ModelState.AddModelError("LockoutEndDateUtc", "Invalid date!");
+     
+                    if (ModelState.IsValid)
+                    {
+                        if (user.LockoutEndDateUtc != model.LockoutEndDateUtc)
+                            user.LockoutEndDateUtc = model.LockoutEndDateUtc;
+
+                        if (user.Banned != model.Banned)
+                        {
+                            user.Banned = model.Banned;
+                            if (model.Banned && user.LockoutEndDateUtc == null)
+                                user.LockoutEndDateUtc = DateTime.UtcNow.AddYears(1);
+                        }
+                        user.AccessFailedCount = 0;
+                        user.LockoutEnabled = model.LockoutEnabled;
+                        user.TwoFactorEnabled = model.TwoFactorEnabled;
+
+                        UserManager.Update(user);
+                        if (removeRoles != null)
+                            UserManager.RemoveFromRoles(user.Id, removeRoles);
+
+                        return RedirectToAction("Index");
+                    }
                 }
                 else
                     AddError("Could not find user for edit!");
             }
+            model.Password = null;
+            model.ConfirmPassword = null;
             model.UserTypes = GetUserTypes();
             return View(model);
         }
