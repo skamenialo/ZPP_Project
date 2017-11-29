@@ -224,6 +224,26 @@ namespace ZPP_Project.Helpers
                     return "None";
             }
         }
+
+        public static bool IsStudent(int userType)
+        {
+            return userType == 2 || userType == 5; //Student || StudentTeacher
+        }
+
+        public static bool IsTeacher(int userType)
+        {
+            return userType > 3; //Teacher || StudentTeacher
+        }
+
+        public static bool IsCompany(int userType)
+        {
+            return userType == 3; //Company
+        }
+
+        public static bool IsAdministrator(int userType)
+        {
+            return userType == 1; //Administrator
+        }
     }
 
     public static class Roles

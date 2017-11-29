@@ -7,10 +7,34 @@ namespace ZPP_Project.Models
 {
     public class IndexViewModel
     {
+        public int UserType { get; set; }
+
+        [Display(Name = "Last name")]
+        public string LastName { get; set; }
+
+        [Display(Name = "First name")]
+        public string FirstName { get; set; }
+
+        [Display(Name = "Company name")]
+        public string Name { get; set; }
+
+        [Required]
+        public string Address { get; set; }
+
+        public string Degree { get; set; }
+
+        [EmailAddress]
+        public string Email { get; set; }
+
+        [Url]
+        public string Website { get; set; }
+
+        public string Description { get; set; }
+
         public bool HasPassword { get; set; }
-        public IList<UserLoginInfo> Logins { get; set; }
-        public string PhoneNumber { get; set; }
-        public bool TwoFactor { get; set; }
+        //public IList<UserLoginInfo> Logins { get; set; }
+        //public string PhoneNumber { get; set; }
+        //public bool TwoFactor { get; set; }
         public bool BrowserRemembered { get; set; }
     }
 
@@ -82,5 +106,46 @@ namespace ZPP_Project.Models
     {
         public string SelectedProvider { get; set; }
         public ICollection<System.Web.Mvc.SelectListItem> Providers { get; set; }
+    }
+
+    public class PersonalDetailsViewModel
+    {
+        public bool IsTeacher { get; set; }
+
+        [Required]
+        [Display(Name = "Last name")]
+        public string LastName { get; set; }
+
+        [Required]
+        [Display(Name = "First name")]
+        public string FirstName { get; set; }
+
+        [Required]
+        public string Address { get; set; }
+
+        public string Degree { get; set; }
+
+        [Url]
+        public string Website { get; set; }
+
+        public string Description { get; set; }
+    }
+
+    public class CompanyDetailsViewModel
+    {
+        [Required]
+        [Display(Name = "Company name")]
+        public string Name { get; set; }
+
+        [Required]
+        public string Address { get; set; }
+
+        [EmailAddress]
+        public string Email { get; set; }
+
+        [Url]
+        public string Website { get; set; }
+
+        public string Description { get; set; }
     }
 }

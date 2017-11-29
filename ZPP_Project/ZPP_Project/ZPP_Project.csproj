@@ -394,6 +394,8 @@
     <Content Include="Views\User\Edit.cshtml" />
     <Content Include="Views\User\Block.cshtml" />
     <Content Include="Views\User\Unlock.cshtml" />
+    <Content Include="Views\Manage\PersonalDetails.cshtml" />
+    <Content Include="Views\Manage\CompanyDetails.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using ZPP_Project.EntityDataModel;
 using ZPP_Project.Models;
+using System.Threading.Tasks;
 
 namespace ZPP_Project.DataAccess
 {
@@ -30,17 +32,47 @@ namespace ZPP_Project.DataAccess
 #endif
         { }
 
-
-#endregion
-
         public static ZppContext Create()
         {
             return new ZppContext();
         }
 
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+#endregion
+
+#region Public members
+
+        public V_Company FindCompanyById(int id)
         {
+            return Companies.FirstOrDefault(company => company.IdUser == id);
         }
+
+        public async Task<V_Company> FindCompanyByIdAsync(int id)
+        {
+            return await Companies.FirstOrDefaultAsync(company => company.IdUser == id);
+        }
+
+        public V_Student FindStudentById(int id)
+        {
+            return Students.FirstOrDefault(company => company.IdUser == id);
+        }
+
+        public async Task<V_Student> FindStudentByIdAsync(int id)
+        {
+            return await Students.FirstOrDefaultAsync(company => company.IdUser == id);
+        }
+
+        public V_Teacher FindTeacherById(int id)
+        {
+            return Teachers.FirstOrDefault(company => company.IdUser == id);
+        }
+
+        public async Task<V_Teacher> FindTeacherByIdAsync(int id)
+        {
+            return await Teachers.FirstOrDefaultAsync(company => company.IdUser == id);
+        }
+
+#endregion
+
     }
 
 }

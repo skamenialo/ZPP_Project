@@ -7,10 +7,11 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using ZPP_Project.Models;
+using ZPP_Project.Helpers;
 
 namespace ZPP_Project.Controllers
 {
-    [Authorize]
+    [ZPPAuthorize]
     public class ManageController : ZPP_Project.Helpers.ZPPController
     {
         #region Constructor
@@ -36,17 +37,147 @@ namespace ZPP_Project.Controllers
                 : message == ManageMessageId.RemovePhoneSuccess ? "Your phone number was removed."
                 : "";
 
-            var StringUserId = User.Identity.GetUserId();
-            var IntUserId = int.Parse(StringUserId);
+            ZppUser user =  UserManager.FindByName(User.Identity.Name);
             var model = new IndexViewModel
             {
-                HasPassword = await UserManager.HasPasswordAsync(IntUserId),
-                PhoneNumber = await UserManager.GetPhoneNumberAsync(IntUserId),
-                TwoFactor = await UserManager.GetTwoFactorEnabledAsync(IntUserId),
-                Logins = await UserManager.GetLoginsAsync(IntUserId),
-                BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(StringUserId)
+                UserType = user.UserType,
+                HasPassword = await UserManager.HasPasswordAsync(user.Id),
+                //PhoneNumber = await UserManager.GetPhoneNumberAsync(IntUserId),
+                //TwoFactor = await UserManager.GetTwoFactorEnabledAsync(IntUserId),
+                //Logins = await UserManager.GetLoginsAsync(IntUserId),
+                BrowserRemembered = await AuthenticationManager.TwoFactorBrowserRememberedAsync(user.Id.ToString())
             };
+            if (ZPPUserRoleHelper.IsTeacher(user.UserType))
+            {
+                ZPP_Project.EntityDataModel.V_Teacher select = DbContext.FindTeacherById(user.Id);
+                if (select != null)
+                {
+                    model.FirstName = select.FirstName;
+                    model.LastName = select.LastName;
+                    model.Address = select.Address;
+                    model.Degree = select.Degree;
+                    model.Description = select.Description;
+                    model.Website = select.Website;
+                }
+            }
+            else if (ZPPUserRoleHelper.IsStudent(user.UserType))
+            {
+                ZPP_Project.EntityDataModel.V_Student select = DbContext.FindStudentById(user.Id);
+                if (select != null)
+                {
+                    model.FirstName = select.FirstName;
+                    model.LastName = select.LastName;
+                    model.Address = select.Address;
+                }
+            }
+            else if (ZPPUserRoleHelper.IsCompany(user.UserType))
+            {
+                ZPP_Project.EntityDataModel.V_Company select = DbContext.FindCompanyById(user.Id);
+                if (select != null)
+                {
+                    model.Name = select.Name;
+                    model.Address = select.Address;
+                    model.Email = select.Email;
+                    model.Description = select.Description;
+                    model.Website = select.Website;
+                }
+            }
             return View(model);
+        }
+
+        public ActionResult PersonalDetails()
+        {
+            ZppUser user = UserManager.FindByName(User.Identity.Name);
+            if (user == null)
+                return View("Error");
+            if (!(ZPPUserRoleHelper.IsStudent(user.UserType) || ZPPUserRoleHelper.IsTeacher(user.UserType)))
+                return RedirectToAction("", "Error");
+
+            PersonalDetailsViewModel model = new PersonalDetailsViewModel()
+            {
+                IsTeacher = ZPPUserRoleHelper.IsTeacher(user.UserType)
+            };
+            if (model.IsTeacher)
+            {
+                ZPP_Project.EntityDataModel.V_Teacher select = DbContext.FindTeacherById(user.Id);
+                if (select != null)
+                {
+                    model.FirstName = select.FirstName.Trim();
+                    model.LastName = select.LastName.Trim();
+                    model.Address = select.Address.Trim();
+                    model.Degree = select.Degree;
+                    model.Description = select.Description;
+                    model.Website = select.Website;
+                }
+            }
+            else
+            {
+                ZPP_Project.EntityDataModel.V_Student select = DbContext.FindStudentById(user.Id);
+                if (select != null)
+                {
+                    model.FirstName = select.FirstName.Trim();
+                    model.LastName = select.LastName.Trim();
+                    model.Address = select.Address.Trim();
+                }
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult PersonalDetails(PersonalDetailsViewModel model)
+        {
+            ZppUser user = UserManager.FindByName(User.Identity.Name);
+            if (user == null)
+                return View("Error");
+            if (!(ZPPUserRoleHelper.IsStudent(user.UserType) || ZPPUserRoleHelper.IsTeacher(user.UserType)))
+                return RedirectToAction("", "Error");
+
+            if (!ModelState.IsValid)
+            {
+                model.IsTeacher = ZPPUserRoleHelper.IsTeacher(user.UserType);
+                return View(model);
+            }
+            return RedirectToAction("Index");
+        }
+
+        public ActionResult CompanyDetails()
+        {
+            ZppUser user = UserManager.FindByName(User.Identity.Name);
+            if (user == null)
+                return View("Error");
+            if (!ZPPUserRoleHelper.IsCompany(user.UserType))
+                return RedirectToAction("", "Error");
+
+            CompanyDetailsViewModel model = new CompanyDetailsViewModel();
+
+            ZPP_Project.EntityDataModel.V_Company select = DbContext.FindCompanyById(user.Id);
+            if (select != null)
+            {
+                model.Name = select.Name.Trim();
+                model.Address = select.Address.Trim();
+                model.Email = select.Email.Trim();
+                model.Description = select.Description;
+                model.Website = select.Website;
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult CompanyDetails(CompanyDetailsViewModel model)
+        {
+            ZppUser user = UserManager.FindByName(User.Identity.Name);
+            if (user == null)
+                return View("Error");
+            if (!ZPPUserRoleHelper.IsCompany(user.UserType))
+                return RedirectToAction("", "Error");
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+            return RedirectToAction("Index");
         }
 
         //
