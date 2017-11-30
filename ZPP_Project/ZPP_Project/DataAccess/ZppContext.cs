@@ -19,6 +19,8 @@ namespace ZPP_Project.DataAccess
         public DbSet<V_Company> Companies { get; set; }
         public DbSet<V_Student> Students { get; set; }
         public DbSet<SL_UserType> UserTypes { get; set; }
+        public DbSet<SL_CourseStates> CouseStates { get; set; }
+        public DbSet<SL_CommentState> CommentStates { get; set; }
 
 #endregion
 
@@ -41,34 +43,34 @@ namespace ZPP_Project.DataAccess
 
 #region Public members
 
-        public V_Company FindCompanyById(int id)
+        public V_Company FindCompanyByUserId(int id)
         {
             return Companies.FirstOrDefault(company => company.IdUser == id);
         }
 
-        public async Task<V_Company> FindCompanyByIdAsync(int id)
+        public async Task<V_Company> FindCompanyByUserIdAsync(int id)
         {
             return await Companies.FirstOrDefaultAsync(company => company.IdUser == id);
         }
 
-        public V_Student FindStudentById(int id)
+        public V_Student FindStudentByUserId(int id)
         {
-            return Students.FirstOrDefault(company => company.IdUser == id);
+            return Students.FirstOrDefault(student => student.IdUser == id);
         }
 
-        public async Task<V_Student> FindStudentByIdAsync(int id)
+        public async Task<V_Student> FindStudentByUserIdAsync(int id)
         {
-            return await Students.FirstOrDefaultAsync(company => company.IdUser == id);
+            return await Students.FirstOrDefaultAsync(student => student.IdUser == id);
         }
 
-        public V_Teacher FindTeacherById(int id)
+        public V_Teacher FindTeacherByUserId(int id)
         {
-            return Teachers.FirstOrDefault(company => company.IdUser == id);
+            return Teachers.FirstOrDefault(teacher => teacher.IdUser == id);
         }
 
-        public async Task<V_Teacher> FindTeacherByIdAsync(int id)
+        public async Task<V_Teacher> FindTeacherByUserIdAsync(int id)
         {
-            return await Teachers.FirstOrDefaultAsync(company => company.IdUser == id);
+            return await Teachers.FirstOrDefaultAsync(teacher => teacher.IdUser == id);
         }
 
 #endregion

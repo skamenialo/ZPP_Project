@@ -1,8 +1,11 @@
-DROP VIEW V_UserLogin
-DROP VIEW V_UserInfo
-DROP VIEW V_Student
-DROP VIEW V_Company
+DROP VIEW V_UserLogin;
+DROP VIEW V_UserInfo;
+DROP VIEW V_Student;
+DROP VIEW V_StudentInfo;
+DROP VIEW V_Company;
+DROP VIEW V_CompanyInfo;
 DROP VIEW V_Teacher;
+DROP VIEW V_TeacherInfo;
 DROP VIEW V_Course;
 DROP VIEW V_Group;
 DROP VIEW V_Lecture;
@@ -25,7 +28,7 @@ IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS
     DROP VIEW V_UserInfo
 GO
 CREATE VIEW V_UserInfo AS
-  SELECT IdUser, UserType, Active, Banned
+  SELECT IdUser, UserType, Login, Active, Banned
   FROM Users;
 GO
 -- V_Student --
@@ -35,8 +38,17 @@ IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS
 GO
 CREATE VIEW V_Student AS
   SELECT s.IdStudent, u.IdUser, u.UserType, s.LastName, s.FirstName, s.Address, u.Email
-  FROM Users u
-  INNER JOIN Students s ON u.IdUser = s.IdUser;
+  FROM Students s
+  INNER JOIN Users u ON u.IdUser = s.IdUser;
+GO
+-- V_StudentInfo --
+IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS
+        WHERE TABLE_NAME = 'V_StudentInfo')
+    DROP VIEW V_StudentInfo
+GO
+CREATE VIEW V_StudentInfo AS
+  SELECT IdStudent, LastName, FirstName, Address
+  FROM Students;
 GO
 -- V_Company --
 IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS
@@ -44,8 +56,18 @@ IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS
     DROP VIEW V_Company
 GO
 CREATE VIEW V_Company AS
-  SELECT IdCompany, IdUser, Name, Address, Email, Website, Description
-  FROM Companies;
+  SELECT c.IdCompany, u.IdUser, u.UserType, c.Name, c.Address, u.Email as EmailUser, c.Email as EmailCompany, c.Website, c.Description
+  FROM Companies c
+  INNER JOIN Users u ON u.IdUser = c.IdUser;
+GO
+-- V_CompanyInfo --
+IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS
+        WHERE TABLE_NAME = 'V_CompanyInfo')
+    DROP VIEW V_CompanyInfo
+GO
+CREATE VIEW V_CompanyInfo AS
+  SELECT IdCompany, Name, Address, Email, Website, Description
+  FROM Companies
 GO
 -- V_Teacher --
 IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS
@@ -54,8 +76,17 @@ IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS
 GO
 CREATE VIEW V_Teacher AS
   SELECT t.IdTeacher, u.IdUser, u.UserType, t.IdCompany, t.LastName, t.FirstName, t.Address, u.Email, t.Degree, t.Website, t.Description
-  FROM Users u
-  INNER JOIN Teachers t ON u.IdUser = t.IdUser;
+  FROM Teachers t
+  INNER JOIN Users u ON u.IdUser = t.IdUser;
+GO
+-- V_TeacherInfo --
+IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS
+        WHERE TABLE_NAME = 'V_TeacherInfo')
+    DROP VIEW V_TeacherInfo
+GO
+CREATE VIEW V_TeacherInfo AS
+  SELECT IdTeacher, IdCompany, LastName, FirstName, Address, Degree, Website, Description
+  FROM Teachers;
 GO
 -- V_Course --
 IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS

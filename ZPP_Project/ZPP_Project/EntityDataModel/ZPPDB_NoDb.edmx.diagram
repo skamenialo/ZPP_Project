@@ -17,6 +17,11 @@
         <EntityTypeShape EntityType="ZPPModel.V_UserInfo" Width="1.5" PointX="2.75" PointY="7.75" />
         <EntityTypeShape EntityType="ZPPModel.V_UserLogin" Width="1.5" PointX="4.75" PointY="7.75" />
         <EntityTypeShape EntityType="ZPPModel.SL_UserType" Width="1.5" PointX="9.375" PointY="0.75" />
+        <EntityTypeShape EntityType="ZPPModel.V_CompanyInfo" Width="1.5" PointX="7.375" PointY="7.75" />
+        <EntityTypeShape EntityType="ZPPModel.V_StudentInfo" Width="1.5" PointX="9.375" PointY="3.75" />
+        <EntityTypeShape EntityType="ZPPModel.V_TeacherInfo" Width="1.5" PointX="9.375" PointY="6.75" />
+        <EntityTypeShape EntityType="ZPPModel.SL_CommentState" Width="1.5" PointX="3.375" PointY="10.75" />
+        <EntityTypeShape EntityType="ZPPModel.SL_CourseStates" Width="1.5" PointX="9.375" PointY="10.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

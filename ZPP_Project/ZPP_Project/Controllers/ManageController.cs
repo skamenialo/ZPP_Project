@@ -8,6 +8,7 @@ using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using ZPP_Project.Models;
 using ZPP_Project.Helpers;
+using ZPP_Project.EntityDataModel;
 
 namespace ZPP_Project.Controllers
 {
@@ -49,7 +50,7 @@ namespace ZPP_Project.Controllers
             };
             if (ZPPUserRoleHelper.IsTeacher(user.UserType))
             {
-                ZPP_Project.EntityDataModel.V_Teacher select = DbContext.FindTeacherById(user.Id);
+                V_Teacher select = DbContext.FindTeacherByUserId(user.Id);
                 if (select != null)
                 {
                     model.FirstName = select.FirstName;
@@ -62,7 +63,7 @@ namespace ZPP_Project.Controllers
             }
             else if (ZPPUserRoleHelper.IsStudent(user.UserType))
             {
-                ZPP_Project.EntityDataModel.V_Student select = DbContext.FindStudentById(user.Id);
+                V_Student select = DbContext.FindStudentByUserId(user.Id);
                 if (select != null)
                 {
                     model.FirstName = select.FirstName;
@@ -72,12 +73,12 @@ namespace ZPP_Project.Controllers
             }
             else if (ZPPUserRoleHelper.IsCompany(user.UserType))
             {
-                ZPP_Project.EntityDataModel.V_Company select = DbContext.FindCompanyById(user.Id);
+                V_Company select = DbContext.FindCompanyByUserId(user.Id);
                 if (select != null)
                 {
                     model.Name = select.Name;
                     model.Address = select.Address;
-                    model.Email = select.Email;
+                    model.Email = select.EmailCompany;
                     model.Description = select.Description;
                     model.Website = select.Website;
                 }
@@ -99,7 +100,7 @@ namespace ZPP_Project.Controllers
             };
             if (model.IsTeacher)
             {
-                ZPP_Project.EntityDataModel.V_Teacher select = DbContext.FindTeacherById(user.Id);
+                V_Teacher select = DbContext.FindTeacherByUserId(user.Id);
                 if (select != null)
                 {
                     model.FirstName = select.FirstName.Trim();
@@ -112,7 +113,7 @@ namespace ZPP_Project.Controllers
             }
             else
             {
-                ZPP_Project.EntityDataModel.V_Student select = DbContext.FindStudentById(user.Id);
+                V_Student select = DbContext.FindStudentByUserId(user.Id);
                 if (select != null)
                 {
                     model.FirstName = select.FirstName.Trim();
@@ -151,12 +152,12 @@ namespace ZPP_Project.Controllers
 
             CompanyDetailsViewModel model = new CompanyDetailsViewModel();
 
-            ZPP_Project.EntityDataModel.V_Company select = DbContext.FindCompanyById(user.Id);
+            ZPP_Project.EntityDataModel.V_Company select = DbContext.FindCompanyByUserId(user.Id);
             if (select != null)
             {
                 model.Name = select.Name.Trim();
                 model.Address = select.Address.Trim();
-                model.Email = select.Email.Trim();
+                model.Email = select.EmailCompany.Trim();
                 model.Description = select.Description;
                 model.Website = select.Website;
             }

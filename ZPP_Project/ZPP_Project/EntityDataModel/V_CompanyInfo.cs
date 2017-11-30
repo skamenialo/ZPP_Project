@@ -12,12 +12,13 @@ namespace ZPP_Project.EntityDataModel
     using System;
     using System.Collections.Generic;
     
-    public partial class V_UserInfo
+    public partial class V_CompanyInfo
     {
-        public int IdUser { get; set; }
-        public int UserType { get; set; }
-        public string Login { get; set; }
-        public bool Active { get; set; }
-        public bool Banned { get; set; }
+        public int IdCompany { get; set; }
+        public string Name { get; set; }
+        public string Address { get; set; }
+        public string Email { get; set; }
+        public string Website { get; set; }
+        public string Description { get; set; }
     }
 }

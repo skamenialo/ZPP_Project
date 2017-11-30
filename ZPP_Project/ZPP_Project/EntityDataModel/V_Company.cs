@@ -16,9 +16,11 @@ namespace ZPP_Project.EntityDataModel
     {
         public int IdCompany { get; set; }
         public int IdUser { get; set; }
+        public int UserType { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
-        public string Email { get; set; }
+        public string EmailUser { get; set; }
+        public string EmailCompany { get; set; }
         public string Website { get; set; }
         public string Description { get; set; }
     }

@@ -5,6 +5,20 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="ZPPModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="SL_CommentState">
+          <Key>
+            <PropertyRef Name="IdState" />
+          </Key>
+          <Property Name="IdState" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="64" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SL_CourseStates">
+          <Key>
+            <PropertyRef Name="IdState" />
+          </Key>
+          <Property Name="IdState" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="64" Nullable="false" />
+        </EntityType>
         <EntityType Name="SL_UserType">
           <Key>
             <PropertyRef Name="IdUserType" />
@@ -44,6 +58,21 @@ warning 6002: The table/view '78429825A9D122436AEFF9503CE2E808_LLUB\1.2 ZESPOŁO
           </Key>
           <Property Name="IdCompany" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="IdUser" Type="int" Nullable="false" />
+          <Property Name="UserType" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="256" Nullable="false" />
+          <Property Name="Address" Type="varchar" MaxLength="512" Nullable="false" />
+          <Property Name="EmailUser" Type="varchar" MaxLength="256" Nullable="false" />
+          <Property Name="EmailCompany" Type="varchar" MaxLength="256" Nullable="false" />
+          <Property Name="Website" Type="varchar" MaxLength="256" />
+          <Property Name="Description" Type="varchar" MaxLength="4096" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view '78429825A9D122436AEFF9503CE2E808_LLUB\1.2 ZESPOŁOWY PROJEKT PROGRAMISTYCZNY\ZPP_PROJECT\ZPP_PROJECT\ZPP_PROJECT\APP_DATA\ZPP.MDF.dbo.V_CompanyInfo' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="V_CompanyInfo">
+          <Key>
+            <PropertyRef Name="IdCompany" />
+          </Key>
+          <Property Name="IdCompany" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="varchar" MaxLength="256" Nullable="false" />
           <Property Name="Address" Type="varchar" MaxLength="512" Nullable="false" />
           <Property Name="Email" Type="varchar" MaxLength="256" Nullable="false" />
@@ -116,6 +145,17 @@ warning 6002: The table/view '78429825A9D122436AEFF9503CE2E808_LLUB\1.2 ZESPOŁO
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view '78429825A9D122436AEFF9503CE2E808_LLUB\1.2 ZESPOŁOWY PROJEKT PROGRAMISTYCZNY\ZPP_PROJECT\ZPP_PROJECT\ZPP_PROJECT\APP_DATA\ZPP.MDF.dbo.V_Teacher' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="V_StudentInfo">
+          <Key>
+            <PropertyRef Name="IdStudent" />
+          </Key>
+          <Property Name="IdStudent" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LastName" Type="varchar" MaxLength="256" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="256" Nullable="false" />
+          <Property Name="Address" Type="varchar" MaxLength="512" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view '78429825A9D122436AEFF9503CE2E808_LLUB\1.2 ZESPOŁOWY PROJEKT PROGRAMISTYCZNY\ZPP_PROJECT\ZPP_PROJECT\ZPP_PROJECT\APP_DATA\ZPP.MDF.dbo.V_Teacher' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="V_Teacher">
           <Key>
             <PropertyRef Name="IdTeacher" />
@@ -134,12 +174,28 @@ warning 6002: The table/view '78429825A9D122436AEFF9503CE2E808_LLUB\1.2 ZESPOŁO
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view '78429825A9D122436AEFF9503CE2E808_LLUB\1.2 ZESPOŁOWY PROJEKT PROGRAMISTYCZNY\ZPP_PROJECT\ZPP_PROJECT\ZPP_PROJECT\APP_DATA\ZPP.MDF.dbo.V_UserInfo' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="V_TeacherInfo">
+          <Key>
+            <PropertyRef Name="IdTeacher" />
+          </Key>
+          <Property Name="IdTeacher" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdCompany" Type="int" Nullable="false" />
+          <Property Name="LastName" Type="varchar" MaxLength="256" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="256" Nullable="false" />
+          <Property Name="Address" Type="varchar" MaxLength="512" Nullable="false" />
+          <Property Name="Degree" Type="varchar" MaxLength="128" />
+          <Property Name="Website" Type="varchar" MaxLength="256" />
+          <Property Name="Description" Type="varchar" MaxLength="4096" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view '78429825A9D122436AEFF9503CE2E808_LLUB\1.2 ZESPOŁOWY PROJEKT PROGRAMISTYCZNY\ZPP_PROJECT\ZPP_PROJECT\ZPP_PROJECT\APP_DATA\ZPP.MDF.dbo.V_UserInfo' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="V_UserInfo">
           <Key>
             <PropertyRef Name="IdUser" />
           </Key>
           <Property Name="IdUser" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="UserType" Type="int" Nullable="false" />
+          <Property Name="Login" Type="varchar" MaxLength="64" Nullable="false" />
           <Property Name="Active" Type="bit" Nullable="false" />
           <Property Name="Banned" Type="bit" Nullable="false" />
         </EntityType>
@@ -154,16 +210,21 @@ warning 6002: The table/view '78429825A9D122436AEFF9503CE2E808_LLUB\1.2 ZESPOŁO
           <Property Name="PasswordHash" Type="varchar" MaxLength="256" Nullable="false" />
         </EntityType>
         <EntityContainer Name="ZPPModelStoreContainer">
+          <EntitySet Name="SL_CommentState" EntityType="Self.SL_CommentState" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SL_CourseStates" EntityType="Self.SL_CourseStates" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SL_UserType" EntityType="Self.SL_UserType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="V_Attendance" EntityType="Self.V_Attendance" store:Type="Views" Schema="dbo"/>
           <EntitySet Name="V_Comment" EntityType="Self.V_Comment" store:Type="Views" Schema="dbo"/>
           <EntitySet Name="V_Company" EntityType="Self.V_Company" store:Type="Views" Schema="dbo"/>
+          <EntitySet Name="V_CompanyInfo" EntityType="Self.V_CompanyInfo" store:Type="Views" Schema="dbo" />
           <EntitySet Name="V_Course" EntityType="Self.V_Course" store:Type="Views" Schema="dbo"/>
           <EntitySet Name="V_Grade" EntityType="Self.V_Grade" store:Type="Views" Schema="dbo"/>
           <EntitySet Name="V_Group" EntityType="Self.V_Group" store:Type="Views" Schema="dbo"/>
           <EntitySet Name="V_Lecture" EntityType="Self.V_Lecture" store:Type="Views" Schema="dbo"/>
           <EntitySet Name="V_Student" EntityType="Self.V_Student" store:Type="Views" Schema="dbo"/>
+          <EntitySet Name="V_StudentInfo" EntityType="Self.V_StudentInfo" store:Type="Views" Schema="dbo" />
           <EntitySet Name="V_Teacher" EntityType="Self.V_Teacher" store:Type="Views" Schema="dbo"/>
+          <EntitySet Name="V_TeacherInfo" EntityType="Self.V_TeacherInfo" store:Type="Views" Schema="dbo" />
           <EntitySet Name="V_UserInfo" EntityType="Self.V_UserInfo" store:Type="Views" Schema="dbo"/>
           <EntitySet Name="V_UserLogin" EntityType="Self.V_UserLogin" store:Type="Views" Schema="dbo"/>
         </EntityContainer>
@@ -183,7 +244,12 @@ warning 6002: The table/view '78429825A9D122436AEFF9503CE2E808_LLUB\1.2 ZESPOŁO
           <EntitySet Name="V_Teacher" EntityType="ZPPModel.V_Teacher" />
           <EntitySet Name="V_UserInfo" EntityType="ZPPModel.V_UserInfo" />
           <EntitySet Name="V_UserLogin" EntityType="ZPPModel.V_UserLogin" />
+          <EntitySet Name="V_CompanyInfo" EntityType="ZPPModel.V_CompanyInfo" />
+          <EntitySet Name="V_StudentInfo" EntityType="ZPPModel.V_StudentInfo" />
+          <EntitySet Name="V_TeacherInfo" EntityType="ZPPModel.V_TeacherInfo" />
           <EntitySet Name="SL_UserType" EntityType="ZPPModel.SL_UserType" />
+          <EntitySet Name="SL_CommentState" EntityType="ZPPModel.SL_CommentState" />
+          <EntitySet Name="SL_CourseStates" EntityType="ZPPModel.SL_CourseStates" />
         </EntityContainer>
         <EntityType Name="V_Attendance">
           <Key>
@@ -211,9 +277,11 @@ warning 6002: The table/view '78429825A9D122436AEFF9503CE2E808_LLUB\1.2 ZESPOŁO
           </Key>
           <Property Name="IdCompany" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="IdUser" Type="Int32" Nullable="false" />
+          <Property Name="UserType" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="false" />
           <Property Name="Address" Type="String" Nullable="false" MaxLength="512" FixedLength="false" Unicode="false" />
-          <Property Name="Email" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="EmailUser" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="EmailCompany" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="false" />
           <Property Name="Website" Type="String" MaxLength="256" FixedLength="false" Unicode="false" />
           <Property Name="Description" Type="String" MaxLength="4096" FixedLength="false" Unicode="false" />
         </EntityType>
@@ -293,6 +361,7 @@ warning 6002: The table/view '78429825A9D122436AEFF9503CE2E808_LLUB\1.2 ZESPOŁO
           </Key>
           <Property Name="IdUser" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="UserType" Type="Int32" Nullable="false" />
+          <Property Name="Login" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="false" />
           <Property Name="Active" Type="Boolean" Nullable="false" />
           <Property Name="Banned" Type="Boolean" Nullable="false" />
         </EntityType>
@@ -309,6 +378,53 @@ warning 6002: The table/view '78429825A9D122436AEFF9503CE2E808_LLUB\1.2 ZESPOŁO
             <PropertyRef Name="IdUserType" />
           </Key>
           <Property Name="IdUserType" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="V_CompanyInfo">
+          <Key>
+            <PropertyRef Name="IdCompany" />
+          </Key>
+          <Property Name="IdCompany" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="Address" Type="String" Nullable="false" MaxLength="512" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="Website" Type="String" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="4096" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="V_StudentInfo">
+          <Key>
+            <PropertyRef Name="IdStudent" />
+          </Key>
+          <Property Name="IdStudent" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="Address" Type="String" Nullable="false" MaxLength="512" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="V_TeacherInfo">
+          <Key>
+            <PropertyRef Name="IdTeacher" />
+          </Key>
+          <Property Name="IdTeacher" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdCompany" Type="Int32" Nullable="false" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="Address" Type="String" Nullable="false" MaxLength="512" FixedLength="false" Unicode="false" />
+          <Property Name="Degree" Type="String" MaxLength="128" FixedLength="false" Unicode="false" />
+          <Property Name="Website" Type="String" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="Description" Type="String" MaxLength="4096" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="SL_CommentState">
+          <Key>
+            <PropertyRef Name="IdState" />
+          </Key>
+          <Property Name="IdState" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="SL_CourseStates">
+          <Key>
+            <PropertyRef Name="IdState" />
+          </Key>
+          <Property Name="IdState" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="false" />
         </EntityType>
         </Schema>
@@ -344,9 +460,11 @@ warning 6002: The table/view '78429825A9D122436AEFF9503CE2E808_LLUB\1.2 ZESPOŁO
               <MappingFragment StoreEntitySet="V_Company">
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="Website" ColumnName="Website" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="EmailCompany" ColumnName="EmailCompany" />
+                <ScalarProperty Name="EmailUser" ColumnName="EmailUser" />
                 <ScalarProperty Name="Address" ColumnName="Address" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="UserType" ColumnName="UserType" />
                 <ScalarProperty Name="IdUser" ColumnName="IdUser" />
                 <ScalarProperty Name="IdCompany" ColumnName="IdCompany" />
               </MappingFragment>
@@ -433,6 +551,7 @@ warning 6002: The table/view '78429825A9D122436AEFF9503CE2E808_LLUB\1.2 ZESPOŁO
               <MappingFragment StoreEntitySet="V_UserInfo">
                 <ScalarProperty Name="Banned" ColumnName="Banned" />
                 <ScalarProperty Name="Active" ColumnName="Active" />
+                <ScalarProperty Name="Login" ColumnName="Login" />
                 <ScalarProperty Name="UserType" ColumnName="UserType" />
                 <ScalarProperty Name="IdUser" ColumnName="IdUser" />
               </MappingFragment>
@@ -452,6 +571,58 @@ warning 6002: The table/view '78429825A9D122436AEFF9503CE2E808_LLUB\1.2 ZESPOŁO
               <MappingFragment StoreEntitySet="SL_UserType">
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="IdUserType" ColumnName="IdUserType" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="V_CompanyInfo">
+            <EntityTypeMapping TypeName="ZPPModel.V_CompanyInfo">
+              <MappingFragment StoreEntitySet="V_CompanyInfo">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Website" ColumnName="Website" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="IdCompany" ColumnName="IdCompany" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="V_StudentInfo">
+            <EntityTypeMapping TypeName="ZPPModel.V_StudentInfo">
+              <MappingFragment StoreEntitySet="V_StudentInfo">
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="IdStudent" ColumnName="IdStudent" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="V_TeacherInfo">
+            <EntityTypeMapping TypeName="ZPPModel.V_TeacherInfo">
+              <MappingFragment StoreEntitySet="V_TeacherInfo">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Website" ColumnName="Website" />
+                <ScalarProperty Name="Degree" ColumnName="Degree" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="IdCompany" ColumnName="IdCompany" />
+                <ScalarProperty Name="IdTeacher" ColumnName="IdTeacher" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SL_CommentState">
+            <EntityTypeMapping TypeName="ZPPModel.SL_CommentState">
+              <MappingFragment StoreEntitySet="SL_CommentState">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="IdState" ColumnName="IdState" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SL_CourseStates">
+            <EntityTypeMapping TypeName="ZPPModel.SL_CourseStates">
+              <MappingFragment StoreEntitySet="SL_CourseStates">
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="IdState" ColumnName="IdState" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

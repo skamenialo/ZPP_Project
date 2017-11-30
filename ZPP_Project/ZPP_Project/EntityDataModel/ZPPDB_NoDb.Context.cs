@@ -36,6 +36,11 @@ namespace ZPP_Project.EntityDataModel
         public virtual DbSet<V_Teacher> V_Teacher { get; set; }
         public virtual DbSet<V_UserInfo> V_UserInfo { get; set; }
         public virtual DbSet<V_UserLogin> V_UserLogin { get; set; }
+        public virtual DbSet<V_CompanyInfo> V_CompanyInfo { get; set; }
+        public virtual DbSet<V_StudentInfo> V_StudentInfo { get; set; }
+        public virtual DbSet<V_TeacherInfo> V_TeacherInfo { get; set; }
         public virtual DbSet<SL_UserType> SL_UserType { get; set; }
+        public virtual DbSet<SL_CommentState> SL_CommentState { get; set; }
+        public virtual DbSet<SL_CourseStates> SL_CourseStates { get; set; }
     }
 }
