@@ -10,10 +10,18 @@
     <h4>Change your account settings</h4>
     <hr />
     <dl class="dl-horizontal">
-        @if(!ZPP_Project.Helpers.ZPPUserRoleHelper.IsAdministrator(Model.UserType))
-        { 
-            if(ZPP_Project.Helpers.ZPPUserRoleHelper.IsTeacher(Model.UserType))
-            { 
+        @if (!ZPP_Project.Helpers.ZPPUserRoleHelper.IsAdministrator(Model.UserType))
+        {
+            if (ZPP_Project.Helpers.ZPPUserRoleHelper.IsTeacher(Model.UserType))
+            {
+                <dt>
+                    Company:
+                </dt>
+
+                <dd>
+                    @Html.ActionLink(ZPP_Project.Helpers.CompanyHelper.Display(Model.IdCompany), "Details", "Company", new { id = Model.IdCompany }, null)
+                </dd>
+            
                 <dt>
                     @Html.DisplayNameFor(model => model.Degree):
                 </dt>
@@ -42,8 +50,7 @@
                     @Html.DisplayFor(model => model.LastName)
                 </dd>
             }
-        
-            if(ZPP_Project.Helpers.ZPPUserRoleHelper.IsCompany(Model.UserType))
+            else if(ZPP_Project.Helpers.ZPPUserRoleHelper.IsCompany(Model.UserType))
             { 
                 <dt>
                     @Html.DisplayNameFor(model => model.Name):

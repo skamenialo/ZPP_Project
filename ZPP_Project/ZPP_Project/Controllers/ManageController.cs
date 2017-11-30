@@ -59,6 +59,7 @@ namespace ZPP_Project.Controllers
                     model.Degree = select.Degree;
                     model.Description = select.Description;
                     model.Website = select.Website;
+                    model.IdCompany = select.IdCompany;
                 }
             }
             else if (ZPPUserRoleHelper.IsStudent(user.UserType))
@@ -110,6 +111,8 @@ namespace ZPP_Project.Controllers
                     model.Description = select.Description;
                     model.Website = select.Website;
                 }
+                else
+                    return View("Error");
             }
             else
             {
@@ -120,6 +123,8 @@ namespace ZPP_Project.Controllers
                     model.LastName = select.LastName.Trim();
                     model.Address = select.Address.Trim();
                 }
+                else
+                    return View("Error");
             }
             return View(model);
         }
@@ -150,18 +155,21 @@ namespace ZPP_Project.Controllers
             if (!ZPPUserRoleHelper.IsCompany(user.UserType))
                 return RedirectToAction("", "Error");
 
-            CompanyDetailsViewModel model = new CompanyDetailsViewModel();
-
-            ZPP_Project.EntityDataModel.V_Company select = DbContext.FindCompanyByUserId(user.Id);
+            V_Company select = DbContext.FindCompanyByUserId(user.Id);
             if (select != null)
             {
-                model.Name = select.Name.Trim();
-                model.Address = select.Address.Trim();
-                model.Email = select.EmailCompany.Trim();
-                model.Description = select.Description;
-                model.Website = select.Website;
+                CompanyDetailsViewModel model = new CompanyDetailsViewModel()
+                {
+                    Name = select.Name.Trim(),
+                    Address = select.Address.Trim(),
+                    Email = select.EmailCompany.Trim(),
+                    Description = select.Description,
+                    Website = select.Website
+                };
+                return View(model);
             }
-            return View(model);
+            else
+                return View("Error");
         }
 
         [HttpPost]
