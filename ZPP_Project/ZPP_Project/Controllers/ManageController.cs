@@ -9,6 +9,8 @@ using Microsoft.Owin.Security;
 using ZPP_Project.Models;
 using ZPP_Project.Helpers;
 using ZPP_Project.EntityDataModel;
+using System.Collections.Generic;
+using System.Data.Entity;
 
 namespace ZPP_Project.Controllers
 {
@@ -144,6 +146,48 @@ namespace ZPP_Project.Controllers
                 model.IsTeacher = ZPPUserRoleHelper.IsTeacher(user.UserType);
                 return View(model);
             }
+
+            if (ZPPUserRoleHelper.IsTeacher(user.UserType))
+            {
+                V_Teacher select = DbContext.FindTeacherByUserId(user.Id);
+                if (select != null)
+                {
+                    DbContext.Entry(new V_TeacherInfo()
+                    {
+                        IdTeacher = select.IdTeacher,
+                        IdCompany = select.IdCompany,
+                        FirstName = model.FirstName,
+                        LastName = model.LastName,
+                        Address = model.Address,
+                        Degree = model.Degree,
+                        Website = model.Website,
+                        Description = model.Description
+                    }).State = EntityState.Modified;
+                    DbContext.SaveChanges();
+                }
+                else
+                    return RedirectToAction("", "Error");
+            }
+
+            if (ZPPUserRoleHelper.IsStudent(user.UserType))
+            {
+                V_Student select = DbContext.FindStudentByUserId(user.Id);
+                if (select != null)
+                {
+                    DbContext.Entry(new V_StudentInfo()
+                    {
+                        IdStudent = select.IdStudent,
+                        FirstName = model.FirstName.Trim(),
+                        LastName = model.LastName.Trim(),
+                        Address = model.Address.Trim()
+                    }).State = EntityState.Modified;
+                    DbContext.SaveChanges();
+                }
+                else
+                    return RedirectToAction("", "Error");
+            }
+            
+
             return RedirectToAction("Index");
         }
 
@@ -186,6 +230,24 @@ namespace ZPP_Project.Controllers
             {
                 return View(model);
             }
+
+            V_Company select = DbContext.FindCompanyByUserId(user.Id);
+            if (select != null)
+            {
+                DbContext.Entry(new V_CompanyInfo()
+                {
+                    IdCompany = select.IdCompany,
+                    Email = select.EmailCompany,
+                    Name = model.Name,
+                    Address = model.Address,
+                    Website = model.Website,
+                    Description = model.Description
+                }).State = EntityState.Modified;
+                DbContext.SaveChanges();
+            }
+            else
+                return RedirectToAction("", "Error");
+
             return RedirectToAction("Index");
         }
 
