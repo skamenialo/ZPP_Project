@@ -258,5 +258,6 @@ namespace ZPP_Project.Helpers
     {
         public const string CURRENT_ROLE = "CURRENT_ROLE";
         public const string LOGIN_MODEL = "LOGIN_MODEL";
+        public const string SELECTED_ROLE = "SELECTED_ROLE";
     }
 }

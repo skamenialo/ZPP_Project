@@ -89,12 +89,11 @@ namespace ZPP_Project.Controllers
             return View(model);
         }
 
+        [AllowAnonymous]
         public ActionResult PersonalDetails()
         {
-            ZppUser user = UserManager.FindByName(User.Identity.Name);
-            if (user == null)
-                return View("Error");
-            if (!(ZPPUserRoleHelper.IsStudent(user.UserType) || ZPPUserRoleHelper.IsTeacher(user.UserType)))
+            ZppUser user = TryGetZppUser();
+            if (user == null || !(ZPPUserRoleHelper.IsStudent(user.UserType) || ZPPUserRoleHelper.IsTeacher(user.UserType)))
                 return RedirectToAction("", "Error");
 
             PersonalDetailsViewModel model = new PersonalDetailsViewModel()
@@ -133,12 +132,12 @@ namespace ZPP_Project.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public ActionResult PersonalDetails(PersonalDetailsViewModel model)
         {
-            ZppUser user = UserManager.FindByName(User.Identity.Name);
-            if (user == null)
-                return View("Error");
-            if (!(ZPPUserRoleHelper.IsStudent(user.UserType) || ZPPUserRoleHelper.IsTeacher(user.UserType)))
+            bool login;
+            ZppUser user = TryGetZppUser(out login);
+            if (user == null || !(ZPPUserRoleHelper.IsStudent(user.UserType) || ZPPUserRoleHelper.IsTeacher(user.UserType)))
                 return RedirectToAction("", "Error");
 
             if (!ModelState.IsValid)
@@ -186,17 +185,18 @@ namespace ZPP_Project.Controllers
                 else
                     return RedirectToAction("", "Error");
             }
-            
 
-            return RedirectToAction("Index");
+            if (login)
+                return RedirectToAction("LoginWithDetails", "Account");
+            else
+                return RedirectToAction("Index");
         }
 
+        [AllowAnonymous]
         public ActionResult CompanyDetails()
         {
-            ZppUser user = UserManager.FindByName(User.Identity.Name);
-            if (user == null)
-                return View("Error");
-            if (!ZPPUserRoleHelper.IsCompany(user.UserType))
+            ZppUser user = TryGetZppUser();
+            if (user == null || !ZPPUserRoleHelper.IsCompany(user.UserType))
                 return RedirectToAction("", "Error");
 
             V_Company select = DbContext.FindCompanyByUserId(user.Id);
@@ -218,12 +218,12 @@ namespace ZPP_Project.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public ActionResult CompanyDetails(CompanyDetailsViewModel model)
         {
-            ZppUser user = UserManager.FindByName(User.Identity.Name);
-            if (user == null)
-                return View("Error");
-            if (!ZPPUserRoleHelper.IsCompany(user.UserType))
+            bool login;
+            ZppUser user = TryGetZppUser(out login);
+            if (user == null || !ZPPUserRoleHelper.IsCompany(user.UserType))
                 return RedirectToAction("", "Error");
 
             if (!ModelState.IsValid)
@@ -244,11 +244,30 @@ namespace ZPP_Project.Controllers
                     Description = model.Description
                 }).State = EntityState.Modified;
                 DbContext.SaveChanges();
+                if (login)
+                    return RedirectToAction("LoginWithDetails", "Account");
+                else
+                    return RedirectToAction("Index");
             }
             else
                 return RedirectToAction("", "Error");
 
-            return RedirectToAction("Index");
+        }
+
+        private ZppUser TryGetZppUser()
+        {
+            bool login;
+            return TryGetZppUser(out login);
+        }
+
+        private ZppUser TryGetZppUser(out bool login)
+        {
+            LoginViewModel loginModel = TempData.Peek(Keys.LOGIN_MODEL) as LoginViewModel;
+            login = loginModel != null;
+            if (login)
+                return UserManager.FindByName(loginModel.UserName);
+            else
+                return UserManager.FindByName(User.Identity.Name);
         }
 
         //
