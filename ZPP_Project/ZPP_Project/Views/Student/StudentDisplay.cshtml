@@ -1,0 +1,26 @@
+﻿@using ZPP_Project.Helpers
+@model ZPP_Project.EntityDataModel.V_Student
+
+@{ string blockName = "TeacherDisplay_" + Model.IdStudent; }
+<div class="row">
+    <div class="row">
+        @HtmlHelperZpp.RenderColapseIcon(blockName)
+        @Html.ActionLink(StudentHelper.Display(Model), "Details", new { id = Model.IdStudent })
+    </div>
+    <div id="@blockName" class="row collapse" style="margin-left:-5px">
+        <div class="col-md-4">
+            <!-- Adress -->
+            <div class="row"></div>
+            <div class="row">@Model.Address</div>
+        </div>
+        <div class="col-md-4">
+            <!-- Email -->
+            <div class="row"></div>
+            <div class="row"><a href="mailto:@Model.Email">Contact</a></div>
+        </div>
+        <div class="col-md-2">
+            @Html.ActionLink("Edit", "Edit", new { id = Model.IdStudent }) |
+            @Html.ActionLink("Details", "Details", new { id = Model.IdStudent })
+        </div>
+    </div>
+</div>

@@ -176,6 +176,7 @@
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\StudentController.cs" />
     <Compile Include="Controllers\TeacherController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="DataAccess\ZppContext.cs" />
@@ -235,6 +236,7 @@
     </Compile>
     <Compile Include="Helpers\HtmlExtensions.cs" />
     <Compile Include="Helpers\HtmlHelperZpp.cs" />
+    <Compile Include="Helpers\StudentHelper.cs" />
     <Compile Include="Helpers\ZPPAuthorizeAttribute.cs" />
     <Compile Include="Helpers\CompanyHelper.cs" />
     <Compile Include="Helpers\TeacherHelper.cs" />
@@ -246,6 +248,7 @@
     <Compile Include="Models\GlobalData.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\StudentViewModel.cs" />
     <Compile Include="Models\Teacher.cs" />
     <Compile Include="Models\UserViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -411,6 +414,10 @@
     <Content Include="Views\User\Unlock.cshtml" />
     <Content Include="Views\Manage\PersonalDetails.cshtml" />
     <Content Include="Views\Manage\CompanyDetails.cshtml" />
+    <Content Include="Views\Student\Details.cshtml" />
+    <Content Include="Views\Student\Index.cshtml" />
+    <Content Include="Views\Student\StudentDisplay.cshtml" />
+    <Content Include="Views\Student\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

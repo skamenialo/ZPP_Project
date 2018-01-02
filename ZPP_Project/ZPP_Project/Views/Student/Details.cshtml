@@ -1,0 +1,42 @@
+﻿@using ZPP_Project.Helpers;
+@model ZPP_Project.EntityDataModel.V_Student
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+<hr />
+
+@if (Model == null)
+{
+    <div class="container">
+        <div class="row">
+            This student does not exist.
+        </div>
+    </div>
+}
+else
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                @StudentHelper.Display(Model)
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <!-- Website -->
+                <div class="row">@Model.Address</div>
+            </div>
+            <div class="col-md-4">
+                <!-- Email -->
+                <div class="row"></div>
+                <div class="row"><a href="mailto:@Model.Email">Contact</a></div>
+            </div>
+        </div>
+        <div class="row">
+            @Html.ActionLink("Edit", "Edit", new { id = Model.IdStudent }, new { @class = "btn btn-default" })
+        </div>
+    </div>
+}

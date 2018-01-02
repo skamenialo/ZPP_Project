@@ -1,0 +1,14 @@
+﻿@model List<ZPP_Project.EntityDataModel.V_Student>
+
+@{
+    ViewBag.Title = "Students";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<div class="container">
+    @foreach (var item in Model)
+    {
+        @Html.Partial("StudentDisplay", item)
+    }
+</div>
