@@ -18,6 +18,7 @@ namespace ZPP_Project.DataAccess
         public DbSet<V_Teacher> Teachers { get; set; }
         public DbSet<V_Company> Companies { get; set; }
         public DbSet<V_Student> Students { get; set; }
+        public DbSet<V_Group> Groups { get; set; }
         public DbSet<SL_UserType> UserTypes { get; set; }
         public DbSet<SL_CourseStates> CouseStates { get; set; }
         public DbSet<SL_CommentState> CommentStates { get; set; }
@@ -71,6 +72,16 @@ namespace ZPP_Project.DataAccess
         public async Task<V_Teacher> FindTeacherByUserIdAsync(int id)
         {
             return await Teachers.FirstOrDefaultAsync(teacher => teacher.IdUser == id);
+        }
+
+        public IQueryable<V_Course> FindCoursesByCompanyId(int id)
+        {
+            return Courses.Where(c => c.IdCompany == id);
+        }
+
+        public IQueryable<V_Group> FindGroupsByCourseId(int id)
+        {
+            return Groups.Where(g => g.IdCourse == id);
         }
 
 #endregion
