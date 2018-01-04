@@ -150,6 +150,7 @@ namespace ZPP_Project.Helpers
                 }
             else
                 ClearSession();
+            ViewBag.UserRoleId = ZPP_Project.Helpers.ZPPUserRoleHelper.GetUserRoleNumber(User.Identity.Name);
         }
 
         #endregion

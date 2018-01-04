@@ -3,6 +3,7 @@
 
 @if (Model == null)
 {
+    ViewBag.Title = "Missing company";
     <div class="container">
         <div class="row">
             This company does not exist.
@@ -11,6 +12,7 @@
 }
 else
 {
+    ViewBag.Title = "Company - " + Model.Name;
     <div class="container">
         <div class="row">
             <div class="col-md-12">

@@ -316,6 +316,7 @@
     <Content Include="Content\bootstrap-theme.css.map" />
     <Content Include="Content\bootstrap.min.css.map" />
     <Content Include="Content\bootstrap.css.map" />
+    <Content Include="_Trash\TODO.txt" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <None Include="Scripts\jquery-3.2.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.2.1.js" />
@@ -418,6 +419,7 @@
     <Content Include="Views\Student\Index.cshtml" />
     <Content Include="Views\Student\StudentDisplay.cshtml" />
     <Content Include="Views\Student\Edit.cshtml" />
+    <Content Include="Views\Student\MyCourses.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

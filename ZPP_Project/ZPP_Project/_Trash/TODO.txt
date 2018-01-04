@@ -1,0 +1,3 @@
+﻿TODO: scenariusz: Użyszkodnik będący wykładowcą chce założyć konto - błąd, konto istnieje; zaloguj się i wciśnij "rozszerz konto o konto studenckie"
+TODO: generyczny mechanizm dzielenia długiej listy wyników na strony po X
+TODO sprawdzić czy każda strona ma @ViewBag.Title

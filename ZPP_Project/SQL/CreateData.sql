@@ -17,6 +17,19 @@ DELETE FROM EF_UserRoles;
 DELETE FROM Users;
 DELETE FROM SL_UserType;
 
+
+PRINT 'reseeding'
+DBCC CHECKIDENT (Comments, RESEED, 0);
+DBCC CHECKIDENT (Grades, RESEED, 0);
+DBCC CHECKIDENT (Attendance, RESEED, 0);
+DBCC CHECKIDENT (Lectures, RESEED, 0);
+DBCC CHECKIDENT (Groups, RESEED, 0);
+DBCC CHECKIDENT (Courses, RESEED, 0);
+DBCC CHECKIDENT (Teachers, RESEED, 0);
+DBCC CHECKIDENT (Companies, RESEED, 0);
+DBCC CHECKIDENT (Students, RESEED, 0);
+DBCC CHECKIDENT (EF_UserClaims, RESEED, 0);
+DBCC CHECKIDENT (Users, RESEED, 0);
 -- ## INSERT ## --
 
 --Tools:
@@ -30,9 +43,9 @@ PRINT 'Creating data';
 INSERT INTO SL_UserType VALUES
 (1, 'Administrator'),
 (2, 'Student'),
-(3, 'Firma'),
-(4, 'Wykladowca'),
-(5, 'WykladowcaStudent');
+(3, 'Company'),
+(4, 'Teacher'),
+(5, 'TeacherStudent');
 
 -- User --
 INSERT INTO Users VALUES--SHA calculated using Sha512
@@ -273,10 +286,10 @@ INSERT INTO Grades VALUES
 
 -- SL_StanKomentarza --
 INSERT INTO SL_CommentState VALUES
-(1, 'Negatywny'),
-(2, 'Neutralny'),
-(3, 'Pozytywny'),
-(4, 'Zablokowany');
+(1, 'Negative'),
+(2, 'Neutral'),
+(3, 'Positive'),
+(4, 'Locked');
 
 -- Komentarze --
 INSERT INTO Comments VALUES

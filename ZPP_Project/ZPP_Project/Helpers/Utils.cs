@@ -2,12 +2,13 @@
 using Microsoft.Owin;
 using Microsoft.AspNet.Identity.Owin;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using ZPP_Project.Models;
-using System.Collections.Generic;
 
 namespace ZPP_Project.Helpers
 {
@@ -206,6 +207,26 @@ namespace ZPP_Project.Helpers
             return roles[roleNr.Value].RoleId == role.Id;
         }
 
+        /// <summary>
+        /// Checks user for active role ID
+        /// </summary>
+        /// <param name="userName">User name</param>
+        /// <returns>True role ID or -1 if method failed</returns>
+        public static int GetUserRoleNumber(string userName)
+        {
+            if (String.IsNullOrWhiteSpace(userName))
+                return -1;
+            int? cookieRoleIndex = (int?)HttpContext.Current.Session[Keys.CURRENT_ROLE];
+            if (cookieRoleIndex == null)
+                return -1;
+
+            var _userManager = HttpContext.Current.GetOwinContext().GetUserManager<ApplicationUserManager>();
+            ZppUser user = _userManager.FindByName(userName);
+            if (user == null)
+                return -1;
+            return user.Roles.ElementAt(cookieRoleIndex.Value).RoleId;
+        }
+
         public static string GetUserRoleName(int roleNr)
         {
             switch (roleNr)
@@ -223,6 +244,27 @@ namespace ZPP_Project.Helpers
                 default:
                     return "None";
             }
+        }
+        #region IsRole methods
+
+        public static bool IsStudent(int? userType)
+        {
+            return userType == null ? false : IsStudent(userType.Value);
+        }
+
+        public static bool IsTeacher(int? userType)
+        {
+            return userType == null ? false : IsTeacher(userType.Value);
+        }
+
+        public static bool IsCompany(int? userType)
+        {
+            return userType == null ? false : IsCompany(userType.Value);
+        }
+
+        public static bool IsAdministrator(int? userType)
+        {
+            return userType == null ? false : IsAdministrator(userType.Value);
         }
 
         public static bool IsStudent(int userType)
@@ -244,14 +286,29 @@ namespace ZPP_Project.Helpers
         {
             return userType == 1; //Administrator
         }
+
+        #endregion
+
+    }
+
+    /// <summary>
+    /// Represents database-specific IDs of various user roles
+    /// </summary>
+    public enum Role : int
+    {
+        Administrator = 1,
+        Student = 2,
+        Company = 3,
+        Teacher = 4,
+        TeacherStudent = 5,
     }
 
     public static class Roles
     {
         public const string ADMINISTRATOR = "Administrator";
         public const string STUDENT = "Student";
-        public const string COMPANY = "Firma";
-        public const string TEACHER = "Wykladowca";
+        public const string COMPANY = "Company";
+        public const string TEACHER = "Teacher";
     }
 
     public static class Keys
