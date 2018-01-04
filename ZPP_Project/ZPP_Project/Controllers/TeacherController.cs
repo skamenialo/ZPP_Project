@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using ZPP_Project.DataAccess;
+using PagedList;
 
 namespace ZPP_Project.Controllers
 {
@@ -20,9 +21,9 @@ namespace ZPP_Project.Controllers
         #endregion
 
         // GET: Teacher
-        public ActionResult Index()
+        public ActionResult Index(int? page, int? pageSize)
         {
-            return View("Index", DbContext.Teachers.ToList());
+            return View("Index", DbContext.Teachers.ToList().ToPagedList(page ?? 1, pageSize ?? ProgramData.DEFAULT_PAGE_SIZE));
         }
 
         public ActionResult Details(int id)

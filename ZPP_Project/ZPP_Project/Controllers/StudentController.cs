@@ -12,6 +12,7 @@ using ZPP_Project.DataAccess;
 using ZPP_Project.EntityDataModel;
 using ZPP_Project.Helpers;
 using ZPP_Project.Models;
+using PagedList;
 
 namespace ZPP_Project.Controllers
 {
@@ -20,9 +21,10 @@ namespace ZPP_Project.Controllers
     {
         // GET: Student
         [ZPPAuthorize(Roles = Roles.ADMINISTRATOR)]
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(int? page, int? pageSize)
         {
-            return View(await DbContext.Students.ToListAsync());
+            var list = await DbContext.Students.ToListAsync();
+            return View(list.ToPagedList(page ?? 1, pageSize ?? ProgramData.DEFAULT_PAGE_SIZE));
         }
 
         // GET: Student/Details/5

@@ -1,15 +1,25 @@
-﻿@model List<ZPP_Project.EntityDataModel.V_Course>
+﻿@using PagedList.Mvc;
+@model  PagedList.IPagedList<ZPP_Project.EntityDataModel.V_Course>
 
 @{
     ViewBag.Title = "Courses";
 }
 
+<h2>@ViewBag.Title</h2>
+
 <div class="container">
-    @foreach (var item in Model)
-    {
-        @Html.Partial("CourseDisplay", item)
-    }
+    <div>
+        @foreach (var item in Model)
+        {
+            @Html.Partial("CourseDisplay", item)
+        }
+    </div>
+    <div class="row">
+        <p>Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount</p>
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page, pageSize = Model.PageSize }))
+    </div>
 </div>
+
 @*
     @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
     @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |

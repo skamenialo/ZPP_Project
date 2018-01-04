@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using ZPP_Project.Helpers;
 using ZPP_Project.Models;
+using PagedList;
 
 namespace ZPP_Project.Controllers
 {
@@ -19,9 +20,9 @@ namespace ZPP_Project.Controllers
         private ZppIdentityContext db = new ZppIdentityContext();
 
         // GET: User
-        public ActionResult Index()
+        public ActionResult Index(int? page, int? pageSize)
         {
-            return View(db.Users.AsEnumerable().Select(user => DisplayUserViewModel.GetFromZppUser(user))); 
+            return View(db.Users.AsEnumerable().Select(user => DisplayUserViewModel.GetFromZppUser(user)).ToPagedList(page ?? 1, pageSize ?? ProgramData.DEFAULT_PAGE_SIZE)); 
         }
 
         // GET: User/Details/5
