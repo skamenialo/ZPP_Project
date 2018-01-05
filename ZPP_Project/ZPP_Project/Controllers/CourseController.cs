@@ -53,10 +53,10 @@ namespace ZPP_Project.Controllers
 
         //GET
         [ZPPAuthorize(Roles = Roles.STUDENT)]
-        public ActionResult SignUp(int courseId)
+        public ActionResult SignUp(int id)
         {
             V_Student student = DbContext.FindStudentByUserId(User.Identity.GetUserId<int>());
-            var course = DbContext.Courses.FirstOrDefault(c => c.IdCourse == courseId);
+            var course = DbContext.Courses.FirstOrDefault(c => c.IdCourse == id);
             if (course == null)
                 return View("Error");
 
