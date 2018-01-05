@@ -55,9 +55,28 @@ namespace ZPP_Project.Controllers
         [ZPPAuthorize(Roles = Roles.STUDENT)]
         public ActionResult SignUp(int courseId)
         {
-            var model = new CourseSignViewModel();
+            V_Student student = DbContext.FindStudentByUserId(User.Identity.GetUserId<int>());
+            var course = DbContext.Courses.FirstOrDefault(c => c.IdCourse == courseId);
+            if (course == null)
+                return View("Error");
 
-            throw new NotImplementedException();
+            var teacher = DbContext.Teachers.FirstOrDefault(t => t.IdTeacher == course.IdTeacher);
+            var company = DbContext.Companies.FirstOrDefault(c => c.IdCompany == course.IdCompany);
+
+            var model = new CourseSignViewModel()
+            {
+                IdStudent = student.IdStudent,
+                IdCourse = course.IdCourse,
+                Name = course.Name,
+                DateEnd = course.DateEnd,
+                DateStart = course.DateStart,
+                Description = course.Description,
+                Lectures = course.Lectures,
+                TeacherFullName = teacher == null ? ProgramData.VALUE_UNKNOWN : TeacherHelper.Display(teacher),
+                CompanyFullName = company == null ? ProgramData.VALUE_UNKNOWN : CompanyHelper.Display(company),
+            };
+
+            return View(model);
         }
 
         // POST: User/Create
@@ -67,6 +86,7 @@ namespace ZPP_Project.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult SignUp(CourseSignViewModel model)
         {
+            V_Student student = DbContext.FindStudentByUserId(User.Identity.GetUserId<int>());
 
             throw new NotImplementedException();
         }
@@ -75,6 +95,7 @@ namespace ZPP_Project.Controllers
         [ZPPAuthorize(Roles = Roles.STUDENT)]
         public ActionResult SignOut(int courseId)
         {
+            V_Student student = DbContext.FindStudentByUserId(User.Identity.GetUserId<int>());
             var model = new CourseSignViewModel();
 
             throw new NotImplementedException();

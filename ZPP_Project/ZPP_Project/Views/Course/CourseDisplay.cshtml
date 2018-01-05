@@ -37,7 +37,7 @@
         <div>
             @if (ViewBag.UserRoleId == (int)Role.Student)
             {
-                if (ExtendedModel != null && ExtendedModel.IsMember)
+                if (ExtendedModel != null && !ExtendedModel.IsMember)//TODO Dirty cheat for development! Remove the '!'!
                 {
                     //State == 1 - Created should not be visible!
                     if (Model.State == 2)//Opened
@@ -64,7 +64,7 @@
                 else
                 {
                     <div class="col-md-2">
-                        <p><a class="btn btn-default" @*href="/Company"*@>Sign up!</a></p>@*TODO link sign up functionality here *@
+                        <p><a class="btn btn-default" href="/Course/SignUp?courseId=@Model.IdCourse">Sign up!</a></p>@*TODO link sign up functionality here *@
                     </div>
                 }
             }

@@ -433,6 +433,7 @@
     <Content Include="Views\Student\StudentDisplay.cshtml" />
     <Content Include="Views\Student\Edit.cshtml" />
     <Content Include="Views\Student\MyCourses.cshtml" />
+    <Content Include="Views\Course\SignUp.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
