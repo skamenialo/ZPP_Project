@@ -4,29 +4,70 @@
 @using ZPP_Project.Helpers
 @model  ZPP_Project.EntityDataModel.V_Course
 
-@{ string blockName = "CourseDisplay_" + Model.IdCourse; }
+@{
+    string blockName = "CourseDisplay_" + Model.IdCourse;
+    V_CourseExtended ExtendedModel = Model as V_CourseExtended;
+}
+@*TODO "comments" href is missing here*@
 <div class="row">
     <div class="row">
         @HtmlHelperZpp.RenderColapseIcon(blockName)
         @Html.ActionLink(Model.Name, "Details", "Course", new { id = Model.IdCourse }, null)
     </div>
-    <div id="@blockName" class="row collapse" style="margin-left:-5px">
-        <div class="col-md-4">
-            <!-- Who -->
-            <div class="row">Offered by</div>
-            <div class="row">@Html.ActionLink(TeacherHelper.Display(Model.IdTeacher), "Details", "Teacher", new { id = Model.IdTeacher }, null)</div>
-            <div class="row">@Html.ActionLink(CompanyHelper.Display(Model.IdCompany), "Details", "Company", new { id = Model.IdCompany }, null)</div>
+    <div id="@blockName" class="collapse" style="margin-left:-5px">
+        <div class="row">
+            <div class="col-md-4">
+                <!-- Who -->
+                <div class="row">Offered by</div>
+                <div class="row">@Html.ActionLink(TeacherHelper.Display(Model.IdTeacher), "Details", "Teacher", new { id = Model.IdTeacher }, null)</div>
+                <div class="row">@Html.ActionLink(CompanyHelper.Display(Model.IdCompany), "Details", "Company", new { id = Model.IdCompany }, null)</div>
+            </div>
+            <div class="col-md-4">
+                <!-- When -->
+                <div class="row">Duration</div>
+                <div class="row">From @Model.DateStart.Value.Date.ToShortDateString()</div>
+                <div class="row">To @Model.DateEnd.Value.Date.ToShortDateString()</div>
+            </div>
+            <div class="col-md-4">
+                <!-- How many lectures -->
+                <div class="row">Lectures</div>
+                <div class="row">@Model.Lectures</div>
+            </div>
         </div>
-        <div class="col-md-4">
-            <!-- When -->
-            <div class="row">Duration</div>
-            <div class="row">From @Model.DateStart.Value.Date.ToShortDateString()</div>
-            <div class="row">To @Model.DateEnd.Value.Date.ToShortDateString()</div>
-        </div>
-        <div class="col-md-4">
-            <!-- How many lectures -->
-            <div class="row">Lectures</div>
-            <div class="row">@Model.Lectures</div>
+        <div>
+            @if (ViewBag.UserRoleId == (int)Role.Student)
+            {
+                if (ExtendedModel != null && ExtendedModel.IsMember)
+                {
+                    //State == 1 - Created should not be visible!
+                    if (Model.State == 2)//Opened
+                    {
+                        <div class="col-md-2">
+                            <p><a class="btn btn-default" @*href="/Company"*@>Sign out</a></p>@*TODO link sign out functionality here *@
+                        </div>
+                    }
+                    else//3 - started or 4 - finished
+                    {
+                        <div class="col-md-2">
+                            @*Leave empty space here, siggn in/out would be present here*@
+                        </div>
+                        <div class="col-md-2">
+                            <!-- Grade info -->
+                            <div class="row">@(Utils.GetDisplayName<V_CourseExtended>("Grade"))</div>
+                            <div class="row">@(ExtendedModel.Grade.HasValue ? ExtendedModel.Grade.Value.ToString("#.#") : String.Empty)</div>@*TODO link grade display here *@
+                        </div>
+                        <div class="col-md-2">
+                            <p><a class="btn btn-default" @*href="/Company"*@>Attendancy</a></p>@*TODO link attendancy here *@
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="col-md-2">
+                        <p><a class="btn btn-default" @*href="/Company"*@>Sign up!</a></p>@*TODO link sign up functionality here *@
+                    </div>
+                }
+            }
         </div>
     </div>
 </div>

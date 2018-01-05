@@ -20,6 +20,7 @@ namespace ZPP_Project.Helpers
 
         // Used for XSRF protection when adding external logins
         protected const string XsrfKey = "XsrfId";
+        protected int UserRoleId;
 
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
@@ -150,7 +151,8 @@ namespace ZPP_Project.Helpers
                 }
             else
                 ClearSession();
-            ViewBag.UserRoleId = ZPP_Project.Helpers.ZPPUserRoleHelper.GetUserRoleNumber(User.Identity.Name);
+            this.UserRoleId = ZPP_Project.Helpers.ZPPUserRoleHelper.GetUserRoleNumber(User.Identity.Name);
+            ViewBag.UserRoleId = this.UserRoleId;
         }
 
         #endregion

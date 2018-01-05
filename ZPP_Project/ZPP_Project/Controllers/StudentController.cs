@@ -16,7 +16,7 @@ using PagedList;
 
 namespace ZPP_Project.Controllers
 {
-    [ZPPAuthorize(Roles = Roles.ADMINISTRATOR+","+Roles.COMPANY)]
+    [ZPPAuthorize]
     public class StudentController : ZPPController
     {
         // GET: Student
@@ -28,6 +28,7 @@ namespace ZPP_Project.Controllers
         }
 
         // GET: Student/Details/5
+        [ZPPAuthorize(Roles = Roles.ADMINISTRATOR + "," + Roles.COMPANY)]
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
@@ -122,5 +123,20 @@ namespace ZPP_Project.Controllers
 
         //    return View(v_Student);
         //}
+
+        // GET: Student/MyCourses
+        [ZPPAuthorize(Roles = Roles.STUDENT)]
+        public async Task<ActionResult> MyCourses(int? page, int? pageSize)
+        {
+            if (User == null || String.IsNullOrWhiteSpace(User.Identity.Name))
+                return HttpNotFound();
+            V_Student student = await DbContext.FindStudentByUserIdAsync(User.Identity.GetUserId<int>());
+            List<V_CourseExtended> list = new List<V_CourseExtended>();
+            foreach (var item in DbContext.FindCoursesByStudentId(student.IdStudent))
+            {
+                list.Add(new V_CourseExtended(item) { IsMember = true,});
+            }
+            return View(list.ToPagedList(page ?? 1, pageSize ?? ProgramData.DEFAULT_PAGE_SIZE));
+        }
     }
 }
