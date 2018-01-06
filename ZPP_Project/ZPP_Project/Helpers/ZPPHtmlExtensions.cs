@@ -13,7 +13,7 @@ using System.Web.Routing;
 
 namespace ZPP_Project.Helpers
 {
-    public static class HtmlExtensions
+    public static class ZPPHtmlExtensions
     {
         public static MvcHtmlString ZPPValidationSummary(this HtmlHelper htmlHelper, bool excludePropertyErrors, string message, object htmlAttributes)
         {

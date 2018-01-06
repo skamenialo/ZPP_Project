@@ -5,7 +5,7 @@
 <div class="row">
     <div class="row" style="margin-left:-5px">
         <div style="float: left">
-            @HtmlHelperZpp.RenderColapseIcon(blockName)
+            @ZPPHtmlHelper.RenderColapseIcon(blockName)
         </div>
         <div class="col-md-2">
             @Html.ActionLink(Model.UserName, "Details", "User", new { id = Model.UserId }, null)

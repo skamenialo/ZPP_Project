@@ -210,7 +210,7 @@ namespace ZPP_Project.Helpers
 
         protected void AddError<TModel, TProperty>(TModel model, System.Linq.Expressions.Expression<Func<TModel, TProperty>> expression, string error)
         {
-            ModelState.AddModelError(Helpers.HtmlExtensions.GetDisplayName<TModel, TProperty>(model, expression), error);
+            ModelState.AddModelError(Helpers.ZPPHtmlExtensions.GetDisplayName<TModel, TProperty>(model, expression), error);
         }
 
         protected void AddErrors(IdentityResult result)

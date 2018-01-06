@@ -187,6 +187,7 @@
     <Compile Include="Controllers\StudentController.cs" />
     <Compile Include="Controllers\TeacherController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\ZPPController.cs" />
     <Compile Include="DataAccess\ZppContext.cs" />
     <Compile Include="EntityDataModel\SL_CommentState.cs">
       <DependentUpon>ZPPDB_NoDb.tt</DependentUpon>
@@ -242,25 +243,22 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\HtmlExtensions.cs" />
-    <Compile Include="Helpers\HtmlHelperZpp.cs" />
     <Compile Include="Helpers\StudentHelper.cs" />
-    <Compile Include="Helpers\ZPPAuthorizeAttribute.cs" />
     <Compile Include="Helpers\CompanyHelper.cs" />
     <Compile Include="Helpers\TeacherHelper.cs" />
     <Compile Include="Helpers\Utils.cs" />
-    <Compile Include="Helpers\ZPPController.cs" />
+    <Compile Include="Helpers\ZPPAttributes.cs" />
+    <Compile Include="Helpers\ZPPHtmlExtensions.cs" />
+    <Compile Include="Helpers\ZPPHtmlHelper.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\Course.cs" />
-    <Compile Include="Models\CourseSignViewModel.cs" />
-    <Compile Include="Models\DataModels.cs" />
+    <Compile Include="Models\CompanyViewModels.cs" />
+    <Compile Include="Models\CourseViewModels.cs" />
     <Compile Include="Models\GlobalData.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\StudentViewModel.cs" />
-    <Compile Include="Models\Teacher.cs" />
+    <Compile Include="Models\StudentViewModels.cs" />
+    <Compile Include="Models\TeacherViewModels.cs" />
     <Compile Include="Models\UserViewModels.cs" />
-    <Compile Include="Models\V_CourseExtended.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="States\CourseState.cs" />

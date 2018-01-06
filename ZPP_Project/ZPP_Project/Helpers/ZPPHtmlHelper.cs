@@ -6,7 +6,7 @@ using System.Web.Mvc;
 
 namespace ZPP_Project.Helpers
 {
-    public static class HtmlHelperZpp
+    public static class ZPPHtmlHelper
     {
         public static MvcHtmlString RenderColapseIcon(string regionName)
         {
