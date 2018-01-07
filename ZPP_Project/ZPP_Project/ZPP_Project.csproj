@@ -426,6 +426,7 @@
     <Content Include="Views\Company\CompanyDisplay.cshtml" />
     <Content Include="Views\Company\Details.cshtml" />
     <Content Include="Views\Course\Details.cshtml" />
+    <Content Include="Views\Company\Create.cshtml" />
     <Content Include="Views\User\Create.cshtml" />
     <Content Include="Views\User\Details.cshtml" />
     <Content Include="Views\User\Index.cshtml" />

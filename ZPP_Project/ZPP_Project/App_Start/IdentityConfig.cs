@@ -104,6 +104,21 @@ namespace ZPP_Project
             }
             return false;
         }
+
+        public IEnumerable<ZppUser> GetStudents()
+        {
+            return Users.AsEnumerable().Where(u => ZPPUserRoleHelper.IsStudent(u.UserType));
+        }
+
+        public IEnumerable<ZppUser> GetCompanies()
+        {
+            return Users.AsEnumerable().Where(u => ZPPUserRoleHelper.IsCompany(u.UserType));
+        }
+
+        public IEnumerable<ZppUser> GetTeachers()
+        {
+            return Users.AsEnumerable().Where(u => ZPPUserRoleHelper.IsTeacher(u.UserType));
+        }
     }
 
     // Configure the application sign-in manager which is used in this application.
