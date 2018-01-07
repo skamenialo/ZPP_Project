@@ -9,6 +9,12 @@ namespace ZPP_Project.Helpers
 {
     public class ZPPAuthorizeAttribute : AuthorizeAttribute
     {
+        public string[] RolesArray
+        {
+            get { return Roles.Split(','); }
+            set { Roles = string.Join(",", value); }
+        }
+
         //
         // Summary:
         //     Processes HTTP requests that fail authorization.

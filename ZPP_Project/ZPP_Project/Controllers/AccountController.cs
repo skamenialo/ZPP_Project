@@ -143,9 +143,10 @@ namespace ZPP_Project.Controllers
                 ZppUser user = UserManager.FindByName(model.UserName);
                 if (user != null)
                 {
-                    try
+                    //details not needed for Administrator
+                    bool detailsNeeded = ZPPUserRoleHelper.IsAdministrator(user.UserType);
+                    if (!detailsNeeded)
                     {
-                        bool detailsNeeded = false;
                         if (ZPPUserRoleHelper.IsTeacher(user.UserType))
                         {
                             V_Teacher select = DbContext.FindTeacherByUserId(user.Id);
@@ -170,10 +171,6 @@ namespace ZPP_Project.Controllers
                             else
                                 return RedirectToAction("PersonalDetails", "Manage");
                         }
-                    }
-                    catch (Exception)
-                    {
-
                     }
                 }
                 else
@@ -392,8 +389,6 @@ namespace ZPP_Project.Controllers
             }
             if (model.Password.Equals(model.ConfirmPassword))
             {
-                AddError("Confirmation password does not match.");
-
                 var user = await UserManager.FindByEmailAsync(model.Email);
                 if (user == null)
                 {
@@ -407,6 +402,8 @@ namespace ZPP_Project.Controllers
                 }
                 AddErrors(result);
             }
+            else
+                AddError("Confirmation password does not match.");
             model.ConfirmPassword = "";
             model.Password = "";
             return View(model);
