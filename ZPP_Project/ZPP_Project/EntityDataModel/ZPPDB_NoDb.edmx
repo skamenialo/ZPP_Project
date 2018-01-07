@@ -67,6 +67,18 @@ warning 6002: The table/view '78429825A9D122436AEFF9503CE2E808_LLUB\1.2 ZESPOŁO
           <Property Name="Description" Type="varchar" MaxLength="4096" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6002: The table/view '78429825A9D122436AEFF9503CE2E808_LLUB\1.2 ZESPOŁOWY PROJEKT PROGRAMISTYCZNY\ZPP_PROJECT\ZPP_PROJECT\ZPP_PROJECT\APP_DATA\ZPP.MDF.dbo.V_CompanyData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="V_CompanyData">
+          <Key>
+            <PropertyRef Name="IdCompany" />
+          </Key>
+          <Property Name="IdCompany" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdUser" Type="int" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="256" Nullable="false" />
+          <Property Name="Address" Type="varchar" MaxLength="512" Nullable="false" />
+          <Property Name="Email" Type="varchar" MaxLength="256" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
 warning 6002: The table/view '78429825A9D122436AEFF9503CE2E808_LLUB\1.2 ZESPOŁOWY PROJEKT PROGRAMISTYCZNY\ZPP_PROJECT\ZPP_PROJECT\ZPP_PROJECT\APP_DATA\ZPP.MDF.dbo.V_CompanyInfo' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="V_CompanyInfo">
           <Key>
@@ -144,7 +156,19 @@ warning 6002: The table/view '78429825A9D122436AEFF9503CE2E808_LLUB\1.2 ZESPOŁO
           <Property Name="Email" Type="varchar" MaxLength="256" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view '78429825A9D122436AEFF9503CE2E808_LLUB\1.2 ZESPOŁOWY PROJEKT PROGRAMISTYCZNY\ZPP_PROJECT\ZPP_PROJECT\ZPP_PROJECT\APP_DATA\ZPP.MDF.dbo.V_Teacher' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view '78429825A9D122436AEFF9503CE2E808_LLUB\1.2 ZESPOŁOWY PROJEKT PROGRAMISTYCZNY\ZPP_PROJECT\ZPP_PROJECT\ZPP_PROJECT\APP_DATA\ZPP.MDF.dbo.V_StudentData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="V_StudentData">
+          <Key>
+            <PropertyRef Name="IdStudent" />
+          </Key>
+          <Property Name="IdStudent" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdUser" Type="int" Nullable="false" />
+          <Property Name="LastName" Type="varchar" MaxLength="256" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="256" Nullable="false" />
+          <Property Name="Address" Type="varchar" MaxLength="512" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view '78429825A9D122436AEFF9503CE2E808_LLUB\1.2 ZESPOŁOWY PROJEKT PROGRAMISTYCZNY\ZPP_PROJECT\ZPP_PROJECT\ZPP_PROJECT\APP_DATA\ZPP.MDF.dbo.V_StudentInfo' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="V_StudentInfo">
           <Key>
             <PropertyRef Name="IdStudent" />
@@ -173,7 +197,20 @@ warning 6002: The table/view '78429825A9D122436AEFF9503CE2E808_LLUB\1.2 ZESPOŁO
           <Property Name="Description" Type="varchar" MaxLength="4096" />
         </EntityType>
         <!--Errors Found During Generation:
-warning 6002: The table/view '78429825A9D122436AEFF9503CE2E808_LLUB\1.2 ZESPOŁOWY PROJEKT PROGRAMISTYCZNY\ZPP_PROJECT\ZPP_PROJECT\ZPP_PROJECT\APP_DATA\ZPP.MDF.dbo.V_UserInfo' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+warning 6002: The table/view '78429825A9D122436AEFF9503CE2E808_LLUB\1.2 ZESPOŁOWY PROJEKT PROGRAMISTYCZNY\ZPP_PROJECT\ZPP_PROJECT\ZPP_PROJECT\APP_DATA\ZPP.MDF.dbo.V_TeacherData' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="V_TeacherData">
+          <Key>
+            <PropertyRef Name="IdTeacher" />
+          </Key>
+          <Property Name="IdTeacher" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="IdUser" Type="int" Nullable="false" />
+          <Property Name="IdCompany" Type="int" Nullable="false" />
+          <Property Name="LastName" Type="varchar" MaxLength="256" Nullable="false" />
+          <Property Name="FirstName" Type="varchar" MaxLength="256" Nullable="false" />
+          <Property Name="Address" Type="varchar" MaxLength="512" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view '78429825A9D122436AEFF9503CE2E808_LLUB\1.2 ZESPOŁOWY PROJEKT PROGRAMISTYCZNY\ZPP_PROJECT\ZPP_PROJECT\ZPP_PROJECT\APP_DATA\ZPP.MDF.dbo.V_TeacherInfo' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="V_TeacherInfo">
           <Key>
             <PropertyRef Name="IdTeacher" />
@@ -216,14 +253,17 @@ warning 6002: The table/view '78429825A9D122436AEFF9503CE2E808_LLUB\1.2 ZESPOŁO
           <EntitySet Name="V_Attendance" EntityType="Self.V_Attendance" store:Type="Views" Schema="dbo"/>
           <EntitySet Name="V_Comment" EntityType="Self.V_Comment" store:Type="Views" Schema="dbo"/>
           <EntitySet Name="V_Company" EntityType="Self.V_Company" store:Type="Views" Schema="dbo"/>
+          <EntitySet Name="V_CompanyData" EntityType="Self.V_CompanyData" store:Type="Views" Schema="dbo" />
           <EntitySet Name="V_CompanyInfo" EntityType="Self.V_CompanyInfo" store:Type="Views" Schema="dbo" />
           <EntitySet Name="V_Course" EntityType="Self.V_Course" store:Type="Views" Schema="dbo"/>
           <EntitySet Name="V_Grade" EntityType="Self.V_Grade" store:Type="Views" Schema="dbo"/>
           <EntitySet Name="V_Group" EntityType="Self.V_Group" store:Type="Views" Schema="dbo"/>
           <EntitySet Name="V_Lecture" EntityType="Self.V_Lecture" store:Type="Views" Schema="dbo"/>
           <EntitySet Name="V_Student" EntityType="Self.V_Student" store:Type="Views" Schema="dbo"/>
+          <EntitySet Name="V_StudentData" EntityType="Self.V_StudentData" store:Type="Views" Schema="dbo" />
           <EntitySet Name="V_StudentInfo" EntityType="Self.V_StudentInfo" store:Type="Views" Schema="dbo" />
           <EntitySet Name="V_Teacher" EntityType="Self.V_Teacher" store:Type="Views" Schema="dbo"/>
+          <EntitySet Name="V_TeacherData" EntityType="Self.V_TeacherData" store:Type="Views" Schema="dbo" />
           <EntitySet Name="V_TeacherInfo" EntityType="Self.V_TeacherInfo" store:Type="Views" Schema="dbo" />
           <EntitySet Name="V_UserInfo" EntityType="Self.V_UserInfo" store:Type="Views" Schema="dbo"/>
           <EntitySet Name="V_UserLogin" EntityType="Self.V_UserLogin" store:Type="Views" Schema="dbo"/>
@@ -250,6 +290,9 @@ warning 6002: The table/view '78429825A9D122436AEFF9503CE2E808_LLUB\1.2 ZESPOŁO
           <EntitySet Name="SL_UserType" EntityType="ZPPModel.SL_UserType" />
           <EntitySet Name="SL_CommentState" EntityType="ZPPModel.SL_CommentState" />
           <EntitySet Name="SL_CourseStates" EntityType="ZPPModel.SL_CourseStates" />
+          <EntitySet Name="V_CompanyData" EntityType="ZPPModel.V_CompanyData" />
+          <EntitySet Name="V_StudentData" EntityType="ZPPModel.V_StudentData" />
+          <EntitySet Name="V_TeacherData" EntityType="ZPPModel.V_TeacherData" />
         </EntityContainer>
         <EntityType Name="V_Attendance">
           <Key>
@@ -426,6 +469,37 @@ warning 6002: The table/view '78429825A9D122436AEFF9503CE2E808_LLUB\1.2 ZESPOŁO
           </Key>
           <Property Name="IdState" Type="Int32" Nullable="false" />
           <Property Name="Name" Type="String" Nullable="false" MaxLength="64" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="V_CompanyData">
+          <Key>
+            <PropertyRef Name="IdCompany" />
+          </Key>
+          <Property Name="IdCompany" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdUser" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="Address" Type="String" Nullable="false" MaxLength="512" FixedLength="false" Unicode="false" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="V_StudentData">
+          <Key>
+            <PropertyRef Name="IdStudent" />
+          </Key>
+          <Property Name="IdStudent" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdUser" Type="Int32" Nullable="false" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="Address" Type="String" Nullable="false" MaxLength="512" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="V_TeacherData">
+          <Key>
+            <PropertyRef Name="IdTeacher" />
+          </Key>
+          <Property Name="IdTeacher" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="IdUser" Type="Int32" Nullable="false" />
+          <Property Name="IdCompany" Type="Int32" Nullable="false" />
+          <Property Name="LastName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="FirstName" Type="String" Nullable="false" MaxLength="256" FixedLength="false" Unicode="false" />
+          <Property Name="Address" Type="String" Nullable="false" MaxLength="512" FixedLength="false" Unicode="false" />
         </EntityType>
         </Schema>
     </edmx:ConceptualModels>
@@ -623,6 +697,40 @@ warning 6002: The table/view '78429825A9D122436AEFF9503CE2E808_LLUB\1.2 ZESPOŁO
               <MappingFragment StoreEntitySet="SL_CourseStates">
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="IdState" ColumnName="IdState" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="V_CompanyData">
+            <EntityTypeMapping TypeName="ZPPModel.V_CompanyData">
+              <MappingFragment StoreEntitySet="V_CompanyData">
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="IdUser" ColumnName="IdUser" />
+                <ScalarProperty Name="IdCompany" ColumnName="IdCompany" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="V_StudentData">
+            <EntityTypeMapping TypeName="ZPPModel.V_StudentData">
+              <MappingFragment StoreEntitySet="V_StudentData">
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="IdUser" ColumnName="IdUser" />
+                <ScalarProperty Name="IdStudent" ColumnName="IdStudent" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="V_TeacherData">
+            <EntityTypeMapping TypeName="ZPPModel.V_TeacherData">
+              <MappingFragment StoreEntitySet="V_TeacherData">
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
+                <ScalarProperty Name="IdCompany" ColumnName="IdCompany" />
+                <ScalarProperty Name="IdUser" ColumnName="IdUser" />
+                <ScalarProperty Name="IdTeacher" ColumnName="IdTeacher" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

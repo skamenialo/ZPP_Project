@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using ZPP_Project.Helpers;
 using ZPP_Project.Models;
+using ZPP_Project.EntityDataModel;
 using PagedList;
 
 namespace ZPP_Project.Controllers
@@ -42,7 +43,7 @@ namespace ZPP_Project.Controllers
         public ActionResult Create()
         {
             
-            return View(new CreateUserViewModel() { LockoutEnabled = true, UserTypes = GetUserTypes()});
+            return View(new CreateUserViewModel() { LockoutEnabled = true, UserTypes = GetUserTypes(), AddDetailsManually = false});
         }
 
         // POST: User/Create
@@ -58,11 +59,55 @@ namespace ZPP_Project.Controllers
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    if (user.UserType > 1)
+                    {
+                        if (model.AddDetailsManually)
+                        {
+                            switch (user.UserType)
+                            {
+                                case 2:
+                                    return RedirectToAction("Create", "Student", new { id = user.UserName });
+                                case 3:
+                                    return RedirectToAction("Create", "Company", new { id = user.UserName });
+                                case 4:
+                                case 5:
+                                    return RedirectToAction("Create", "Teacher", new { id = user.UserName });
+                            }
+                        }
+                        else
+                        {
+                            switch (user.UserType)
+                            {
+                                case 2:
+                                    DbContext.Entry(new V_StudentData()
+                                    {
+                                        IdUser = user.Id,
+                                        LastName = " ",
+                                        FirstName = " ",
+                                        Address = " "
+                                    }).State = EntityState.Added;
+                                    break;
+                                case 3:
+                                    DbContext.Entry(new V_CompanyData()
+                                    {
+                                        IdUser = user.Id,
+                                        Name = " ",
+                                        Address = " ",
+                                        Email = " "
+                                    }).State = EntityState.Added;
+                                    break;
+                                case 4:
+                                case 5:
+                                    return RedirectToAction("SelectCompany", "Teacher", new { id = user.Id });
+                            }
+                            DbContext.SaveChanges();
+                        }
+                    }
                     return RedirectToAction("Index");
                 }
                 AddErrors(result);
             }
-
+            model.UserTypes = GetUserTypes();
             return View(model);
         }
 
@@ -95,6 +140,7 @@ namespace ZPP_Project.Controllers
                 {
                     ZppUser user2 = null;
                     string[] removeRoles = null;
+                    bool userTypeChanged = false;
 
                     if (!string.IsNullOrEmpty(model.UserName) && user.UserName != model.UserName)
                     {
@@ -126,9 +172,10 @@ namespace ZPP_Project.Controllers
                         if (Int32.TryParse(model.UserType, out userType)
                             && userType <= DbContext.UserTypes.Count())
                         {
-                            if (userType != user.UserType)
+                            if (user.UserType != 1 && userType > 1)
                             {
-                                if (userType > 1)
+                                userTypeChanged = userType != user.UserType;
+                                if (userTypeChanged)
                                 {
                                     switch (user.UserType)
                                     {
@@ -156,9 +203,9 @@ namespace ZPP_Project.Controllers
                                     user.UserType = userType;
                                     user.EmailConfirmed = false;
                                 }
-                                else
-                                    AddError("Could not change" + (user.UserType == 1 ? " " : " to ") + "administrator role!");
                             }
+                            else
+                                AddError("Could not change" + (user.UserType == 1 ? " " : " to ") + "administrator role!");
                         }
                         else
                             AddError("Wrong user role!");
@@ -200,11 +247,45 @@ namespace ZPP_Project.Controllers
                         user.AccessFailedCount = 0;
                         user.LockoutEnabled = model.LockoutEnabled;
                         user.TwoFactorEnabled = model.TwoFactorEnabled;
-
+                        
                         UserManager.Update(user);
                         if (removeRoles != null)
                             UserManager.RemoveFromRoles(user.Id, removeRoles);
-
+                        if(userTypeChanged)
+                        {
+                            switch(user.UserType)
+                            {
+                                case 2:
+                                    V_Student student = DbContext.FindStudentByUserId(user.Id);
+                                    if (student == null)
+                                        DbContext.Entry(new V_StudentData()
+                                        {
+                                            IdUser = user.Id,
+                                            LastName = " ",
+                                            FirstName = " ",
+                                            Address = " "
+                                        }).State = EntityState.Added;
+                                    break;
+                                case 3:
+                                    V_Company company = DbContext.FindCompanyByUserId(user.Id);
+                                    if (company == null)
+                                        DbContext.Entry(new V_CompanyData()
+                                        {
+                                            IdUser = user.Id,
+                                            Name = " ",
+                                            Address = " ",
+                                            Email = " "
+                                        }).State = EntityState.Added;
+                                    break;
+                                case 4:
+                                case 5:
+                                    V_Teacher teacher = DbContext.FindTeacherByUserId(user.Id);
+                                    if (teacher == null)
+                                        return RedirectToAction("SelectCompany", "Teacher", new { id = user.Id });
+                                    goto case 2;
+                            }
+                            DbContext.SaveChanges();
+                        }
                         return RedirectToAction("Index");
                     }
                 }

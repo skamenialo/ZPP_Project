@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
@@ -38,5 +39,16 @@ namespace ZPP_Project.Models
         public string Website { get; set; }
         [DisplayName("Description")]
         public string Description { get; set; }
+    }
+
+    public class SelectTeacherCompanyViewModel
+    {
+        [Required]
+        public int Id { get; set; }
+
+        [Required]
+        [Display(Name = "Company")]
+        public string Company { get; set; }
+        public IEnumerable<System.Web.Mvc.SelectListItem> Companies { get; set; }
     }
 }

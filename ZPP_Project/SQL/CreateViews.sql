@@ -50,6 +50,15 @@ CREATE VIEW V_StudentInfo AS
   SELECT IdStudent, LastName, FirstName, Address
   FROM Students;
 GO
+-- V_StudentData --
+IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS
+        WHERE TABLE_NAME = 'V_StudentData')
+    DROP VIEW V_StudentData
+GO
+CREATE VIEW V_StudentData AS
+  SELECT IdStudent, IdUser, LastName, FirstName, Address
+  FROM Students;
+GO
 -- V_Company --
 IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS
         WHERE TABLE_NAME = 'V_Company')
@@ -69,6 +78,15 @@ CREATE VIEW V_CompanyInfo AS
   SELECT IdCompany, Name, Address, Email, Website, Description
   FROM Companies
 GO
+-- V_CompanyData --
+IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS
+        WHERE TABLE_NAME = 'V_CompanyData')
+    DROP VIEW V_CompanyData
+GO
+CREATE VIEW V_CompanyData AS
+  SELECT IdCompany, IdUser, Name, Address, Email
+  FROM Companies;
+GO
 -- V_Teacher --
 IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS
         WHERE TABLE_NAME = 'V_Teacher')
@@ -86,6 +104,15 @@ IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS
 GO
 CREATE VIEW V_TeacherInfo AS
   SELECT IdTeacher, IdCompany, LastName, FirstName, Address, Degree, Website, Description
+  FROM Teachers;
+GO
+-- V_TeacherData --
+IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS
+        WHERE TABLE_NAME = 'V_TeacherData')
+    DROP VIEW V_TeacherData
+GO
+CREATE VIEW V_TeacherData AS
+  SELECT IdTeacher, IdUser, IdCompany, LastName, FirstName, Address
   FROM Teachers;
 GO
 -- V_Course --

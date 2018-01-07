@@ -95,6 +95,10 @@ namespace ZPP_Project.Models
         [Display(Name = "Lockout enabled")]
         public bool LockoutEnabled { get; set; }
 
+        [Required]
+        [Display(Name = "Add details manually")]
+        public bool AddDetailsManually { get; set; }
+
         public IEnumerable<System.Web.Mvc.SelectListItem> UserTypes { get; set; }
     }
 

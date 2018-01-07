@@ -207,6 +207,9 @@
     <Compile Include="EntityDataModel\V_Company.cs">
       <DependentUpon>ZPPDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="EntityDataModel\V_CompanyData.cs">
+      <DependentUpon>ZPPDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="EntityDataModel\V_CompanyInfo.cs">
       <DependentUpon>ZPPDB.tt</DependentUpon>
     </Compile>
@@ -225,10 +228,16 @@
     <Compile Include="EntityDataModel\V_Student.cs">
       <DependentUpon>ZPPDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="EntityDataModel\V_StudentData.cs">
+      <DependentUpon>ZPPDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="EntityDataModel\V_StudentInfo.cs">
       <DependentUpon>ZPPDB.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityDataModel\V_Teacher.cs">
+      <DependentUpon>ZPPDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityDataModel\V_TeacherData.cs">
       <DependentUpon>ZPPDB.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityDataModel\V_TeacherInfo.cs">
@@ -431,6 +440,7 @@
     <Content Include="Views\Student\StudentDisplay.cshtml" />
     <Content Include="Views\Student\Edit.cshtml" />
     <Content Include="Views\Student\MyCourses.cshtml" />
+    <Content Include="Views\Teacher\SelectCompany.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
