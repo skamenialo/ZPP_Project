@@ -261,22 +261,6 @@ namespace ZPP_Project.Controllers
                 return View("Error");
         }
 
-        private async Task<ActionResult> GenerateEmailConfirmation(int userId)
-        {
-            // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-            // Send an email with this link
-            string code = await UserManager.GenerateEmailConfirmationTokenAsync(userId);
-            var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = userId, code = code }, protocol: Request.Url.Scheme);
-            await UserManager.SendEmailAsync(userId, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-
-#if DEBUG
-            ViewBag.Link = callbackUrl;
-            return View("DisplayEmail");
-#else
-            return View("Login");
-#endif
-        }
-
         //
         // GET: /Account/ConfirmEmail
         [AllowAnonymous]

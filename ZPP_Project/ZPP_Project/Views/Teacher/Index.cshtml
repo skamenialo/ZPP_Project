@@ -1,4 +1,5 @@
 ﻿@using PagedList.Mvc;
+@using ZPP_Project.Helpers;
 @model  PagedList.IPagedList<ZPP_Project.EntityDataModel.V_Teacher>
 
 @{
@@ -6,6 +7,11 @@
 }
 
 <h2>@ViewBag.Title</h2>
+
+@if (ZPPUserRoleHelper.IsAdministrator(ViewBag.UserRoleId) || ZPPUserRoleHelper.IsCompany(ViewBag.UserRoleId))
+{
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-default" })
+}
 
 <div class="container">
     <div>

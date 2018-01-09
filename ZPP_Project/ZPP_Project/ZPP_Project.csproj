@@ -421,7 +421,7 @@
     <Content Include="Views\Teacher\Details.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />
     <Content Include="Views\Account\SelectRole.cshtml" />
-    <Content Include="Views\Account\DisplayEmail.cshtml" />
+    <Content Include="Views\Shared\DisplayEmail.cshtml" />
     <Content Include="Views\Company\Index.cshtml" />
     <Content Include="Views\Company\CompanyDisplay.cshtml" />
     <Content Include="Views\Company\Details.cshtml" />
@@ -442,6 +442,7 @@
     <Content Include="Views\Student\Edit.cshtml" />
     <Content Include="Views\Student\MyCourses.cshtml" />
     <Content Include="Views\Teacher\SelectCompany.cshtml" />
+    <Content Include="Views\Teacher\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
