@@ -232,7 +232,7 @@ namespace ZPP_Project.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ZppUser { UserName = model.UserName, Email = model.Email, UserType = 2 };
+                var user = new ZppUser { UserName = model.UserName, Email = model.Email, UserType = Roles.STUDENT_NR };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -277,18 +277,18 @@ namespace ZPP_Project.Controllers
                 ZppUser user = await UserManager.FindByIdAsync(id);
                 switch (user.UserType)
                 {
-                    case 2:
-                        result = await UserManager.AddToRoleAsync(id, Helpers.Roles.STUDENT);
+                    case Roles.STUDENT_NR:
+                        result = await UserManager.AddToRoleAsync(id, Roles.STUDENT);
                         break;
-                    case 3:
-                        result = await UserManager.AddToRoleAsync(id, Helpers.Roles.COMPANY);
+                    case Roles.COMPANY_NR:
+                        result = await UserManager.AddToRoleAsync(id, Roles.COMPANY);
                         break;
-                    case 4:
-                        result = await UserManager.AddToRoleAsync(id, Helpers.Roles.TEACHER);
+                    case Roles.TEACHER_NR:
+                        result = await UserManager.AddToRoleAsync(id, Roles.TEACHER);
                         break;
-                    case 5:
-                        result = await UserManager.AddToRoleAsync(id, Helpers.Roles.STUDENT);
-                        result = await UserManager.AddToRoleAsync(id, Helpers.Roles.TEACHER);
+                    case Roles.TEACHER_STUDENT_NR:
+                        result = await UserManager.AddToRoleAsync(id, Roles.STUDENT);
+                        result = await UserManager.AddToRoleAsync(id, Roles.TEACHER);
                         break;
                     default:
                         break;

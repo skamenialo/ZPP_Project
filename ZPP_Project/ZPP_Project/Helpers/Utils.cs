@@ -231,20 +231,21 @@ namespace ZPP_Project.Helpers
         {
             switch (roleNr)
             {
-                case 1:
+                case Roles.ADMINISTRATOR_NR:
                     return Roles.ADMINISTRATOR;
-                case 2:
+                case Roles.STUDENT_NR:
                     return Roles.STUDENT;
-                case 3:
+                case Roles.COMPANY_NR:
                     return Roles.COMPANY;
-                case 4:
+                case Roles.TEACHER_NR:
                     return Roles.TEACHER;
-                case 5:
+                case Roles.TEACHER_STUDENT_NR:
                     return Roles.TEACHER + " | " + Roles.STUDENT;
                 default:
                     return "None";
             }
         }
+
         #region IsRole methods
 
         public static bool IsStudent(int? userType)
@@ -269,22 +270,43 @@ namespace ZPP_Project.Helpers
 
         public static bool IsStudent(int userType)
         {
-            return userType == 2 || userType == 5; //Student || StudentTeacher
+            return userType == Roles.STUDENT_NR || userType == Roles.TEACHER_STUDENT_NR; //Student || StudentTeacher
         }
 
         public static bool IsTeacher(int userType)
         {
-            return userType > 3; //Teacher || StudentTeacher
+            return userType > Roles.TEACHER_NR; //Teacher || StudentTeacher
         }
 
         public static bool IsCompany(int userType)
         {
-            return userType == 3; //Company
+            return userType == Roles.COMPANY_NR; //Company
         }
 
         public static bool IsAdministrator(int userType)
         {
-            return userType == 1; //Administrator
+            return userType == Roles.ADMINISTRATOR_NR; //Administrator
+        }
+
+        public static bool IsRoleValid(int? userType)
+        {
+            return userType.HasValue && IsRoleValid(userType);
+        }
+
+        public static bool IsRoleValid(int userType)
+        {
+            return userType >= Roles.ADMINISTRATOR_NR && userType <= Roles.TEACHER_STUDENT_NR;
+        }
+
+        public static bool IsRoleValid(string userType)
+        {
+            int uType = 0;
+            return Int32.TryParse(userType, out uType) && IsRoleValid(uType);
+        }
+
+        public static bool IsRoleValid(string userType, out int type)
+        {
+            return Int32.TryParse(userType, out type) && IsRoleValid(type);
         }
 
         #endregion
@@ -294,21 +316,18 @@ namespace ZPP_Project.Helpers
     /// <summary>
     /// Represents database-specific IDs of various user roles
     /// </summary>
-    public enum Role : int
-    {
-        Administrator = 1,
-        Student = 2,
-        Company = 3,
-        Teacher = 4,
-        TeacherStudent = 5,
-    }
-
     public static class Roles
     {
         public const string ADMINISTRATOR = "Administrator";
         public const string STUDENT = "Student";
         public const string COMPANY = "Company";
         public const string TEACHER = "Teacher";
+
+        public const int ADMINISTRATOR_NR = 1;
+        public const int STUDENT_NR = 2;
+        public const int COMPANY_NR = 3;
+        public const int TEACHER_NR = 4;
+        public const int TEACHER_STUDENT_NR = 5;
     }
 
     public static class Keys

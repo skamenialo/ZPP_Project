@@ -69,7 +69,7 @@ namespace ZPP_Project.Controllers
                     if (ZPPUserRoleHelper.IsCompany(UserRoleId))
                     {
                         //check email
-                        user = new ZppUser() { UserName = model.UserName, Email = model.Email, UserType = 4 };
+                        user = new ZppUser() { UserName = model.UserName, Email = model.Email, UserType = Roles.TEACHER_NR };
                         var result = await UserManager.CreateAsync(user, model.Password);
                         if (!result.Succeeded)
                             AddErrors(result);

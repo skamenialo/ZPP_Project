@@ -27,7 +27,7 @@ namespace ZPP_Project.Controllers
         // GET: Course
         public ActionResult Index(int? page, int? pageSize)
         {
-            if (this.UserRoleId == (int)Helpers.Role.Student)
+            if (ZPPUserRoleHelper.IsStudent(this.UserRoleId))
             {
                 V_Student student = DbContext.FindStudentByUserId(User.Identity.GetUserId<int>());
                 List<V_Course> list = new List<V_Course>();

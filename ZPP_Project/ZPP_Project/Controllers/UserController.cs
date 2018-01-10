@@ -53,24 +53,27 @@ namespace ZPP_Project.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(CreateUserViewModel model)
         {
+            int userType = -1;
+            if (ZPPUserRoleHelper.IsRoleValid(model.UserType, out userType))
+                AddError("Wrong user type");
             if (ModelState.IsValid)
             {
-                var user = new ZppUser { UserName = model.UserName, Email = model.Email, UserType = Int32.Parse(model.UserType), LockoutEnabled = model.LockoutEnabled };
+                var user = new ZppUser { UserName = model.UserName, Email = model.Email, UserType = userType, LockoutEnabled = model.LockoutEnabled };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    if (user.UserType > 1)
+                    if (!ZPPUserRoleHelper.IsAdministrator(user.UserType))
                     {
                         if (model.AddDetailsManually)
                         {
                             switch (user.UserType)
                             {
-                                case 2:
+                                case Roles.STUDENT_NR:
                                     return RedirectToAction("Create", "Student", new { id = user.UserName });
-                                case 3:
+                                case Roles.COMPANY_NR:
                                     return RedirectToAction("Create", "Company", new { id = user.UserName });
-                                case 4:
-                                case 5:
+                                case Roles.TEACHER_NR:
+                                case Roles.TEACHER_STUDENT_NR:
                                     return RedirectToAction("Create", "Teacher", new { id = user.UserName });
                             }
                         }
@@ -78,7 +81,7 @@ namespace ZPP_Project.Controllers
                         {
                             switch (user.UserType)
                             {
-                                case 2:
+                                case Roles.STUDENT_NR:
                                     DbContext.Entry(new V_StudentData()
                                     {
                                         IdUser = user.Id,
@@ -87,7 +90,7 @@ namespace ZPP_Project.Controllers
                                         Address = " "
                                     }).State = EntityState.Added;
                                     break;
-                                case 3:
+                                case Roles.COMPANY_NR:
                                     DbContext.Entry(new V_CompanyData()
                                     {
                                         IdUser = user.Id,
@@ -96,8 +99,8 @@ namespace ZPP_Project.Controllers
                                         Email = " "
                                     }).State = EntityState.Added;
                                     break;
-                                case 4:
-                                case 5:
+                                case Roles.TEACHER_NR:
+                                case Roles.TEACHER_STUDENT_NR:
                                     return RedirectToAction("SelectCompany", "Teacher", new { id = user.Id });
                             }
                             DbContext.SaveChanges();
@@ -169,34 +172,34 @@ namespace ZPP_Project.Controllers
                     if (!string.IsNullOrEmpty(model.UserType))
                     {
                         int userType = user.UserType;
-                        if (Int32.TryParse(model.UserType, out userType)
-                            && userType <= DbContext.UserTypes.Count())
+                        if (ZPPUserRoleHelper.IsRoleValid(model.UserType, out userType))
                         {
-                            if (user.UserType != 1 && userType > 1)
+                            if (!(ZPPUserRoleHelper.IsAdministrator(user.UserType)
+                                || ZPPUserRoleHelper.IsAdministrator(userType)))
                             {
                                 userTypeChanged = userType != user.UserType;
                                 if (userTypeChanged)
                                 {
                                     switch (user.UserType)
                                     {
-                                        case 2:
-                                            if (userType != 5)
-                                                removeRoles = new string[] { Helpers.Roles.STUDENT };
+                                        case Roles.STUDENT_NR:
+                                            if (!ZPPUserRoleHelper.IsTeacher(userType))
+                                                removeRoles = new string[] { Roles.STUDENT };
                                             break;
-                                        case 3:
-                                            removeRoles = new string[] { Helpers.Roles.COMPANY };
+                                        case Roles.COMPANY_NR:
+                                            removeRoles = new string[] { Roles.COMPANY };
                                             break;
-                                        case 4:
-                                            if (userType != 5)
-                                                removeRoles = new string[] { Helpers.Roles.TEACHER };
+                                        case Roles.TEACHER_NR:
+                                            if (!ZPPUserRoleHelper.IsStudent(userType))
+                                                removeRoles = new string[] { Roles.TEACHER };
                                             break;
-                                        case 5:
-                                            if (userType == 2)
-                                                removeRoles = new string[] { Helpers.Roles.TEACHER };
-                                            else if (userType == 4)
-                                                removeRoles = new string[] { Helpers.Roles.STUDENT };
+                                        case Roles.TEACHER_STUDENT_NR:
+                                            if (userType == Roles.STUDENT_NR)
+                                                removeRoles = new string[] { Roles.TEACHER };
+                                            else if (userType == Roles.TEACHER_NR)
+                                                removeRoles = new string[] { Roles.STUDENT };
                                             else
-                                                removeRoles = new string[] { Helpers.Roles.STUDENT, Helpers.Roles.TEACHER };
+                                                removeRoles = new string[] { Roles.STUDENT, Roles.TEACHER };
                                             break;
                                     }
 
@@ -205,7 +208,7 @@ namespace ZPP_Project.Controllers
                                 }
                             }
                             else
-                                AddError("Could not change" + (user.UserType == 1 ? " " : " to ") + "administrator role!");
+                                AddError("Could not change" + (ZPPUserRoleHelper.IsAdministrator(user.UserType) ? " " : " to ") + "administrator role!");
                         }
                         else
                             AddError("Wrong user role!");
@@ -255,7 +258,7 @@ namespace ZPP_Project.Controllers
                         {
                             switch(user.UserType)
                             {
-                                case 2:
+                                case Roles.STUDENT_NR:
                                     V_Student student = DbContext.FindStudentByUserId(user.Id);
                                     if (student == null)
                                         DbContext.Entry(new V_StudentData()
@@ -266,7 +269,7 @@ namespace ZPP_Project.Controllers
                                             Address = " "
                                         }).State = EntityState.Added;
                                     break;
-                                case 3:
+                                case Roles.COMPANY_NR:
                                     V_Company company = DbContext.FindCompanyByUserId(user.Id);
                                     if (company == null)
                                         DbContext.Entry(new V_CompanyData()
@@ -277,8 +280,8 @@ namespace ZPP_Project.Controllers
                                             Email = " "
                                         }).State = EntityState.Added;
                                     break;
-                                case 4:
-                                case 5:
+                                case Roles.TEACHER_NR:
+                                case Roles.TEACHER_STUDENT_NR:
                                     V_Teacher teacher = DbContext.FindTeacherByUserId(user.Id);
                                     if (teacher == null)
                                         return RedirectToAction("SelectCompany", "Teacher", new { id = user.Id });

@@ -35,7 +35,7 @@
             </div>
         </div>
         <div>
-            @if (ViewBag.UserRoleId == (int)Role.Student)
+            @if (ViewBag.UserRoleId == ZPP_Project.Helpers.Roles.STUDENT_NR)
             {
                 if (ExtendedModel != null && ExtendedModel.IsMember)
                 {
