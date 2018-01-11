@@ -40,10 +40,16 @@ namespace ZPP_Project.Controllers
         }
 
         // GET: User/Create
-        public ActionResult Create()
+        [Route("User/Create/{type?}")]
+        public ActionResult Create(int? type)
         {
-            
-            return View(new CreateUserViewModel() { LockoutEnabled = true, UserTypes = GetUserTypes(), AddDetailsManually = false});
+            return View(new CreateUserViewModel()
+            {
+                LockoutEnabled = true,
+                UserTypes = GetUserTypes(),
+                UserType = (type ?? -1).ToString(),
+                AddDetailsManually = ZPPUserRoleHelper.IsRoleValid(type)
+            });
         }
 
         // POST: User/Create

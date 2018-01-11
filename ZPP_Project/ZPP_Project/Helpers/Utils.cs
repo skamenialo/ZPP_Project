@@ -290,7 +290,7 @@ namespace ZPP_Project.Helpers
 
         public static bool IsRoleValid(int? userType)
         {
-            return userType.HasValue && IsRoleValid(userType);
+            return userType.HasValue && IsRoleValid(userType.Value);
         }
 
         public static bool IsRoleValid(int userType)
