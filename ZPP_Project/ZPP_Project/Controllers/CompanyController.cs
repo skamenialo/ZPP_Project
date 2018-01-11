@@ -25,6 +25,7 @@ namespace ZPP_Project.Controllers
         #endregion
 
         // GET: Company
+        [Route("Companies/{page?}/{pageSize?}")]
         public ActionResult Index(int? page, int? pageSize)
         {
             return View("Index", DbContext.Companies.ToList().ToPagedList(page ?? 1, pageSize ?? ProgramData.DEFAULT_PAGE_SIZE));
@@ -72,7 +73,7 @@ namespace ZPP_Project.Controllers
                     if (await DbContext.Companies.FirstOrDefaultAsync((c) => c.Name.Equals(model.Name)) != null)
                         AddError("Company with given name already exists.");
 
-                    if(ModelState.IsValid)
+                    if (ModelState.IsValid)
                     {
                         DbContext.Entry(new V_CompanyData()
                         {

@@ -21,6 +21,7 @@ namespace ZPP_Project.Controllers
     {
         // GET: Student
         [ZPPAuthorize(Roles = Roles.ADMINISTRATOR)]
+        [Route("Students/{page?}/{pageSize?}")]
         public async Task<ActionResult> Index(int? page, int? pageSize)
         {
             var list = await DbContext.Students.ToListAsync();

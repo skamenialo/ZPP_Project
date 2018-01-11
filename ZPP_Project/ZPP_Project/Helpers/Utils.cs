@@ -275,7 +275,7 @@ namespace ZPP_Project.Helpers
 
         public static bool IsTeacher(int userType)
         {
-            return userType > Roles.TEACHER_NR; //Teacher || StudentTeacher
+            return userType >= Roles.TEACHER_NR; //Teacher || StudentTeacher
         }
 
         public static bool IsCompany(int userType)

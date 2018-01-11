@@ -21,9 +21,36 @@ namespace ZPP_Project.Controllers
         private ZppIdentityContext db = new ZppIdentityContext();
 
         // GET: User
+        [Route("Users/{page?}/{pageSize?}")]
         public ActionResult Index(int? page, int? pageSize)
         {
+            ViewBag.ButtonMap = new bool[] { true, true, true, false };
+            ViewBag.PagedListPagerAction = "Index";
             return View(db.Users.AsEnumerable().Select(user => DisplayUserViewModel.GetFromZppUser(user)).ToPagedList(page ?? 1, pageSize ?? ProgramData.DEFAULT_PAGE_SIZE)); 
+        }
+
+        [Route("Users/Company/{page?}/{pageSize?}")]
+        public ActionResult ShowCompanies(int? page, int? pageSize)
+        {
+            ViewBag.ButtonMap = new bool[] { false, true, true, true };
+            ViewBag.PagedListPagerAction = "ShowCompanies";
+            return View("Index", UserManager.GetCompanies().AsEnumerable().Select(user => DisplayUserViewModel.GetFromZppUser(user)).ToPagedList(page ?? 1, pageSize ?? ProgramData.DEFAULT_PAGE_SIZE));
+        }
+
+        [Route("Users/Teacher/{page?}/{pageSize?}")]
+        public ActionResult ShowTeachers(int? page, int? pageSize)
+        {
+            ViewBag.ButtonMap = new bool[] { true, false, true, true };
+            ViewBag.PagedListPagerAction = "ShowTeachers";
+            return View("Index", UserManager.GetTeachers().AsEnumerable().Select(user => DisplayUserViewModel.GetFromZppUser(user)).ToPagedList(page ?? 1, pageSize ?? ProgramData.DEFAULT_PAGE_SIZE));
+        }
+
+        [Route("Users/Student/{page?}/{pageSize?}")]
+        public ActionResult ShowStudents(int? page, int? pageSize)
+        {
+            ViewBag.ButtonMap = new bool[] { true, true, false, true };
+            ViewBag.PagedListPagerAction = "ShowStudents";
+            return View("Index", UserManager.GetStudents().AsEnumerable().Select(user => DisplayUserViewModel.GetFromZppUser(user)).ToPagedList(page ?? 1, pageSize ?? ProgramData.DEFAULT_PAGE_SIZE));
         }
 
         // GET: User/Details/5
