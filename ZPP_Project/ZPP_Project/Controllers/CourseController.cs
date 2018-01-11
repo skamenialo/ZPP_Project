@@ -25,6 +25,7 @@ namespace ZPP_Project.Controllers
         #endregion
 
         // GET: Course
+        [Route("Courses/{page?}/{pageSize?}")]
         public ActionResult Index(int? page, int? pageSize)
         {
             if (ZPPUserRoleHelper.IsStudent(this.UserRoleId))
@@ -43,7 +44,18 @@ namespace ZPP_Project.Controllers
                 return View("Index", list.ToPagedList(page ?? 1, pageSize ?? ProgramData.DEFAULT_PAGE_SIZE));
             }
             else
+            {
+                ViewBag.ShowMyCourses = true;
                 return View("Index", DbContext.Courses.ToList().ToPagedList(page ?? 1, pageSize ?? ProgramData.DEFAULT_PAGE_SIZE));
+            }
+        }
+
+        [Route("Courses/My/{page?}/{pageSize?}")]
+        [ZPPAuthorize(Roles = Roles.COMPANY)]
+        public ActionResult CompanyCourses(int? page, int? pageSize)
+        {
+            ViewBag.ShowMyCourses = false;
+            return View("Index", DbContext.FindCoursesByCompanyId(DbContext.FindCompanyByUserId(User.Identity.GetUserId<int>()).IdCompany).ToList().ToPagedList(page ?? 1, pageSize ?? ProgramData.DEFAULT_PAGE_SIZE));
         }
 
         public ActionResult Details(int id)
