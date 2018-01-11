@@ -27,9 +27,19 @@ namespace ZPP_Project.Controllers
         #endregion
 
         // GET: Teacher
+        [Route("Teachers/{page?}/{pageSize?}")]
         public ActionResult Index(int? page, int? pageSize)
         {
-            return View("Index", DbContext.Teachers.ToList().ToPagedList(page ?? 1, pageSize ?? ProgramData.DEFAULT_PAGE_SIZE));
+            ViewBag.ShowMyTeachers = true;
+            return View("Index", DbContext.Teachers.ToList().ToPagedList( 1,  ProgramData.DEFAULT_PAGE_SIZE));
+        }
+
+        [Route("Teachers/My/{page?}/{pageSize?}")]
+        [ZPPAuthorize(Roles = Roles.COMPANY)]
+        public ActionResult CompanyTeachers(int? page, int? pageSize)
+        {
+            ViewBag.ShowMyTeachers = false;
+            return View("Index", DbContext.FindTeacherByCompanyId(DbContext.FindCompanyByUserId(User.Identity.GetUserId<int>()).IdCompany).ToList().ToPagedList(page ?? 1, pageSize ?? ProgramData.DEFAULT_PAGE_SIZE));
         }
 
         public ActionResult Details(int id)

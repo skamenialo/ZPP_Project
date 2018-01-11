@@ -74,9 +74,19 @@ namespace ZPP_Project.DataAccess
             return await Teachers.FirstOrDefaultAsync(teacher => teacher.IdUser == id);
         }
 
+        public IQueryable<V_Teacher> FindTeacherByCompanyId(int id)
+        {
+            return Teachers.Where(t => t.IdCompany == id);
+        }
+
         public IQueryable<V_Course> FindCoursesByCompanyId(int id)
         {
             return Courses.Where(c => c.IdCompany == id);
+        }
+
+        public IQueryable<V_Course> FindCoursesByStudentId(int id)
+        {
+            return FindGroupsByStudentId(id).Select(g => Courses.FirstOrDefault(c => c.IdCourse == g.IdCourse));
         }
 
         public IQueryable<V_Group> FindGroupsByCourseId(int id)
@@ -87,11 +97,6 @@ namespace ZPP_Project.DataAccess
         public IQueryable<V_Group> FindGroupsByStudentId(int id)
         {
             return Groups.Where(g => g.IdStudent == id);
-        }
-
-        public IQueryable<V_Course> FindCoursesByStudentId(int id)
-        {
-            return FindGroupsByStudentId(id).Select(g => Courses.FirstOrDefault(c => c.IdCourse == g.IdCourse));
         }
 
 #endregion

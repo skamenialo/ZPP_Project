@@ -7,6 +7,17 @@
 }
 
 <h2>@ViewBag.Title</h2>
+@if (ZPPUserRoleHelper.IsCompany(ViewBag.UserRoleId))
+{
+    if (ViewBag.ShowMyTeachers)
+    {
+        @Html.ActionLink("Show only my teachers", "CompanyTeachers", null, new { @class = "btn btn-default" })
+    }
+    else
+    {
+        @Html.ActionLink("Show all teachers", "Index", null, new { @class = "btn btn-default" })
+    }
+}
 
 @if (ZPPUserRoleHelper.IsAdministrator(ViewBag.UserRoleId) || ZPPUserRoleHelper.IsCompany(ViewBag.UserRoleId))
 {
