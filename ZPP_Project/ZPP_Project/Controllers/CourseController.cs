@@ -96,7 +96,7 @@ namespace ZPP_Project.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult SignUp(CourseSignViewModel model)
+        public ActionResult SignUp(int id, CourseSignViewModel model)
         {
             V_Student student = DbContext.FindStudentByUserId(User.Identity.GetUserId<int>());
 

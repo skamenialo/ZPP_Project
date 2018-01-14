@@ -90,9 +90,11 @@ namespace ZPP_Project.Models
         public int Lectures { get; set; }
 
         [Display(Name = "Start date")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public Nullable<System.DateTime> DateStart { get; set; }
 
         [Display(Name = "End date")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public Nullable<System.DateTime> DateEnd { get; set; }
     }
 }
