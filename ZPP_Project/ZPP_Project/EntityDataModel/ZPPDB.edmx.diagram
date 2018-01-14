@@ -22,6 +22,9 @@
         <EntityTypeShape EntityType="ZPPModel.V_CompanyInfo" Width="1.5" PointX="7.375" PointY="7.75" />
         <EntityTypeShape EntityType="ZPPModel.V_StudentInfo" Width="1.5" PointX="9.375" PointY="6.75" />
         <EntityTypeShape EntityType="ZPPModel.V_TeacherInfo" Width="1.5" PointX="9.375" PointY="9.75" />
+        <EntityTypeShape EntityType="ZPPModel.V_CompanyData" Width="1.5" PointX="3.375" PointY="10.75" />
+        <EntityTypeShape EntityType="ZPPModel.V_StudentData" Width="1.5" PointX="5.375" PointY="10.75" />
+        <EntityTypeShape EntityType="ZPPModel.V_TeacherData" Width="1.5" PointX="11.375" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

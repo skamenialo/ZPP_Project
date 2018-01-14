@@ -25,13 +25,13 @@
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 @*<li>@Html.ActionLink("Home", "Index", "Home")</li>*@
-                <li>@Html.ActionLink("Courses", "Index", "Course")</li>
-                <li>@Html.ActionLink("Teachers", "Index", "Teacher")</li>
-                <li>@Html.ActionLink("Companies", "Index", "Company")</li>
+                <li>@Html.ActionLink("Courses", "Index", "Course", new { page = (int?)null, pageSize = (int?)null }, null)</li>
+                <li>@Html.ActionLink("Teachers", "Index", "Teacher", new { page = (int?)null, pageSize = (int?)null }, null)</li>
+                <li>@Html.ActionLink("Companies", "Index", "Company", new { page = (int?)null, pageSize = (int?)null }, null)</li>
                 @if (ZPPUserRoleHelper.IsAdministrator(ViewBag.UserRoleId))
                 {
-                    <li>@Html.ActionLink("Students", "Index", "Student")</li>
-                    <li>@Html.ActionLink("Users", "Index", "User")</li>
+                    <li>@Html.ActionLink("Students", "Index", "Student", new { page = (int?)null, pageSize = (int?)null }, null)</li>
+                    <li>@Html.ActionLink("Users", "Index", "User", new { page = (int?)null, pageSize = (int?)null }, null)</li>
                 }
                 <li>@Html.ActionLink("About", "About", "Home")</li>
                 <li>@Html.ActionLink("Contact", "Contact", "Home")</li>

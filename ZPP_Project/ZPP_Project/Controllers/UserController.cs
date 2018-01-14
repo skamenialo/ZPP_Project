@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using ZPP_Project.Helpers;
 using ZPP_Project.Models;
+using ZPP_Project.EntityDataModel;
 using PagedList;
 
 namespace ZPP_Project.Controllers
@@ -20,9 +21,36 @@ namespace ZPP_Project.Controllers
         private ZppIdentityContext db = new ZppIdentityContext();
 
         // GET: User
+        [Route("Users/{page?}/{pageSize?}")]
         public ActionResult Index(int? page, int? pageSize)
         {
+            ViewBag.ButtonMap = new bool[] { true, true, true, false };
+            ViewBag.PagedListPagerAction = "Index";
             return View(db.Users.AsEnumerable().Select(user => DisplayUserViewModel.GetFromZppUser(user)).ToPagedList(page ?? 1, pageSize ?? ProgramData.DEFAULT_PAGE_SIZE)); 
+        }
+
+        [Route("Users/Company/{page?}/{pageSize?}")]
+        public ActionResult ShowCompanies(int? page, int? pageSize)
+        {
+            ViewBag.ButtonMap = new bool[] { false, true, true, true };
+            ViewBag.PagedListPagerAction = "ShowCompanies";
+            return View("Index", UserManager.GetCompanies().AsEnumerable().Select(user => DisplayUserViewModel.GetFromZppUser(user)).ToPagedList(page ?? 1, pageSize ?? ProgramData.DEFAULT_PAGE_SIZE));
+        }
+
+        [Route("Users/Teacher/{page?}/{pageSize?}")]
+        public ActionResult ShowTeachers(int? page, int? pageSize)
+        {
+            ViewBag.ButtonMap = new bool[] { true, false, true, true };
+            ViewBag.PagedListPagerAction = "ShowTeachers";
+            return View("Index", UserManager.GetTeachers().AsEnumerable().Select(user => DisplayUserViewModel.GetFromZppUser(user)).ToPagedList(page ?? 1, pageSize ?? ProgramData.DEFAULT_PAGE_SIZE));
+        }
+
+        [Route("Users/Student/{page?}/{pageSize?}")]
+        public ActionResult ShowStudents(int? page, int? pageSize)
+        {
+            ViewBag.ButtonMap = new bool[] { true, true, false, true };
+            ViewBag.PagedListPagerAction = "ShowStudents";
+            return View("Index", UserManager.GetStudents().AsEnumerable().Select(user => DisplayUserViewModel.GetFromZppUser(user)).ToPagedList(page ?? 1, pageSize ?? ProgramData.DEFAULT_PAGE_SIZE));
         }
 
         // GET: User/Details/5
@@ -39,10 +67,16 @@ namespace ZPP_Project.Controllers
         }
 
         // GET: User/Create
-        public ActionResult Create()
+        [Route("User/Create/{type?}")]
+        public ActionResult Create(int? type)
         {
-            
-            return View(new CreateUserViewModel() { LockoutEnabled = true, UserTypes = GetUserTypes()});
+            return View(new CreateUserViewModel()
+            {
+                LockoutEnabled = true,
+                UserTypes = GetUserTypes(),
+                UserType = (type ?? -1).ToString(),
+                AddDetailsManually = ZPPUserRoleHelper.IsRoleValid(type)
+            });
         }
 
         // POST: User/Create
@@ -52,17 +86,64 @@ namespace ZPP_Project.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Create(CreateUserViewModel model)
         {
+            int userType = -1;
+            if (ZPPUserRoleHelper.IsRoleValid(model.UserType, out userType))
+                AddError("Wrong user type");
             if (ModelState.IsValid)
             {
-                var user = new ZppUser { UserName = model.UserName, Email = model.Email, UserType = Int32.Parse(model.UserType), LockoutEnabled = model.LockoutEnabled };
+                var user = new ZppUser { UserName = model.UserName, Email = model.Email, UserType = userType, LockoutEnabled = model.LockoutEnabled };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    if (!ZPPUserRoleHelper.IsAdministrator(user.UserType))
+                    {
+                        if (model.AddDetailsManually)
+                        {
+                            switch (user.UserType)
+                            {
+                                case Roles.STUDENT_NR:
+                                    return RedirectToAction("Create", "Student", new { id = user.UserName });
+                                case Roles.COMPANY_NR:
+                                    return RedirectToAction("Create", "Company", new { id = user.UserName });
+                                case Roles.TEACHER_NR:
+                                case Roles.TEACHER_STUDENT_NR:
+                                    return RedirectToAction("Create", "Teacher", new { id = user.UserName });
+                            }
+                        }
+                        else
+                        {
+                            switch (user.UserType)
+                            {
+                                case Roles.STUDENT_NR:
+                                    DbContext.Entry(new V_StudentData()
+                                    {
+                                        IdUser = user.Id,
+                                        LastName = " ",
+                                        FirstName = " ",
+                                        Address = " "
+                                    }).State = EntityState.Added;
+                                    break;
+                                case Roles.COMPANY_NR:
+                                    DbContext.Entry(new V_CompanyData()
+                                    {
+                                        IdUser = user.Id,
+                                        Name = " ",
+                                        Address = " ",
+                                        Email = " "
+                                    }).State = EntityState.Added;
+                                    break;
+                                case Roles.TEACHER_NR:
+                                case Roles.TEACHER_STUDENT_NR:
+                                    return RedirectToAction("SelectCompany", "Teacher", new { id = user.Id });
+                            }
+                            DbContext.SaveChanges();
+                        }
+                    }
                     return RedirectToAction("Index");
                 }
                 AddErrors(result);
             }
-
+            model.UserTypes = GetUserTypes();
             return View(model);
         }
 
@@ -95,6 +176,7 @@ namespace ZPP_Project.Controllers
                 {
                     ZppUser user2 = null;
                     string[] removeRoles = null;
+                    bool userTypeChanged = false;
 
                     if (!string.IsNullOrEmpty(model.UserName) && user.UserName != model.UserName)
                     {
@@ -123,42 +205,43 @@ namespace ZPP_Project.Controllers
                     if (!string.IsNullOrEmpty(model.UserType))
                     {
                         int userType = user.UserType;
-                        if (Int32.TryParse(model.UserType, out userType)
-                            && userType <= DbContext.UserTypes.Count())
+                        if (ZPPUserRoleHelper.IsRoleValid(model.UserType, out userType))
                         {
-                            if (userType != user.UserType)
+                            if (!(ZPPUserRoleHelper.IsAdministrator(user.UserType)
+                                || ZPPUserRoleHelper.IsAdministrator(userType)))
                             {
-                                if (userType > 1)
+                                userTypeChanged = userType != user.UserType;
+                                if (userTypeChanged)
                                 {
                                     switch (user.UserType)
                                     {
-                                        case 2:
-                                            if (userType != 5)
-                                                removeRoles = new string[] { Helpers.Roles.STUDENT };
+                                        case Roles.STUDENT_NR:
+                                            if (!ZPPUserRoleHelper.IsTeacher(userType))
+                                                removeRoles = new string[] { Roles.STUDENT };
                                             break;
-                                        case 3:
-                                            removeRoles = new string[] { Helpers.Roles.COMPANY };
+                                        case Roles.COMPANY_NR:
+                                            removeRoles = new string[] { Roles.COMPANY };
                                             break;
-                                        case 4:
-                                            if (userType != 5)
-                                                removeRoles = new string[] { Helpers.Roles.TEACHER };
+                                        case Roles.TEACHER_NR:
+                                            if (!ZPPUserRoleHelper.IsStudent(userType))
+                                                removeRoles = new string[] { Roles.TEACHER };
                                             break;
-                                        case 5:
-                                            if (userType == 2)
-                                                removeRoles = new string[] { Helpers.Roles.TEACHER };
-                                            else if (userType == 4)
-                                                removeRoles = new string[] { Helpers.Roles.STUDENT };
+                                        case Roles.TEACHER_STUDENT_NR:
+                                            if (userType == Roles.STUDENT_NR)
+                                                removeRoles = new string[] { Roles.TEACHER };
+                                            else if (userType == Roles.TEACHER_NR)
+                                                removeRoles = new string[] { Roles.STUDENT };
                                             else
-                                                removeRoles = new string[] { Helpers.Roles.STUDENT, Helpers.Roles.TEACHER };
+                                                removeRoles = new string[] { Roles.STUDENT, Roles.TEACHER };
                                             break;
                                     }
 
                                     user.UserType = userType;
                                     user.EmailConfirmed = false;
                                 }
-                                else
-                                    AddError("Could not change" + (user.UserType == 1 ? " " : " to ") + "administrator role!");
                             }
+                            else
+                                AddError("Could not change" + (ZPPUserRoleHelper.IsAdministrator(user.UserType) ? " " : " to ") + "administrator role!");
                         }
                         else
                             AddError("Wrong user role!");
@@ -200,11 +283,45 @@ namespace ZPP_Project.Controllers
                         user.AccessFailedCount = 0;
                         user.LockoutEnabled = model.LockoutEnabled;
                         user.TwoFactorEnabled = model.TwoFactorEnabled;
-
+                        
                         UserManager.Update(user);
                         if (removeRoles != null)
                             UserManager.RemoveFromRoles(user.Id, removeRoles);
-
+                        if(userTypeChanged)
+                        {
+                            switch(user.UserType)
+                            {
+                                case Roles.STUDENT_NR:
+                                    V_Student student = DbContext.FindStudentByUserId(user.Id);
+                                    if (student == null)
+                                        DbContext.Entry(new V_StudentData()
+                                        {
+                                            IdUser = user.Id,
+                                            LastName = " ",
+                                            FirstName = " ",
+                                            Address = " "
+                                        }).State = EntityState.Added;
+                                    break;
+                                case Roles.COMPANY_NR:
+                                    V_Company company = DbContext.FindCompanyByUserId(user.Id);
+                                    if (company == null)
+                                        DbContext.Entry(new V_CompanyData()
+                                        {
+                                            IdUser = user.Id,
+                                            Name = " ",
+                                            Address = " ",
+                                            Email = " "
+                                        }).State = EntityState.Added;
+                                    break;
+                                case Roles.TEACHER_NR:
+                                case Roles.TEACHER_STUDENT_NR:
+                                    V_Teacher teacher = DbContext.FindTeacherByUserId(user.Id);
+                                    if (teacher == null)
+                                        return RedirectToAction("SelectCompany", "Teacher", new { id = user.Id });
+                                    goto case 2;
+                            }
+                            DbContext.SaveChanges();
+                        }
                         return RedirectToAction("Index");
                     }
                 }

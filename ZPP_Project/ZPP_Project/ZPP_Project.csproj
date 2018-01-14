@@ -187,6 +187,7 @@
     <Compile Include="Controllers\StudentController.cs" />
     <Compile Include="Controllers\TeacherController.cs" />
     <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Controllers\ZPPController.cs" />
     <Compile Include="DataAccess\ZppContext.cs" />
     <Compile Include="EntityDataModel\SL_CommentState.cs">
       <DependentUpon>ZPPDB_NoDb.tt</DependentUpon>
@@ -204,6 +205,9 @@
       <DependentUpon>ZPPDB.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityDataModel\V_Company.cs">
+      <DependentUpon>ZPPDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityDataModel\V_CompanyData.cs">
       <DependentUpon>ZPPDB.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityDataModel\V_CompanyInfo.cs">
@@ -224,10 +228,16 @@
     <Compile Include="EntityDataModel\V_Student.cs">
       <DependentUpon>ZPPDB.tt</DependentUpon>
     </Compile>
+    <Compile Include="EntityDataModel\V_StudentData.cs">
+      <DependentUpon>ZPPDB.tt</DependentUpon>
+    </Compile>
     <Compile Include="EntityDataModel\V_StudentInfo.cs">
       <DependentUpon>ZPPDB.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityDataModel\V_Teacher.cs">
+      <DependentUpon>ZPPDB.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityDataModel\V_TeacherData.cs">
       <DependentUpon>ZPPDB.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityDataModel\V_TeacherInfo.cs">
@@ -242,25 +252,22 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Helpers\HtmlExtensions.cs" />
-    <Compile Include="Helpers\HtmlHelperZpp.cs" />
     <Compile Include="Helpers\StudentHelper.cs" />
-    <Compile Include="Helpers\ZPPAuthorizeAttribute.cs" />
     <Compile Include="Helpers\CompanyHelper.cs" />
     <Compile Include="Helpers\TeacherHelper.cs" />
     <Compile Include="Helpers\Utils.cs" />
-    <Compile Include="Helpers\ZPPController.cs" />
+    <Compile Include="Helpers\ZPPAttributes.cs" />
+    <Compile Include="Helpers\ZPPHtmlExtensions.cs" />
+    <Compile Include="Helpers\ZPPHtmlHelper.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\Course.cs" />
-    <Compile Include="Models\CourseSignViewModel.cs" />
-    <Compile Include="Models\DataModels.cs" />
+    <Compile Include="Models\CompanyViewModels.cs" />
+    <Compile Include="Models\CourseViewModels.cs" />
     <Compile Include="Models\GlobalData.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\StudentViewModel.cs" />
-    <Compile Include="Models\Teacher.cs" />
+    <Compile Include="Models\StudentViewModels.cs" />
+    <Compile Include="Models\TeacherViewModels.cs" />
     <Compile Include="Models\UserViewModels.cs" />
-    <Compile Include="Models\V_CourseExtended.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="States\CourseState.cs" />
@@ -414,11 +421,12 @@
     <Content Include="Views\Teacher\Details.cshtml" />
     <Content Include="Views\Error\Index.cshtml" />
     <Content Include="Views\Account\SelectRole.cshtml" />
-    <Content Include="Views\Account\DisplayEmail.cshtml" />
+    <Content Include="Views\Shared\DisplayEmail.cshtml" />
     <Content Include="Views\Company\Index.cshtml" />
     <Content Include="Views\Company\CompanyDisplay.cshtml" />
     <Content Include="Views\Company\Details.cshtml" />
     <Content Include="Views\Course\Details.cshtml" />
+    <Content Include="Views\Company\Create.cshtml" />
     <Content Include="Views\User\Create.cshtml" />
     <Content Include="Views\User\Details.cshtml" />
     <Content Include="Views\User\Index.cshtml" />
@@ -434,6 +442,8 @@
     <Content Include="Views\Student\Edit.cshtml" />
     <Content Include="Views\Student\MyCourses.cshtml" />
     <Content Include="Views\Course\SignUp.cshtml" />
+    <Content Include="Views\Teacher\SelectCompany.cshtml" />
+    <Content Include="Views\Teacher\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

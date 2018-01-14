@@ -21,6 +21,7 @@ namespace ZPP_Project.Controllers
     {
         // GET: Student
         [ZPPAuthorize(Roles = Roles.ADMINISTRATOR)]
+        [Route("Students/{page?}/{pageSize?}")]
         public async Task<ActionResult> Index(int? page, int? pageSize)
         {
             var list = await DbContext.Students.ToListAsync();
@@ -28,7 +29,7 @@ namespace ZPP_Project.Controllers
         }
 
         // GET: Student/Details/5
-        [ZPPAuthorize(Roles = Roles.ADMINISTRATOR + "," + Roles.COMPANY)]
+        [ZPPAuthorize(RolesArray = new string[] { Roles.ADMINISTRATOR, Roles.COMPANY })]
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
@@ -38,7 +39,7 @@ namespace ZPP_Project.Controllers
             if (v_Student == null)
                 return HttpNotFound();
 
-            if(User.IsInRole(Roles.COMPANY))
+            if (User.IsInRole(Roles.COMPANY))
             {
                 V_Company v_Company = await DbContext.FindCompanyByUserIdAsync(User.Identity.GetUserId<int>());
                 bool canDisplay = false;

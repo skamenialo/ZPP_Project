@@ -1,4 +1,5 @@
 ﻿@using PagedList.Mvc;
+@using ZPP_Project.Helpers;
 @model  PagedList.IPagedList<ZPP_Project.EntityDataModel.V_Teacher>
 
 @{
@@ -6,6 +7,22 @@
 }
 
 <h2>@ViewBag.Title</h2>
+@if (ZPPUserRoleHelper.IsCompany(ViewBag.UserRoleId))
+{
+    if (ViewBag.ShowMyTeachers)
+    {
+        @Html.ActionLink("Show only my teachers", "CompanyTeachers", null, new { @class = "btn btn-default" })
+    }
+    else
+    {
+        @Html.ActionLink("Show all teachers", "Index", null, new { @class = "btn btn-default" })
+    }
+}
+
+@if (ZPPUserRoleHelper.IsAdministrator(ViewBag.UserRoleId) || ZPPUserRoleHelper.IsCompany(ViewBag.UserRoleId))
+{
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-default" })
+}
 
 <div class="container">
     <div>

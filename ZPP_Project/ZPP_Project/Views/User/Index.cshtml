@@ -9,6 +9,10 @@
 
 <p>
     @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-default" })
+    @if(ViewBag.ButtonMap[0]){ @Html.ActionLink("Companies", "ShowCompanies", new { page = (int?)null, pageSize = (int?)null }, new { @class = "btn btn-default" }) }
+    @if(ViewBag.ButtonMap[1]){ @Html.ActionLink("Teachers", "ShowTeachers", new { page = (int?)null, pageSize = (int?)null }, new { @class = "btn btn-default" }) }
+    @if(ViewBag.ButtonMap[2]){ @Html.ActionLink("Students", "ShowStudents", new { page = (int?)null, pageSize = (int?)null }, new { @class = "btn btn-default" }) }
+    @if(ViewBag.ButtonMap[3]){ @Html.ActionLink("All", "Index", new { page = (int?)null, pageSize = (int?)null }, new { @class = "btn btn-default" }) }
 </p>
 <div class="container">
     <div class="row">
@@ -40,6 +44,6 @@
     </div>
     <div class="row">
         <p>Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount</p>
-        @Html.PagedListPager(Model, page => Url.Action("Index", new { page, pageSize = Model.PageSize }))
+        @Html.PagedListPager(Model, page => Url.Action(ViewBag.PagedListPagerAction, new { page, pageSize = Model.PageSize }))
     </div>
 </div>

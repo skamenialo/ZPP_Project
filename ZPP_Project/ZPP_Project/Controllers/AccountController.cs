@@ -143,9 +143,10 @@ namespace ZPP_Project.Controllers
                 ZppUser user = UserManager.FindByName(model.UserName);
                 if (user != null)
                 {
-                    try
+                    //details not needed for Administrator
+                    bool detailsNeeded = ZPPUserRoleHelper.IsAdministrator(user.UserType);
+                    if (!detailsNeeded)
                     {
-                        bool detailsNeeded = false;
                         if (ZPPUserRoleHelper.IsTeacher(user.UserType))
                         {
                             V_Teacher select = DbContext.FindTeacherByUserId(user.Id);
@@ -170,10 +171,6 @@ namespace ZPP_Project.Controllers
                             else
                                 return RedirectToAction("PersonalDetails", "Manage");
                         }
-                    }
-                    catch (Exception)
-                    {
-
                     }
                 }
                 else
@@ -235,7 +232,7 @@ namespace ZPP_Project.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ZppUser { UserName = model.UserName, Email = model.Email, UserType = 2 };
+                var user = new ZppUser { UserName = model.UserName, Email = model.Email, UserType = Roles.STUDENT_NR };
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
@@ -264,22 +261,6 @@ namespace ZPP_Project.Controllers
                 return View("Error");
         }
 
-        private async Task<ActionResult> GenerateEmailConfirmation(int userId)
-        {
-            // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
-            // Send an email with this link
-            string code = await UserManager.GenerateEmailConfirmationTokenAsync(userId);
-            var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = userId, code = code }, protocol: Request.Url.Scheme);
-            await UserManager.SendEmailAsync(userId, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
-
-#if DEBUG
-            ViewBag.Link = callbackUrl;
-            return View("DisplayEmail");
-#else
-            return View("Login");
-#endif
-        }
-
         //
         // GET: /Account/ConfirmEmail
         [AllowAnonymous]
@@ -296,18 +277,18 @@ namespace ZPP_Project.Controllers
                 ZppUser user = await UserManager.FindByIdAsync(id);
                 switch (user.UserType)
                 {
-                    case 2:
-                        result = await UserManager.AddToRoleAsync(id, Helpers.Roles.STUDENT);
+                    case Roles.STUDENT_NR:
+                        result = await UserManager.AddToRoleAsync(id, Roles.STUDENT);
                         break;
-                    case 3:
-                        result = await UserManager.AddToRoleAsync(id, Helpers.Roles.COMPANY);
+                    case Roles.COMPANY_NR:
+                        result = await UserManager.AddToRoleAsync(id, Roles.COMPANY);
                         break;
-                    case 4:
-                        result = await UserManager.AddToRoleAsync(id, Helpers.Roles.TEACHER);
+                    case Roles.TEACHER_NR:
+                        result = await UserManager.AddToRoleAsync(id, Roles.TEACHER);
                         break;
-                    case 5:
-                        result = await UserManager.AddToRoleAsync(id, Helpers.Roles.STUDENT);
-                        result = await UserManager.AddToRoleAsync(id, Helpers.Roles.TEACHER);
+                    case Roles.TEACHER_STUDENT_NR:
+                        result = await UserManager.AddToRoleAsync(id, Roles.STUDENT);
+                        result = await UserManager.AddToRoleAsync(id, Roles.TEACHER);
                         break;
                     default:
                         break;
@@ -392,8 +373,6 @@ namespace ZPP_Project.Controllers
             }
             if (model.Password.Equals(model.ConfirmPassword))
             {
-                AddError("Confirmation password does not match.");
-
                 var user = await UserManager.FindByEmailAsync(model.Email);
                 if (user == null)
                 {
@@ -407,6 +386,8 @@ namespace ZPP_Project.Controllers
                 }
                 AddErrors(result);
             }
+            else
+                AddError("Confirmation password does not match.");
             model.ConfirmPassword = "";
             model.Password = "";
             return View(model);

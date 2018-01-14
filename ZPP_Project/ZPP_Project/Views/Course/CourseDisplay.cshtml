@@ -11,7 +11,7 @@
 @*TODO "comments" href is missing here*@
 <div class="row">
     <div class="row">
-        @HtmlHelperZpp.RenderColapseIcon(blockName)
+        @ZPPHtmlHelper.RenderColapseIcon(blockName)
         @Html.ActionLink(Model.Name, "Details", "Course", new { id = Model.IdCourse }, null)
     </div>
     <div id="@blockName" class="collapse" style="margin-left:-5px">
@@ -35,7 +35,7 @@
             </div>
         </div>
         <div>
-            @if (ViewBag.UserRoleId == (int)Role.Student)
+            @if (ViewBag.UserRoleId == ZPP_Project.Helpers.Roles.STUDENT_NR)
             {
                 if (ExtendedModel != null && !ExtendedModel.IsMember)//TODO Dirty cheat for development! Remove the '!'!
                 {

@@ -4,7 +4,7 @@
 @{ string blockName = "TeacherDisplay_" + Model.IdTeacher; }
 <div class="row">
     <div class="row">
-        @HtmlHelperZpp.RenderColapseIcon(blockName)
+        @ZPPHtmlHelper.RenderColapseIcon(blockName)
         @Html.ActionLink(TeacherHelper.Display(Model), "Details", new { id = Model.IdTeacher })
     </div>
     <div id="@blockName" class="row collapse" style="margin-left:-5px">

@@ -210,7 +210,7 @@ namespace ZPP_Project.Helpers
 
         protected void AddError<TModel, TProperty>(TModel model, System.Linq.Expressions.Expression<Func<TModel, TProperty>> expression, string error)
         {
-            ModelState.AddModelError(Helpers.HtmlExtensions.GetDisplayName<TModel, TProperty>(model, expression), error);
+            ModelState.AddModelError(Helpers.ZPPHtmlExtensions.GetDisplayName<TModel, TProperty>(model, expression), error);
         }
 
         protected void AddErrors(IdentityResult result)
@@ -230,5 +230,20 @@ namespace ZPP_Project.Helpers
             return RedirectToAction("Index", "Home");
         }
 
+        protected async Task<ActionResult> GenerateEmailConfirmation(int userId)
+        {
+            // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=320771
+            // Send an email with this link
+            string code = await UserManager.GenerateEmailConfirmationTokenAsync(userId);
+            var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = userId, code = code }, protocol: HttpContext.Request.Url.Scheme);
+            await UserManager.SendEmailAsync(userId, "Confirm your account", "Please confirm your account by clicking <a href=\"" + callbackUrl + "\">here</a>");
+
+#if DEBUG
+            ViewBag.Link = callbackUrl;
+            return View("DisplayEmail");
+#else
+            return View("Login");
+#endif
+        }
     }
 }

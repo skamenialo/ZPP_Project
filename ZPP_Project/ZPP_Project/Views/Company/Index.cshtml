@@ -7,6 +7,11 @@
 
 <h2>@ViewBag.Title</h2>
 
+@if (ZPP_Project.Helpers.ZPPUserRoleHelper.IsUserInRole(ZPP_Project.Helpers.Roles.ADMINISTRATOR))
+{
+    @Html.ActionLink("Create New", "Create", null, new { @class = "btn btn-default" })
+}
+
 <div class="container">
     <div>
         @foreach (var item in Model)
