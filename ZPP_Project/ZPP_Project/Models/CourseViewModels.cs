@@ -70,15 +70,13 @@ namespace ZPP_Project.Models
     public class CourseSignViewModel
     {
         [Required]
-        public int StudentId { get; set; }//@Html.HiddenFor(model => model.HiddenText);
+        public int IdStudent { get; set; }//@Html.HiddenFor(model => model.HiddenText);
 
         [Required]
         public int IdCourse { get; set; }
 
         [Display(Name = "Teacher")]
         public string TeacherFullName { get; set; }
-
-        public int IdCompany { get; set; }
 
         [Display(Name = "Company")]
         public string CompanyFullName { get; set; }
