@@ -1,0 +1,12 @@
+﻿@model ZPP_Project.Models.GenericViewModel
+
+<div class="container">
+    <h4>@Model.Title</h4>
+    <div class="row">
+        @Model.Message
+        @if (!String.IsNullOrEmpty(Model.ButtonText))
+        {
+            <p><a class="btn btn-default" href="@Model.ButtonHref">@Model.ButtonText</a></p>
+        }
+    </div>
+</div>

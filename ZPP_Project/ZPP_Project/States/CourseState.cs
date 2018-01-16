@@ -14,18 +14,18 @@ namespace ZPP_Project.States
         /// <summary>
         /// !opened &amp;&amp; !stared &amp;&amp; !closed &amp;&amp; can(Start)
         /// </summary>
-        created = 0,
+        Created = 1,
         /// <summary>
         /// created &amp;&amp; pending &amp;&amp; !closed &amp;&amp; can(Close)
         /// </summary>
-        opened = 1,
+        Opened = 2,
         /// <summary>
         /// created &amp;&amp; opened &amp;&amp; !closed &amp;&amp; can(Close)
         /// </summary>
-        started = 2,
+        Started = 3,
         /// <summary>
         /// created &amp;&amp; !opened &amp;&amp; !started &amp;&amp; !can(Start)
         /// </summary>
-        closed = 4
+        Closed = 4
     }
 }

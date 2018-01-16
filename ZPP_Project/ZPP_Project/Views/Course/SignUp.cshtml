@@ -6,20 +6,24 @@
     @Html.AntiForgeryToken()
         
     <div class="form-horizontal">
-        <h4>CourseSignViewModel</h4>
+        <h4>@ViewBag.Header</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         <div class="form-group">
             @Html.LabelFor(model => model.IdStudent, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.IdStudent, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", @readonly = "readonly" } })
+                @*@Html.EditorFor(model => model.IdStudent, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", @readonly = "readonly" } })*@
+                @Html.HiddenFor(model => model.IdStudent, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.DisplayFor(model => model.IdStudent, new { htmlAttributes = new { @class = "form-control" } })
             </div>
         </div>
     
         <div class="form-group">
             @Html.LabelFor(model => model.IdCourse, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.EditorFor(model => model.IdCourse, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", @readonly = "readonly" } })
+                @*@Html.EditorFor(model => model.IdCourse, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", @readonly = "readonly" } })*@
+                @Html.HiddenFor(model => model.IdCourse, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.DisplayFor(model => model.IdCourse, new { htmlAttributes = new { @class = "form-control" } })
             </div>
         </div>
     
@@ -81,7 +85,7 @@
     
         <div class="form-group">
             <div class="col-md-offset-2 col-md-1">
-                <input type="submit" value="Sign up" class="btn btn-default" />
+                <input type="submit" value="Accept" class="btn btn-default" />
             </div>
             <div class="col-md-offset-1 col-md-1">
                 <input type="button" value="Cancel" class="btn btn-default" onclick="history.back()" />

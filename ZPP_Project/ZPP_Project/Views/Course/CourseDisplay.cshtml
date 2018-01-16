@@ -15,6 +15,12 @@
         @Html.ActionLink(Model.Name, "Details", "Course", new { id = Model.IdCourse }, null)
     </div>
     <div id="@blockName" class="collapse" style="margin-left:-5px">
+        @if (ZPPUserRoleHelper.IsAdministrator(ViewBag.UserRoleId))
+        {
+        <div class="row">
+            Course state: @((ZPP_Project.States.CourseState)Model.State)
+        </div>
+        }
         <div class="row">
             <div class="col-md-4">
                 <!-- Who -->
@@ -37,13 +43,13 @@
         <div>
             @if (ViewBag.UserRoleId == ZPP_Project.Helpers.Roles.STUDENT_NR)
             {
-                if (ExtendedModel != null && !ExtendedModel.IsMember)//TODO Dirty cheat for development! Remove the '!'!
+                if (ExtendedModel != null && ExtendedModel.IsMember)//TODO Dirty cheat for development! Remove the '!'!
                 {
                     //State == 1 - Created should not be visible!
                     if (Model.State == 2)//Opened
                     {
                         <div class="col-md-2">
-                            <p><a class="btn btn-default" @*href="/Company"*@>Sign out</a></p>@*TODO link sign out functionality here *@
+                            <p><a class="btn btn-default" href="/Course/SignOut/@Model.IdCourse">Sign out</a></p>@*TODO link sign out functionality here *@
                         </div>
                     }
                     else//3 - started or 4 - finished

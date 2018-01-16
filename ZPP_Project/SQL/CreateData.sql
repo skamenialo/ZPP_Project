@@ -97,8 +97,8 @@ INSERT INTO SL_CourseStates VALUES
 
 -- Kurs --
 INSERT INTO Courses VALUES
-(1, 1, 'Proin sit amet sem vitae mi venenatis sagittis eu vel est.', 4, 1, 'Curabitur varius ante imperdiet nulla varius lacinia. Pellentesque mauris erat, varius non sodales id, pretium vel nisi. Mauris aliquet ut dolor varius molestie. Praesent pharetra lobortis dui. Suspendisse aliquam vestibulum vehicula. Fusce ante dolor, fringilla eu nulla sed, ullamcorper iaculis sem. Morbi pulvinar massa mauris, vel accumsan risus rutrum sit amet. Sed venenatis volutpat tortor, vitae porta nisi dictum id. Donec arcu velit, faucibus et leo sed, euismod placerat lacus. Donec consequat pretium lorem ac accumsan. Suspendisse vel lobortis mauris. Curabitur iaculis vulputate metus, eu condimentum mauris tincidunt vel.', '20161001', '20161101'),
-(1, 1, 'Curabitur dignissim dui eu risus dapibus ultricies vitae id justo.', 4, 1, 'Etiam aliquet tempus ullamcorper. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris blandit tincidunt purus eu luctus. Maecenas at sem sit amet dui molestie mollis. Morbi nec diam nec magna interdum dictum. Nulla sit amet odio turpis. Vivamus porttitor et ipsum hendrerit rhoncus. Sed a nibh vulputate mauris bibendum sagittis.', '20161002', '20161102'),
+(1, 1, 'Proin sit amet sem vitae mi venenatis sagittis eu vel est.', 4, 2, 'Curabitur varius ante imperdiet nulla varius lacinia. Pellentesque mauris erat, varius non sodales id, pretium vel nisi. Mauris aliquet ut dolor varius molestie. Praesent pharetra lobortis dui. Suspendisse aliquam vestibulum vehicula. Fusce ante dolor, fringilla eu nulla sed, ullamcorper iaculis sem. Morbi pulvinar massa mauris, vel accumsan risus rutrum sit amet. Sed venenatis volutpat tortor, vitae porta nisi dictum id. Donec arcu velit, faucibus et leo sed, euismod placerat lacus. Donec consequat pretium lorem ac accumsan. Suspendisse vel lobortis mauris. Curabitur iaculis vulputate metus, eu condimentum mauris tincidunt vel.', '20161001', '20161101'),
+(1, 1, 'Curabitur dignissim dui eu risus dapibus ultricies vitae id justo.', 4, 2, 'Etiam aliquet tempus ullamcorper. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris blandit tincidunt purus eu luctus. Maecenas at sem sit amet dui molestie mollis. Morbi nec diam nec magna interdum dictum. Nulla sit amet odio turpis. Vivamus porttitor et ipsum hendrerit rhoncus. Sed a nibh vulputate mauris bibendum sagittis.', '20161002', '20161102'),
 (2, 1, 'Ut pretium erat vel condimentum congue.', 4, 1, 'Nulla ac mollis lectus, id laoreet massa. Sed mollis tristique odio ac pellentesque. Cras hendrerit vulputate arcu, sed accumsan massa pulvinar eu. Vestibulum vitae faucibus ipsum. Integer congue tristique sem, ac condimentum dui maximus a. Vestibulum lectus est, hendrerit quis nunc sit amet, fermentum condimentum neque. Fusce nibh elit, imperdiet lacinia ultricies vel, posuere sit amet augue. Phasellus nisl magna, mollis eu ultrices non, molestie ac sem.', '20161003', '20161103'),
 (2, 2, 'Ut ac velit in dui faucibus semper.', 4, 1, 'Integer eu dapibus magna. Vivamus egestas arcu sem, consequat sodales elit dignissim id. Donec diam urna, ultrices eget tortor a, condimentum iaculis quam. Nam sollicitudin ultricies mauris sit amet commodo. Morbi cursus a risus at finibus. Nunc laoreet leo mollis lorem aliquam, sit amet venenatis risus malesuada. Nunc tellus mauris, sodales non leo quis, fermentum hendrerit urna. Maecenas feugiat finibus laoreet. Integer dolor ipsum, tempor at ligula non, commodo sodales dolor. Fusce vulputate tempus justo. In hac habitasse platea dictumst. Ut mi neque, viverra vitae vehicula quis, accumsan nec sem. Aliquam erat volutpat. Praesent eu erat id lorem tempor hendrerit.', '20161004', '20161104'),
 (4, 2, 'Pellentesque iaculis metus ac condimentum rutrum.', 4, 1, 'Mauris massa elit, luctus quis dapibus eu, viverra nec nisl. Mauris efficitur felis sed est bibendum tempus. Proin neque ex, sagittis nec iaculis ac, scelerisque in urna. Aenean faucibus lacus id tellus lacinia consectetur eu non ante. Nulla augue nisl, sollicitudin sed arcu sed, finibus vulputate orci. Vestibulum sed eleifend quam. Integer pulvinar sed enim sed semper. Cras porttitor quis sapien sed placerat. Nam ante libero, pharetra at dolor ultricies, vehicula ullamcorper purus. Integer venenatis libero ante, ut vulputate massa malesuada sed.', '20161005', '20161105'),
@@ -106,12 +106,12 @@ INSERT INTO Courses VALUES
 
 -- Grupa --
 INSERT INTO Groups VALUES --4 studentów, 6 kursów
-(1, 1),
-(1, 2),
-(1, 3),
-(1, 4),
-(1, 5),
-(1, 6),
+-- (1, 1),
+-- (1, 2),
+-- (1, 3),
+-- (1, 4),
+-- (1, 5),
+-- (1, 6),
 (2, 1),
 (2, 2),
 (2, 3),
