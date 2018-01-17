@@ -49,13 +49,13 @@
                     if (Model.State == 2)//Opened
                     {
                         <div class="col-md-2">
-                            <p><a class="btn btn-default" href="/Course/SignOut/@Model.IdCourse">Sign out</a></p>@*TODO link sign out functionality here *@
+                            <p><a class="btn btn-default" href="/Course/SignOut/@Model.IdCourse">Sign out</a></p>
                         </div>
                     }
                     else//3 - started or 4 - finished
                     {
                         <div class="col-md-2">
-                            @*Leave empty space here, siggn in/out would be present here*@
+                            @*Leave empty space here, sign in/out would be present here*@
                         </div>
                         <div class="col-md-2">
                             <!-- Grade info -->
@@ -63,14 +63,14 @@
                             <div class="row">@(ExtendedModel.Grade.HasValue ? ExtendedModel.Grade.Value.ToString("#.#") : String.Empty)</div>@*TODO link grade display here *@
                         </div>
                         <div class="col-md-2">
-                            <p><a class="btn btn-default" @*href="/Company"*@>Attendancy</a></p>@*TODO link attendancy here *@
+                            <p><a class="btn btn-default" href="/Course/Attendance/@ExtendedModel.IdCourse">Attendancy</a></p>
                         </div>
                     }
                 }
                 else
                 {
                     <div class="col-md-2">
-                        <p><a class="btn btn-default" href="/Course/SignUp/@Model.IdCourse">Sign up!</a></p>@*TODO link sign up functionality here *@
+                        <p><a class="btn btn-default" href="/Course/SignUp/@Model.IdCourse">Sign up!</a></p>
                     </div>
                 }
             }

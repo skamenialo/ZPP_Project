@@ -97,4 +97,20 @@ namespace ZPP_Project.Models
         [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
         public Nullable<System.DateTime> DateEnd { get; set; }
     }
+
+    public class AttendanceViewModel
+    {
+        public List<LectureAttendanceViewModel> Lectures { get; set; }
+        public string CourseName { get; set; }
+        public string StudentName { get; set; }
+
+    }
+
+    public class LectureAttendanceViewModel
+    {
+        public int IdAttendance { get; set; }
+        public int IdLecture { get; set; }
+        public bool Attended { get; set; }
+        public Nullable<System.DateTime> LecuteDate { get; set; }
+    }
 }

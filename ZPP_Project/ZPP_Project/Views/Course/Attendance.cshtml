@@ -1,0 +1,47 @@
+﻿@model ZPP_Project.Models.AttendanceViewModel
+
+@{
+    ViewBag.Title = "Attendance";
+}
+<h2>@ViewBag.Title</h2>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-2">Student:
+        </div>
+        <div class="col-md-5">@Model.StudentName
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-2">Course:
+        </div>
+        <div class="col-md-5">@Model.CourseName
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var lecture in Model.Lectures)
+                    {
+                        <tr>
+                            <td>@(lecture.LecuteDate.HasValue ? lecture.LecuteDate.Value.ToString("yyyy/MM/dd") : ProgramData.VALUE_UNKNOWN)</td>
+                            <td>@(lecture.Attended ? "✓" : "✗")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="row">
+        <p><a class="btn btn-default" onclick="history.back()">Back</a></p>
+    </div>
+</div>

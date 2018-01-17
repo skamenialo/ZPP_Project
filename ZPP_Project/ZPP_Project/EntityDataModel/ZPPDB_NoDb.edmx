@@ -140,6 +140,7 @@ warning 6002: The table/view '78429825A9D122436AEFF9503CE2E808_LLUB\1.2 ZESPOŁO
           <Property Name="IdLecture" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="IdCourse" Type="int" Nullable="false" />
           <Property Name="IdTeacher" Type="int" Nullable="false" />
+          <Property Name="LecuteDate" Type="date" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view '78429825A9D122436AEFF9503CE2E808_LLUB\1.2 ZESPOŁOWY PROJEKT PROGRAMISTYCZNY\ZPP_PROJECT\ZPP_PROJECT\ZPP_PROJECT\APP_DATA\ZPP.MDF.dbo.V_Student' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -369,6 +370,7 @@ warning 6002: The table/view '78429825A9D122436AEFF9503CE2E808_LLUB\1.2 ZESPOŁO
           <Property Name="IdLecture" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="IdCourse" Type="Int32" Nullable="false" />
           <Property Name="IdTeacher" Type="Int32" Nullable="false" />
+          <Property Name="LecuteDate" Type="DateTime" Precision="0" />
         </EntityType>
         <EntityType Name="V_Student">
           <Key>
@@ -584,6 +586,7 @@ warning 6002: The table/view '78429825A9D122436AEFF9503CE2E808_LLUB\1.2 ZESPOŁO
           <EntitySetMapping Name="V_Lecture">
             <EntityTypeMapping TypeName="ZPPModel.V_Lecture">
               <MappingFragment StoreEntitySet="V_Lecture">
+                <ScalarProperty Name="LecuteDate" ColumnName="LecuteDate" />
                 <ScalarProperty Name="IdTeacher" ColumnName="IdTeacher" />
                 <ScalarProperty Name="IdCourse" ColumnName="IdCourse" />
                 <ScalarProperty Name="IdLecture" ColumnName="IdLecture" />

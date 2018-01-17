@@ -17,5 +17,6 @@ namespace ZPP_Project.EntityDataModel
         public int IdLecture { get; set; }
         public int IdCourse { get; set; }
         public int IdTeacher { get; set; }
+        public Nullable<System.DateTime> LecuteDate { get; set; }
     }
 }

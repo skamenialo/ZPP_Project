@@ -446,6 +446,7 @@
     <Content Include="Views\Teacher\SelectCompany.cshtml" />
     <Content Include="Views\Teacher\Create.cshtml" />
     <Content Include="Views\Shared\GenericMessage.cshtml" />
+    <Content Include="Views\Course\Attendance.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

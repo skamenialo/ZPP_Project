@@ -139,7 +139,7 @@ IF EXISTS (SELECT TABLE_NAME FROM INFORMATION_SCHEMA.VIEWS
     DROP VIEW V_Lecture
 GO
 CREATE VIEW V_Lecture AS
-  SELECT IdLecture, IdCourse, IdTeacher
+  SELECT IdLecture, IdCourse, IdTeacher, LecuteDate
   FROM Lectures;
 GO
 -- V_Attendance --

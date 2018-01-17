@@ -32,11 +32,20 @@ namespace ZPP_Project.Controllers
             {
                 V_Student student = DbContext.FindStudentByUserId(User.Identity.GetUserId<int>());
                 List<V_Course> list = new List<V_Course>();
+                var grades = DbContext.Grades.Where(g => g.IdStudent == student.IdStudent).ToList();
                 foreach (var item in DbContext.Courses.Where(c => c.State != 1))
                 {
                     if (DbContext.Groups.Any(g => g.IdCourse == item.IdCourse && g.IdStudent == student.IdStudent))
                     {
-                        list.Add(new V_CourseExtended(item) { IdStudent = student.IdStudent, IsMember = true });
+                        var grade = grades.FirstOrDefault(g => g.IdCourse == item.IdCourse);
+                        list.Add(new V_CourseExtended(item)
+                        {
+                            IdStudent = student.IdStudent,
+                            Grade = grade != null
+                                ? (double?)grade.Grade
+                                : null,
+                            IsMember = true
+                        });
                     }
                     else
                         list.Add(item);
@@ -186,5 +195,28 @@ namespace ZPP_Project.Controllers
                 ButtonHref = @"/Courses/"
             });
         }
+
+        [ZPPAuthorize]
+        public ActionResult Attendance(int id)
+        {
+            V_Student student = DbContext.FindStudentByUserId(User.Identity.GetUserId<int>());
+            var course = DbContext.Courses.Where(c => c.IdCourse == id).FirstOrDefault();
+            var lectures = new List<V_Lecture>(DbContext.Lectures.Where(l => l.IdCourse == course.IdCourse));
+            var lectureIds = lectures.Select(l => l.IdLecture);
+            var attendanceModel = new AttendanceViewModel()
+            {
+                CourseName = course.Name,
+                StudentName = ZPP_Project.Helpers.StudentHelper.Display(student),
+                Lectures = DbContext.Attendance.Where(a => lectureIds.Contains(a.IdLecture) == true).ToList().Select(a => new LectureAttendanceViewModel()
+                {
+                    Attended = a.Attended,
+                    IdAttendance = a.IdAttendance,
+                    LecuteDate = lectures.FirstOrDefault(l => l.IdLecture == a.IdLecture).LecuteDate
+                }).ToList()
+            };
+
+            return View(attendanceModel);
+        }
+
     }
 }

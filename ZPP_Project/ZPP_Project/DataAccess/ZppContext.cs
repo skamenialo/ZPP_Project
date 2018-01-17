@@ -19,6 +19,9 @@ namespace ZPP_Project.DataAccess
         public DbSet<V_Company> Companies { get; set; }
         public DbSet<V_Student> Students { get; set; }
         public DbSet<V_Group> Groups { get; set; }
+        public DbSet<V_Lecture> Lectures { get; set; }
+        public DbSet<V_Grade> Grades { get; set; }
+        public DbSet<V_Attendance> Attendance { get; set; }
         public DbSet<SL_UserType> UserTypes { get; set; }
         public DbSet<SL_CourseStates> CouseStates { get; set; }
         public DbSet<SL_CommentState> CommentStates { get; set; }

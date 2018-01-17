@@ -132,6 +132,7 @@ CREATE TABLE Lectures(
   IdLecture INTEGER IDENTITY(1,1) NOT NULL,
   IdCourse INTEGER NOT NULL,
   IdTeacher INTEGER NOT NULL,
+  LecuteDate DATE,
   CONSTRAINT Lecture_PK PRIMARY KEY (IdLecture),
   CONSTRAINT Lecture_IdCourse_FK FOREIGN KEY (IdCourse) REFERENCES Courses(IdCourse),
   CONSTRAINT Lecture_IdTeacher_FK FOREIGN KEY (IdTeacher) REFERENCES Teachers(IdTeacher)
