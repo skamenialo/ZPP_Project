@@ -60,7 +60,7 @@
                         <div class="col-md-2">
                             <!-- Grade info -->
                             <div class="row">@(Utils.GetDisplayName<V_CourseExtended>("Grade"))</div>
-                            <div class="row">@(ExtendedModel.Grade.HasValue ? ExtendedModel.Grade.Value.ToString("#.#") : String.Empty)</div>@*TODO link grade display here *@
+                            <div class="row">@(ExtendedModel.Grade.HasValue ? ExtendedModel.Grade.Value.ToString("#.#") : String.Empty)</div>
                         </div>
                         <div class="col-md-2">
                             <p><a class="btn btn-default" href="/Course/Attendance/@ExtendedModel.IdCourse">Attendancy</a></p>

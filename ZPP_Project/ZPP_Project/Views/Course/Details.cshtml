@@ -1,5 +1,6 @@
 ﻿@using ZPP_Project.Helpers;
 @model ZPP_Project.EntityDataModel.V_Course
+@using ZPP_Project.Models
 
 <h2>Course details</h2>
 
@@ -15,6 +16,7 @@
 else
 {
     ViewBag.Title = "Course - " + Model.Name;
+    V_CourseExtended ExtendedModel = Model as V_CourseExtended;
     <div class="container">
         <div class="row">
             <div class="col-md-12">
@@ -45,5 +47,42 @@ else
                 @Model.Description
             </div>
         </div>
+
+        <div>
+            @if (ViewBag.UserRoleId == ZPP_Project.Helpers.Roles.STUDENT_NR)
+            {
+                if (ExtendedModel != null && ExtendedModel.IsMember)
+                {
+                    //State == 1 - Created should not be visible!
+                    if (Model.State == 2)//Opened
+                    {
+                        <div class="col-md-2">
+                            <p><a class="btn btn-default" href="/Course/SignOut/@Model.IdCourse">Sign out</a></p>
+                        </div>
+                    }
+                    else//3 - started or 4 - finished
+                    {
+                        <div class="col-md-2">
+                            @*Leave empty space here, sign in/out would be present here*@
+                        </div>
+                        <div class="col-md-2">
+                            <!-- Grade info -->
+                            <div class="row">@(Utils.GetDisplayName<V_CourseExtended>("Grade"))</div>
+                            <div class="row">@(ExtendedModel.Grade.HasValue ? ExtendedModel.Grade.Value.ToString("#.#") : String.Empty)</div>
+                        </div>
+                        <div class="col-md-2">
+                            <p><a class="btn btn-default" href="/Course/Attendance/@ExtendedModel.IdCourse">Attendancy</a></p>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <div class="col-md-2">
+                        <p><a class="btn btn-default" href="/Course/SignUp/@Model.IdCourse">Sign up!</a></p>
+                    </div>
+                }
+            }
+        </div>
+
     </div>
 }

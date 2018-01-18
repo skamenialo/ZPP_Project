@@ -11,5 +11,7 @@ namespace ZPP_Project
 
 
         public readonly static string VALUE_UNKNOWN = "Unknown!";
+        public readonly static string SIGN_YES = "✓";
+        public readonly static string SIGN_NO = "✗";
     }
 }

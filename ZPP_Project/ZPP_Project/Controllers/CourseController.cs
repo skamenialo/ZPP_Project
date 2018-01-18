@@ -59,7 +59,7 @@ namespace ZPP_Project.Controllers
                 return View("Index",
                     ZPPUserRoleHelper.IsAdministrator(this.UserRoleId)
                     ? DbContext.Courses.ToList().ToPagedList(page ?? 1, pageSize ?? ProgramData.DEFAULT_PAGE_SIZE)//Admin should see everything
-                    : DbContext.Courses.Where(c => c.State != 1).ToPagedList(page ?? 1, pageSize ?? ProgramData.DEFAULT_PAGE_SIZE)
+                    : DbContext.Courses.Where(c => c.State != 1).ToList().ToPagedList(page ?? 1, pageSize ?? ProgramData.DEFAULT_PAGE_SIZE)
                     );
             }
         }
@@ -74,6 +74,21 @@ namespace ZPP_Project.Controllers
 
         public ActionResult Details(int id)
         {
+            if (ZPPUserRoleHelper.IsStudent(this.UserRoleId))
+            {
+                V_Student student = DbContext.FindStudentByUserId(User.Identity.GetUserId<int>());
+                V_Course course = DbContext.Courses.Where(c => c.IdCourse == id).FirstOrDefault();
+
+                var grade = DbContext.Grades.Where(g => g.IdStudent == student.IdStudent && g.IdCourse == course.IdCourse).FirstOrDefault();
+                var model = new V_CourseExtended(course)
+                {
+                    IdStudent = student.IdStudent,
+                    Grade = grade == null ? null  : (double?)grade.Grade,
+                    IsMember = DbContext.Groups.Any(g => g.IdCourse == course.IdCourse && g.IdStudent == student.IdStudent)
+                };
+                return View("Details", model);
+            }
+
             return View("Details", DbContext.Courses.Where(c => c.IdCourse == id).FirstOrDefault());
         }
 
@@ -207,7 +222,7 @@ namespace ZPP_Project.Controllers
             {
                 CourseName = course.Name,
                 StudentName = ZPP_Project.Helpers.StudentHelper.Display(student),
-                Lectures = DbContext.Attendance.Where(a => lectureIds.Contains(a.IdLecture) == true).ToList().Select(a => new LectureAttendanceViewModel()
+                Lectures = DbContext.Attendance.Where(a => a.IdStudent == student.IdStudent && lectureIds.Contains(a.IdLecture) == true).ToList().Select(a => new LectureAttendanceViewModel()
                 {
                     Attended = a.Attended,
                     IdAttendance = a.IdAttendance,
