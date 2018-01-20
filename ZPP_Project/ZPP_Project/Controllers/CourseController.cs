@@ -233,5 +233,59 @@ namespace ZPP_Project.Controllers
             return View(attendanceModel);
         }
 
+        [ZPPAuthorize(RolesArray = new[] {Roles.STUDENT, Roles.ADMINISTRATOR})]
+        public ActionResult Student(int? id, int? page, int? pageSize)
+        {
+            V_Student student = null;
+            if (ZPPUserRoleHelper.IsAdministrator(this.UserRoleId))
+                student = DbContext.FindStudentByUserId(id ?? -1);
+            else
+                student = DbContext.FindStudentByUserId(User.Identity.GetUserId<int>());
+
+            if (student != null)
+            {
+                var groups = DbContext.Groups.Where(g => g.IdStudent == student.IdStudent).Select(g => g.IdCourse).ToList();
+                var courses = DbContext.Courses.Where(c => groups.Contains(c.IdCourse)).ToList();
+                var model = new List<V_CourseExtended>();
+                foreach (var c in courses)
+                {
+                    model.Add(new V_CourseExtended(c)
+                    {
+                        IdStudent = student.IdStudent,
+                        Grade = (double?)(DbContext.Grades.Where(g => g.IdStudent == student.IdStudent && g.IdCourse == c.IdCourse).FirstOrDefault() ?? new V_Grade()).Grade,
+                        IsMember = true,
+                    });
+                }
+                return View(model.ToPagedList(page ?? 1, pageSize ?? ProgramData.DEFAULT_PAGE_SIZE));
+            }
+            else
+                return View("Error");
+        }
+
+        [ZPPAuthorize(RolesArray = new[] { Roles.TEACHER, Roles.ADMINISTRATOR })]
+        public ActionResult Teacher(int? id, int? page, int? pageSize)
+        {
+            V_Teacher teacher = null;
+            if (ZPPUserRoleHelper.IsAdministrator(this.UserRoleId))
+                teacher = DbContext.FindTeacherByUserId(id ?? -1);
+            else
+                teacher = DbContext.FindTeacherByUserId(User.Identity.GetUserId<int>());
+
+            if (teacher != null)
+            {
+                var courses = DbContext.Courses.Where(c => c.IdTeacher == teacher.IdTeacher).ToList();
+                var model = new List<V_CourseExtended>();
+                foreach (var c in courses)
+                {
+                    model.Add(new V_CourseExtended(c)
+                    {
+                        IdTeacher = teacher.IdTeacher,
+                    });
+                }
+                return View(model.ToPagedList(page ?? 1, pageSize ?? ProgramData.DEFAULT_PAGE_SIZE));
+            }
+            else
+                return View("Error");
+        }
     }
 }

@@ -180,5 +180,25 @@
                     }
                 }
         </dd>*@
+        @if (!ZPP_Project.Helpers.ZPPUserRoleHelper.IsAdministrator(Model.UserType))
+        {
+            string href = String.Empty;
+            switch (Model.UserType)
+            {
+                case ZPP_Project.Helpers.Roles.STUDENT_NR:
+                    href = "/Course/Student/";
+                    break;
+                case ZPP_Project.Helpers.Roles.TEACHER_NR:
+                    href = "/Course/Teacher/";
+                    break;
+                case ZPP_Project.Helpers.Roles.COMPANY_NR:
+                    href = "/Courses/My";
+                    break;
+            }
+            <dt>My Courses:</dt>
+            <dd>
+                <p><a class="btn btn-default" href="@href">Courses</a></p>
+            </dd>
+        }
     </dl>
 </div>
