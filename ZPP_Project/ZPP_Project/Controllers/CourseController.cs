@@ -28,6 +28,8 @@ namespace ZPP_Project.Controllers
         [Route("Courses/{page?}/{pageSize?}")]
         public ActionResult Index(int? page, int? pageSize)
         {
+            if (this.UserRoleId != -1)
+                ViewBag.ShowMyCourses = true;
             if (ZPPUserRoleHelper.IsStudent(this.UserRoleId))
             {
                 V_Student student = DbContext.FindStudentByUserId(User.Identity.GetUserId<int>());
@@ -54,7 +56,6 @@ namespace ZPP_Project.Controllers
             }
             else
             {
-                ViewBag.ShowMyCourses = true;
                 ViewBag.UserRoleId = this.UserRoleId;
                 return View("Index",
                     ZPPUserRoleHelper.IsAdministrator(this.UserRoleId)
@@ -244,6 +245,7 @@ namespace ZPP_Project.Controllers
 
             if (student != null)
             {
+                ViewBag.ShowMyCourses = false;
                 var groups = DbContext.Groups.Where(g => g.IdStudent == student.IdStudent).Select(g => g.IdCourse).ToList();
                 var courses = DbContext.Courses.Where(c => groups.Contains(c.IdCourse)).ToList();
                 var model = new List<V_CourseExtended>();
@@ -256,7 +258,8 @@ namespace ZPP_Project.Controllers
                         IsMember = true,
                     });
                 }
-                return View(model.ToPagedList(page ?? 1, pageSize ?? ProgramData.DEFAULT_PAGE_SIZE));
+
+                return View("Index", model.ToPagedList(page ?? 1, pageSize ?? ProgramData.DEFAULT_PAGE_SIZE));
             }
             else
                 return View("Error");
@@ -273,6 +276,7 @@ namespace ZPP_Project.Controllers
 
             if (teacher != null)
             {
+                ViewBag.ShowMyCourses = false;
                 var courses = DbContext.Courses.Where(c => c.IdTeacher == teacher.IdTeacher).ToList();
                 var model = new List<V_CourseExtended>();
                 foreach (var c in courses)
@@ -282,7 +286,7 @@ namespace ZPP_Project.Controllers
                         IdTeacher = teacher.IdTeacher,
                     });
                 }
-                return View(model.ToPagedList(page ?? 1, pageSize ?? ProgramData.DEFAULT_PAGE_SIZE));
+                return View("Index", model.ToPagedList(page ?? 1, pageSize ?? ProgramData.DEFAULT_PAGE_SIZE));
             }
             else
                 return View("Error");
