@@ -110,6 +110,21 @@ namespace ZPP_Project.Controllers
                 };
                 return View("Details", model);
             }
+            else if (ZPPUserRoleHelper.IsTeacher(this.UserRoleId))
+            {
+                V_Teacher teacher = DbContext.FindTeacherByUserId(User.Identity.GetUserId<int>());
+                V_Course course = DbContext.Courses.Where(c => c.IdCourse == id).FirstOrDefault();
+                if (course.IdTeacher == teacher.IdTeacher)
+                {
+                    var model = new V_CourseExtended(course)
+                    {
+                        IdTeacher = teacher.IdTeacher,
+                        IsMember = true,
+                    };
+                    return View("Details", model);
+                }
+
+            }
 
             return View("Details", DbContext.Courses.Where(c => c.IdCourse == id).FirstOrDefault());
         }

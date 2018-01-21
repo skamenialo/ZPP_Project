@@ -82,6 +82,22 @@ else
                     </div>
                 }
             }
+            else if (ViewBag.UserRoleId == ZPP_Project.Helpers.Roles.TEACHER_NR)
+            {
+                if (ExtendedModel != null && ExtendedModel.IsMember)
+                {
+                    <div class="col-md-2">
+                        @*Leave empty space here, sign in/out would be present here*@
+                    </div>
+                    <div class="col-md-2">
+                        <!-- Grade info -->
+                        <p><a class="btn btn-default" href="/Course/GradeEdit/@ExtendedModel.IdCourse">Grades</a></p>
+                    </div>
+                    <div class="col-md-2">
+                        <p><a class="btn btn-default" href="/Course/AttendanceEdit/@ExtendedModel.IdCourse">Attendancy</a></p>
+                    </div>
+                }
+            }
         </div>
 
     </div>
