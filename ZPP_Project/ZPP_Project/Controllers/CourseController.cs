@@ -366,7 +366,64 @@ namespace ZPP_Project.Controllers
             if (!ModelState.IsValid)
                 return View("Error");
 
-            throw new NotImplementedException();
+            //authorization
+            var course = DbContext.Courses.Where(c => c.IdCourse == id).FirstOrDefault();
+            if (course == null)
+                return View("Error");
+            if (ZPPUserRoleHelper.IsCompany(this.UserRoleId))
+            {
+                var company = DbContext.FindCompanyByUserId(User.Identity.GetUserId<int>());
+                if (company == null || company.IdCompany != course.IdCourse)
+                    return View("Error");
+            }
+            else if (ZPPUserRoleHelper.IsTeacher(this.UserRoleId))
+            {
+                var teacher = DbContext.FindTeacherByUserId(User.Identity.GetUserId<int>());
+                if (teacher == null || teacher.IdTeacher != course.IdCourse)
+                    return View("Error");
+            }
+            //authorisation check ok, parse results
+            var groups = DbContext.Groups.Where(g => g.IdCourse == course.IdCourse).ToList();
+            //warning: each item must be checked again!
+            foreach (var item in model.Items)
+            {
+                if (item.IdGrade != 0)//grade updated
+                {
+                    var grade = DbContext.Grades.Where(g => g.IdGrade == item.IdGrade).FirstOrDefault();
+                    if (grade == null || grade.IdStudent != item.IdStudent//wrong student, reject
+                        || ((item.Grade.HasValue && item.Grade.Value == grade.Grade)//nothing changed, reject
+                            && item.Comment.Equals(grade.Comment)))
+                        continue;
+                    if (item.Grade.HasValue)
+                        grade.Grade = item.Grade.Value;
+                    grade.Comment = item.Comment;
+                    grade.Date = DateTime.Now;
+                }
+                else//new grade
+                {
+                    if (item.IdStudent == null || !item.Grade.HasValue)
+                        continue;
+                    var newGrade = new V_Grade()
+                    {
+                        IdStudent = item.IdStudent,
+                        IdTeacher = item.IdTeacher,
+                        IdCourse = course.IdCourse,
+                        Grade = item.Grade.Value,
+                        Comment = item.Comment,
+                        Date = DateTime.Now,
+                    };
+                    DbContext.Grades.Add(newGrade);
+                }
+            }
+
+            DbContext.SaveChanges();
+            return View("GenericMessage", new GenericViewModel()
+            {
+                Title = "Changes saved",
+                Message = "Grades for course " + course.Name + " altered",
+                ButtonText = "Back to Courses",
+                ButtonHref = @"/Courses/"
+            });
         }
     }
 }

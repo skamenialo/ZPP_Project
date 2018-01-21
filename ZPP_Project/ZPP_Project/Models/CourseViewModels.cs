@@ -136,6 +136,7 @@ namespace ZPP_Project.Models
         public int IdCourse { get; set; }
 
         [Display(Name = "Grade")]
+        [Range(3, 5)]
         public decimal? Grade { get; set; }
 
         [Display(Name = "Date")]
