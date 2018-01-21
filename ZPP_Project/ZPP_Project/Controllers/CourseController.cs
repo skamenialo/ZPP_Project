@@ -422,7 +422,7 @@ namespace ZPP_Project.Controllers
                 Title = "Changes saved",
                 Message = "Grades for course " + course.Name + " altered",
                 ButtonText = "Back to Courses",
-                ButtonHref = @"/Courses/"
+                ButtonHref = @"/Courses"
             });
         }
 
