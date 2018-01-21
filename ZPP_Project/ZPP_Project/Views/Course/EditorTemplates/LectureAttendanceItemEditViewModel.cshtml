@@ -21,14 +21,15 @@
                     @Html.HiddenFor(model => model.IdLecture, new { htmlAttributes = new { @class = "form-control" } })
                 </div>
             </div>
-            @for (int i = 0; i < Model.Items.Count; i++ )
+            @for (int i = 0; i < Model.Items.Count; i++)
             {
                 <div class="row">
                     <div class="col-md-4">
                         @Model.Items[i].StudentName
                     </div>
                     <div class="col-md-3">
-                        @Html.EditorFor(model => Model.Items[i].Attended)
+                        @Html.EditorFor(model => model.Items[i].Attended, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.HiddenFor(model => model.Items[i].IdStudent, new { htmlAttributes = new { @class = "form-control" } })
                     </div>
                 </div>
             }
