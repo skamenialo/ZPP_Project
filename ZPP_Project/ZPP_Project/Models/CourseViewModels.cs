@@ -184,6 +184,7 @@ namespace ZPP_Project.Models
         public bool Attended { get; set; }
         public string StudentName { get; set; }
         public int IdStudent { get; set; }
+        public int IdAttendance { get; set; }
 
     }
 }

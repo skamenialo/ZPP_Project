@@ -30,6 +30,7 @@
                     <div class="col-md-3">
                         @Html.EditorFor(model => model.Items[i].Attended, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.HiddenFor(model => model.Items[i].IdStudent, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.HiddenFor(model => model.Items[i].IdAttendance, new { htmlAttributes = new { @class = "form-control" } })
                     </div>
                 </div>
             }

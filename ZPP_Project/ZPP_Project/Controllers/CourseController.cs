@@ -420,7 +420,7 @@ namespace ZPP_Project.Controllers
             return View("GenericMessage", new GenericViewModel()
             {
                 Title = "Changes saved",
-                Message = "Grades for course " + course.Name + " altered",
+                Message = "Grades for course \"" + course.Name + "\" altered",
                 ButtonText = "Back to Courses",
                 ButtonHref = @"/Courses"
             });
@@ -475,16 +475,10 @@ namespace ZPP_Project.Controllers
                     {
                       Attended = a.Attended,
                       IdStudent = a.IdStudent,
+                      IdAttendance = a.IdAttendance,
                       StudentName = studentNames[a.IdStudent],
                     });
                 }
-                //.Select(a => new LectureAttendanceEntryEditViewModel()
-                //    {
-                //      Attended = a.Attended,
-                //      IdStudent = a.IdStudent,
-                //      StudentName = studentNames[a.IdStudent],
-                //    }).ToList();
-                //entry.Items = attendancy;
                 model.Items.Add(entry);
             }
             return View(model);
@@ -513,8 +507,33 @@ namespace ZPP_Project.Controllers
             }
             //authorisation check ok, parse results
 
+            var validStudents = DbContext.Groups.Where(g => g.IdCourse == course.IdCourse).Select(g => g.IdStudent).ToList();
+            foreach (var item in model.Items)
+            {
+                //check if lecture is valid
+                if (!DbContext.Lectures.Any(l => l.IdCourse == item.IdLecture && l.IdCourse == course.IdCourse))
+                    continue;
+                //check attendance of students
+                foreach (var entry in item.Items)
+                {
+                    if (validStudents.Contains(entry.IdStudent))
+                    {
+                        var attendance = DbContext.Attendance.Where(a => a.IdAttendance == entry.IdAttendance).FirstOrDefault();
+                        if (attendance == null || attendance.Attended == entry.Attended)//Double check in case entityframework would not do this
+                            continue;
+                        attendance.Attended = entry.Attended;
+                    }
+                }
+            }
 
-            throw new NotImplementedException();
+            DbContext.SaveChanges();
+            return View("GenericMessage", new GenericViewModel()
+            {
+                Title = "Changes saved",
+                Message = "attendance for course \"" + course.Name + "\" altered",
+                ButtonText = "Back to Courses",
+                ButtonHref = @"/Courses"
+            });
         }
     }
 }
