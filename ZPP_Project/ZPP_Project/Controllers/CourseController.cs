@@ -54,6 +54,27 @@ namespace ZPP_Project.Controllers
                 }
                 return View("Index", list.ToPagedList(page ?? 1, pageSize ?? ProgramData.DEFAULT_PAGE_SIZE));
             }
+            else if (ZPPUserRoleHelper.IsTeacher(this.UserRoleId))
+            {
+                V_Teacher teacher = DbContext.FindTeacherByUserId(User.Identity.GetUserId<int>());
+                List<V_Course> list = new List<V_Course>();
+
+                foreach (var item in DbContext.Courses)
+                {
+                    if (teacher.IdTeacher == item.IdTeacher)
+                    {
+                        //extended
+                        list.Add(new V_CourseExtended(item)
+                        {
+                            IdTeacher = teacher.IdTeacher,
+                            IsMember = true
+                        });
+                    }
+                    else if (item.State != 1)
+                        list.Add(item);
+                }
+                return View("Index", list.ToPagedList(page ?? 1, pageSize ?? ProgramData.DEFAULT_PAGE_SIZE));
+            }
             else
             {
                 ViewBag.UserRoleId = this.UserRoleId;
@@ -290,6 +311,62 @@ namespace ZPP_Project.Controllers
             }
             else
                 return View("Error");
+        }
+
+        [ZPPAuthorize(RolesArray = new[] { Roles.TEACHER, Roles.COMPANY, Roles.ADMINISTRATOR })]
+        public ActionResult GradeEdit(int id)
+        {
+            //authorization
+            var course = DbContext.Courses.Where(c => c.IdCourse == id).FirstOrDefault();
+            if (course == null)
+                return View("Error");
+            if (ZPPUserRoleHelper.IsCompany(this.UserRoleId))
+            {
+                var company = DbContext.FindCompanyByUserId(User.Identity.GetUserId<int>());
+                if (company == null || company.IdCompany != course.IdCourse)
+                    return View("Error");
+            }
+            else if (ZPPUserRoleHelper.IsTeacher(this.UserRoleId))
+            {
+                var teacher = DbContext.FindTeacherByUserId(User.Identity.GetUserId<int>());
+                if (teacher == null || teacher.IdTeacher != course.IdCourse)
+                    return View("Error");
+            }
+            //authorisation check ok, display stuff
+            var model = new GradeEditViewModel();
+            model.CourseName = course.Name;
+            model.Items.AddRange(DbContext.Grades.Where(g => g.IdCourse == course.IdCourse).Select(g => new GradeEditItemViewModel()
+                {
+                    IdGrade = g.IdGrade,
+                    IdStudent = g.IdStudent,
+                    IdCourse = g.IdCourse,
+                    Grade = g.Grade,
+                    Date = g.Date,
+                    IdTeacher = g.IdTeacher,
+                    Comment = g.Comment,
+                }));
+            List<int> ids = model.Items.Select(item => item.IdStudent).ToList();
+            model.Items.AddRange(DbContext.Groups.Where(g => g.IdCourse == course.IdCourse && !ids.Contains(g.IdStudent)).Select(g => new GradeEditItemViewModel()
+                {
+                    IdStudent = g.IdStudent,
+                    IdCourse = course.IdCourse,
+                }));
+            foreach (var item in model.Items)
+            {
+                item.StudentName = ZPP_Project.Helpers.StudentHelper.Display(item.IdStudent);
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ZPPAuthorize(RolesArray = new[] { Roles.TEACHER, Roles.COMPANY, Roles.ADMINISTRATOR })]
+        public ActionResult GradeEdit(int id, GradeEditViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View("Error");
+
+            throw new NotImplementedException();
         }
     }
 }

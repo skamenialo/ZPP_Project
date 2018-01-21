@@ -113,4 +113,38 @@ namespace ZPP_Project.Models
         public bool Attended { get; set; }
         public Nullable<System.DateTime> LecuteDate { get; set; }
     }
+
+    public class GradeEditViewModel
+    {
+        public string CourseName { get; set; }
+        public List<GradeEditItemViewModel> Items { get; set; }
+        public GradeEditViewModel()
+        {
+            this.Items = new List<GradeEditItemViewModel>();
+        }
+    }
+
+    public class GradeEditItemViewModel
+    {
+        public int IdGrade { get; set; }
+
+        public int IdStudent { get; set; }
+
+        [Display(Name = "Student")]
+        public string StudentName { get; set; }
+        
+        public int IdCourse { get; set; }
+
+        [Display(Name = "Grade")]
+        public decimal? Grade { get; set; }
+
+        [Display(Name = "Date")]
+        [DisplayFormat(DataFormatString = "{0:yyyy-MM-dd}", ApplyFormatInEditMode = true)]
+        public System.DateTime Date { get; set; }
+
+        public int IdTeacher { get; set; }
+
+        [Display(Name = "Comment")]
+        public string Comment { get; set; }
+    }
 }
