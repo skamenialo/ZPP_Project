@@ -148,4 +148,42 @@ namespace ZPP_Project.Models
         [Display(Name = "Comment")]
         public string Comment { get; set; }
     }
+
+    /// <summary>
+    /// Represents an attendance for entire course
+    /// </summary>
+    public class LectureAttendanceEditViewModel
+    {
+        public string CourseName { get; set; }
+        public int IdCourse { get; set; }
+        public int IdTeacher { get; set; }
+        public List<LectureAttendanceItemEditViewModel> Items { get; set; }
+        public LectureAttendanceEditViewModel()
+        {
+            this.Items = new List<LectureAttendanceItemEditViewModel>();
+        }
+    }
+
+    /// <summary>
+    /// Represents an attendance for a single lecture within a course
+    /// </summary>
+    public class LectureAttendanceItemEditViewModel
+    {
+        public int IdLecture { get; set; }
+        public Nullable<System.DateTime> LecuteDate { get; set; }
+        public List<LectureAttendanceEntryEditViewModel> Items { get; set; }
+        public LectureAttendanceItemEditViewModel()
+        {
+            this.Items = new List<LectureAttendanceEntryEditViewModel>();
+       } 
+    }
+
+    //Represents an attendance of a single student for a single lecture within a course
+    public class LectureAttendanceEntryEditViewModel
+    {
+        public bool Attended { get; set; }
+        public string StudentName { get; set; }
+        public int IdStudent { get; set; }
+
+    }
 }

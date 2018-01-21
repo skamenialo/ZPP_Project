@@ -425,5 +425,96 @@ namespace ZPP_Project.Controllers
                 ButtonHref = @"/Courses/"
             });
         }
+
+        [ZPPAuthorize(RolesArray = new[] { Roles.TEACHER, Roles.COMPANY, Roles.ADMINISTRATOR })]
+        public ActionResult AttendanceEdit(int id)
+        {
+            //authorization
+            var course = DbContext.Courses.Where(c => c.IdCourse == id).FirstOrDefault();
+            if (course == null)
+                return View("Error");
+            if (ZPPUserRoleHelper.IsCompany(this.UserRoleId))
+            {
+                var company = DbContext.FindCompanyByUserId(User.Identity.GetUserId<int>());
+                if (company == null || company.IdCompany != course.IdCourse)
+                    return View("Error");
+            }
+            else if (ZPPUserRoleHelper.IsTeacher(this.UserRoleId))
+            {
+                var teacher = DbContext.FindTeacherByUserId(User.Identity.GetUserId<int>());
+                if (teacher == null || teacher.IdTeacher != course.IdCourse)
+                    return View("Error");
+            }
+            //authorisation check ok, display stuff
+
+            var model = new LectureAttendanceEditViewModel()
+            {
+                IdCourse = course.IdCourse,
+                IdTeacher = course.IdTeacher,
+                CourseName = course.Name,
+            };
+            //get valid students
+            var students = DbContext.Groups.Where(g => g.IdCourse == course.IdCourse).ToList();
+            var studentNames = new Dictionary<int, string>();
+            foreach (var s in students)
+                studentNames.Add(s.IdStudent, ZPP_Project.Helpers.StudentHelper.Display(s.IdStudent));
+            //get lectures
+            var lectures = DbContext.Lectures.Where(l => l.IdCourse == course.IdCourse).ToList();
+            foreach(var item in lectures)
+            {
+                var entry = new LectureAttendanceItemEditViewModel()
+                {
+                    IdLecture = item.IdLecture,
+                    LecuteDate = item.LecuteDate,
+                };
+                //get attendancy for lectures
+                var attendancy = DbContext.Attendance.Where(a => a.IdLecture == item.IdLecture);
+                foreach (var a in attendancy)
+                {
+                    entry.Items.Add(new LectureAttendanceEntryEditViewModel()
+                    {
+                      Attended = a.Attended,
+                      IdStudent = a.IdStudent,
+                      StudentName = studentNames[a.IdStudent],
+                    });
+                }
+                //.Select(a => new LectureAttendanceEntryEditViewModel()
+                //    {
+                //      Attended = a.Attended,
+                //      IdStudent = a.IdStudent,
+                //      StudentName = studentNames[a.IdStudent],
+                //    }).ToList();
+                //entry.Items = attendancy;
+                model.Items.Add(entry);
+            }
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ZPPAuthorize(RolesArray = new[] { Roles.TEACHER, Roles.COMPANY, Roles.ADMINISTRATOR })]
+        public ActionResult AttendanceEdit(int id, LectureAttendanceEditViewModel model)
+        {
+            //authorization
+            var course = DbContext.Courses.Where(c => c.IdCourse == id).FirstOrDefault();
+            if (course == null)
+                return View("Error");
+            if (ZPPUserRoleHelper.IsCompany(this.UserRoleId))
+            {
+                var company = DbContext.FindCompanyByUserId(User.Identity.GetUserId<int>());
+                if (company == null || company.IdCompany != course.IdCourse)
+                    return View("Error");
+            }
+            else if (ZPPUserRoleHelper.IsTeacher(this.UserRoleId))
+            {
+                var teacher = DbContext.FindTeacherByUserId(User.Identity.GetUserId<int>());
+                if (teacher == null || teacher.IdTeacher != course.IdCourse)
+                    return View("Error");
+            }
+            //authorisation check ok, parse results
+
+
+            throw new NotImplementedException();
+        }
     }
 }
