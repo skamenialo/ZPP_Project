@@ -24,6 +24,15 @@ namespace ZPP_Project.Helpers
             return c.Name;
         }
 
+        public static string Display(string idCompany)
+        {
+            int id = 0;
+            if (int.TryParse(idCompany, out id))
+                return Display(id);
+            else
+                return String.Format("Company {0} not found!", idCompany);
+        }
+
         public static string Display(V_Company c)
         {
             return c.Name;
