@@ -23,6 +23,15 @@ namespace ZPP_Project.Helpers
             return Display(t);
         }
 
+        public static string Display(string idTeacher)
+        {
+            int id = 0;
+            if (int.TryParse(idTeacher, out id))
+                return Display(id);
+            else
+                return String.Format("Teacher {0} not found!", idTeacher);
+        }
+
         public static string Display(V_Teacher t)
         {
             return String.Format("{0} {1} {2}", t.Degree, t.FirstName, t.LastName);
