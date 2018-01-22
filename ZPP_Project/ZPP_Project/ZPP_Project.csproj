@@ -450,6 +450,7 @@
     <Content Include="Views\Course\GradeEdit.cshtml" />
     <Content Include="Views\Course\AttendanceEdit.cshtml" />
     <Content Include="Views\Course\EditorTemplates\LectureAttendanceItemEditViewModel.cshtml" />
+    <Content Include="Views\Course\Create.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
