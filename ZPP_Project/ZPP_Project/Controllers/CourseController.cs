@@ -488,10 +488,12 @@ namespace ZPP_Project.Controllers
                 {
                     entry.Items.Add(new LectureAttendanceEntryEditViewModel()
                     {
-                      Attended = a.Attended,
-                      IdStudent = a.IdStudent,
-                      IdAttendance = a.IdAttendance,
-                      StudentName = studentNames[a.IdStudent],
+                        Attended = a.Attended,
+                        IdStudent = a.IdStudent,
+                        IdAttendance = a.IdAttendance,
+                        StudentName = studentNames.ContainsKey(a.IdStudent)
+                            ? studentNames[a.IdStudent]
+                            : ProgramData.VALUE_UNKNOWN,
                     });
                 }
                 model.Items.Add(entry);
