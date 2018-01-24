@@ -32,7 +32,7 @@
                     @foreach (var lecture in Model.Lectures)
                     {
                         <tr>
-                            <td>@(lecture.LecuteDate.HasValue ? lecture.LecuteDate.Value.ToString("yyyy/MM/dd") : ProgramData.VALUE_UNKNOWN)</td>
+                            <td>@(lecture.LectureDate.HasValue ? lecture.LectureDate.Value.ToString("yyyy/MM/dd") : ProgramData.VALUE_UNKNOWN)</td>
                             <td>@(lecture.Attended ? ProgramData.SIGN_YES : ProgramData.SIGN_NO)</td>
                         </tr>
                     }

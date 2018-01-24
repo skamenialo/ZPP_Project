@@ -15,7 +15,7 @@ namespace ZPP_Project.Models
     /// </summary>
     public class CreateCourseViewModel
     {
-        [DisplayName("Tutor")]
+        [DisplayName("Teacher")]
         public string IdTeacher { get; set; }
 
         [DisplayName("Company")]
@@ -111,7 +111,7 @@ namespace ZPP_Project.Models
         public int IdAttendance { get; set; }
         public int IdLecture { get; set; }
         public bool Attended { get; set; }
-        public Nullable<System.DateTime> LecuteDate { get; set; }
+        public Nullable<System.DateTime> LectureDate { get; set; }
     }
 
     public class GradeEditViewModel
@@ -170,7 +170,7 @@ namespace ZPP_Project.Models
     public class LectureAttendanceItemEditViewModel
     {
         public int IdLecture { get; set; }
-        public Nullable<System.DateTime> LecuteDate { get; set; }
+        public Nullable<System.DateTime> LectureDate { get; set; }
         public List<LectureAttendanceEntryEditViewModel> Items { get; set; }
         public LectureAttendanceItemEditViewModel()
         {

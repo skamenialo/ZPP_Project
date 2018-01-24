@@ -27,7 +27,14 @@ else
             <div class="col-md-4">
                 <!-- Who -->
                 <div class="row">Offered by</div>
-                <div class="row">@Html.ActionLink(TeacherHelper.Display(Model.IdTeacher), "Details", "Teacher", new { id = Model.IdTeacher }, null)</div>
+                @if (Model.IdTeacher.HasValue)
+                {
+                    <div class="row">@Html.ActionLink(TeacherHelper.Display(Model.IdTeacher.Value), "Details", "Teacher", new { id = Model.IdTeacher }, null)</div>
+                }
+                else
+                {
+                    <div class="row">No teacher lead this course</div>
+                }
                 <div class="row">@Html.ActionLink(CompanyHelper.Display(Model.IdCompany), "Details", "Company", new { id = Model.IdCompany }, null)</div>
             </div>
             <div class="col-md-4">

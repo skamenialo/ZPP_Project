@@ -103,7 +103,7 @@ CREATE TABLE SL_CourseStates(
 -- Courses --
 CREATE TABLE Courses(
   IdCourse INTEGER IDENTITY(1,1) NOT NULL,
-  IdTeacher INTEGER NOT NULL,
+  IdTeacher INTEGER,
   IdCompany INTEGER NOT NULL,
   Name VARCHAR(256) NOT NULL,
   Lectures Integer NOT NULL,
@@ -131,8 +131,8 @@ CREATE TABLE Groups(
 CREATE TABLE Lectures(
   IdLecture INTEGER IDENTITY(1,1) NOT NULL,
   IdCourse INTEGER NOT NULL,
-  IdTeacher INTEGER NOT NULL,
-  LecuteDate DATE,
+  IdTeacher INTEGER,
+  LectureDate DATE,
   CONSTRAINT Lecture_PK PRIMARY KEY (IdLecture),
   CONSTRAINT Lecture_IdCourse_FK FOREIGN KEY (IdCourse) REFERENCES Courses(IdCourse),
   CONSTRAINT Lecture_IdTeacher_FK FOREIGN KEY (IdTeacher) REFERENCES Teachers(IdTeacher)

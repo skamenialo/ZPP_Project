@@ -252,7 +252,7 @@ namespace ZPP_Project.Controllers
         {
             V_Student student = DbContext.FindStudentByUserId(User.Identity.GetUserId<int>());
             var course = DbContext.Courses.Where(c => c.IdCourse == id).FirstOrDefault();
-            var lectures = new List<V_Lecture>(DbContext.Lectures.Where(l => l.IdCourse == course.IdCourse));
+            var lectures = new List<V_Lecture>(DbContext.FindLecturesByCourseId(course.IdCourse));
             var lectureIds = lectures.Select(l => l.IdLecture);
             var attendanceModel = new AttendanceViewModel()
             {
@@ -262,7 +262,7 @@ namespace ZPP_Project.Controllers
                 {
                     Attended = a.Attended,
                     IdAttendance = a.IdAttendance,
-                    LecuteDate = lectures.FirstOrDefault(l => l.IdLecture == a.IdLecture).LecuteDate
+                    LectureDate = lectures.FirstOrDefault(l => l.IdLecture == a.IdLecture).LectureDate
                 }).ToList()
             };
 
@@ -464,7 +464,7 @@ namespace ZPP_Project.Controllers
             var model = new LectureAttendanceEditViewModel()
             {
                 IdCourse = course.IdCourse,
-                IdTeacher = course.IdTeacher,
+                IdTeacher = course.IdTeacher.Value,
                 CourseName = course.Name,
             };
             //get valid students
@@ -473,13 +473,13 @@ namespace ZPP_Project.Controllers
             foreach (var s in students)
                 studentNames.Add(s.IdStudent, ZPP_Project.Helpers.StudentHelper.Display(s.IdStudent));
             //get lectures
-            var lectures = DbContext.Lectures.Where(l => l.IdCourse == course.IdCourse).ToList();
+            var lectures = DbContext.FindLecturesByCourseId(course.IdCourse).ToList();
             foreach(var item in lectures)
             {
                 var entry = new LectureAttendanceItemEditViewModel()
                 {
                     IdLecture = item.IdLecture,
-                    LecuteDate = item.LecuteDate,
+                    LectureDate = item.LectureDate,
                 };
                 //get attendancy for lectures
                 var attendancy = DbContext.Attendance.Where(a => a.IdLecture == item.IdLecture);

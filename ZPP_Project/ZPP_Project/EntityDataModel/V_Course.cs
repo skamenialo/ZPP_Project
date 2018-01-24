@@ -15,7 +15,7 @@ namespace ZPP_Project.EntityDataModel
     public partial class V_Course
     {
         public int IdCourse { get; set; }
-        public int IdTeacher { get; set; }
+        public Nullable<int> IdTeacher { get; set; }
         public int IdCompany { get; set; }
         public string Name { get; set; }
         public int Lectures { get; set; }
