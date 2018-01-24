@@ -336,6 +336,6 @@ namespace ZPP_Project.Helpers
         public const string LOGIN_MODEL = "LOGIN_MODEL";
         public const string SELECTED_ROLE = "SELECTED_ROLE";
         public const string CREATE_COURSE_MODEL = "CREATE_COURSE_MODEL";
-        public const string CREATE_COURSE_LECTURES = "CREATE_COURSE_LECTURES";
+        public const string CREATE_COURSE_LECTURE = "CREATE_COURSE_LECTURE";
     }
 }

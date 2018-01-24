@@ -38,8 +38,14 @@
             <div class="col-md-4">
                 <!-- When -->
                 <div class="row">Duration</div>
-                <div class="row">From @Model.DateStart.Value.Date.ToShortDateString()</div>
-                <div class="row">To @Model.DateEnd.Value.Date.ToShortDateString()</div>
+                @if (Model.DateStart != null)
+                {
+                    <div class="row">From @Model.DateStart.Value.Date.ToShortDateString()</div>
+                }
+                @if (Model.DateEnd != null)
+                {
+                    <div class="row">To @Model.DateEnd.Value.Date.ToShortDateString()</div>
+                }
             </div>
             <div class="col-md-4">
                 <!-- How many lectures -->

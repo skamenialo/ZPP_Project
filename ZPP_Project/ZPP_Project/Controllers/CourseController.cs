@@ -9,6 +9,7 @@ using ZPP_Project.Models;
 using PagedList;
 using ZPP_Project.EntityDataModel;
 using ZPP_Project.Helpers;
+using System.Data.Entity;
 
 namespace ZPP_Project.Controllers
 {
@@ -558,9 +559,8 @@ namespace ZPP_Project.Controllers
         public ActionResult Create()
         {
             TempData.Remove(Keys.CREATE_COURSE_MODEL);
-            TempData.Remove(Keys.CREATE_COURSE_LECTURES);
 
-            CreateCourseViewModel model = new CreateCourseViewModel() { Lectures = 0 };
+            CreateCourseViewModel model = new CreateCourseViewModel() { Lectures = new LectureCreateEditItemViewModel[0] };
             if (ZPPUserRoleHelper.IsAdministrator(UserRoleId))
                 model.Companies = GetCompanies();
             if (ZPPUserRoleHelper.IsCompany(UserRoleId))
@@ -608,13 +608,13 @@ namespace ZPP_Project.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    List<V_Lecture> lectures = TempData.Peek(Keys.CREATE_COURSE_LECTURES) as List<V_Lecture>;
-                    if (lectures != null)
-                        model.Lectures = lectures.Count;
+                    if (model.Lectures == null || model.Lectures.Count() == 0)
+                    {
+                        TempData[Keys.CREATE_COURSE_MODEL] = model;
+                        return View("CreateNoLectures");
+                    }
                     else
-                        model.Lectures = 0;
-
-                    return CreateCourse(model, lectures);
+                        return CreateCourse(model, company, teacher);
                 }
             }
 
@@ -625,24 +625,155 @@ namespace ZPP_Project.Controllers
             return View(model);
         }
 
-        [HttpPost, ZPPSubmitName("lectures")]
+        [HttpPost, ZPPSubmitName("add_lectures")]
         [ValidateAntiForgeryToken]
         [ZPPAuthorize(RolesArray = new[] { Roles.ADMINISTRATOR, Roles.COMPANY })]
         public ActionResult CreateAddLectures(CreateCourseViewModel model)
         {
-            TempData[Keys.CREATE_COURSE_MODEL] = model;
-            List<V_Lecture> lectures = TempData.Peek(Keys.CREATE_COURSE_LECTURES) as List<V_Lecture>;
-            return View("CreateLectures", lectures);
+            CreateCourseViewModel createModel = TempData.Peek(Keys.CREATE_COURSE_MODEL) as CreateCourseViewModel;
+            if (createModel == null)
+                TempData[Keys.CREATE_COURSE_MODEL] = model;
+            //TODO admin
+            return View("CreateLecture", new LectureCreateEditItemViewModel() { Teachers = GetCompanyTeachers(UserRoleId, true), Edit = true });
+        }
+
+        [HttpPost, ZPPSubmitName("confirm_lecture")]
+        [ValidateAntiForgeryToken]
+        [ZPPAuthorize(RolesArray = new[] { Roles.ADMINISTRATOR, Roles.COMPANY })]
+        public ActionResult CreateAddLectures(LectureCreateEditItemViewModel model)
+        {
+            CreateCourseViewModel createModel = TempData[Keys.CREATE_COURSE_MODEL] as CreateCourseViewModel;
+            if (createModel == null)
+                return RedirectToAction("Create");
+
+            //check date
+            //check teacher
+            if (ModelState.IsValid)
+            {
+                List<LectureCreateEditItemViewModel> lectures;
+                if (createModel.Lectures == null)
+                    lectures = new List<LectureCreateEditItemViewModel>();
+                else
+                    lectures = createModel.Lectures.ToList();
+                model.Index = lectures.Count;
+                lectures.Add(model);
+                createModel.Lectures = lectures.ToArray();
+
+                if (ZPPUserRoleHelper.IsAdministrator(UserRoleId))
+                    createModel.Companies = GetCompanies();
+                if (ZPPUserRoleHelper.IsCompany(UserRoleId))
+                    createModel.Teachers = GetCompanyTeachers(UserRoleId, true);
+                return View("Create", createModel);
+            }
+            model.Teachers = GetCompanyTeachers(UserRoleId);
+            model.Edit = true;
+            return View("CreateLecture", model);
+        }
+
+        [HttpPost, ZPPSubmitName("no_lectures")]
+        [ValidateAntiForgeryToken]
+        [ZPPAuthorize(RolesArray = new[] { Roles.ADMINISTRATOR, Roles.COMPANY })]
+        public ActionResult CreateWithoutLectures()
+        {
+            CreateCourseViewModel model = TempData[Keys.CREATE_COURSE_MODEL] as CreateCourseViewModel;
+            if (model == null)
+                return RedirectToAction("Create");
+
+            int id = 0;
+            V_Company company = null;
+            if (ZPPUserRoleHelper.IsCompany(UserRoleId))
+                company = DbContext.FindCompanyByUserId(User.Identity.GetUserId<int>());
+            else
+            {
+                if (int.TryParse(model.IdCompany, out id))
+                    company = DbContext.Companies.Find(id);
+                else
+                    AddError("Parsing error");
+            }
+            id = 0;
+            V_Teacher teacher = null;
+            if (string.IsNullOrWhiteSpace(model.IdTeacher) && !model.IdTeacher.Equals("none"))
+            {
+                if (int.TryParse(model.IdTeacher, out id))
+                {
+                    teacher = DbContext.Teachers.Find(id);
+                    if (teacher == null)
+                        AddError("Teacher not exist");
+                }
+                else
+                    AddError("Parsing error");
+            }
+
+            if (ModelState.IsValid)
+                return CreateCourse(model, company, teacher);
+            else
+                return View("Create", model);
+        }
+
+        [HttpPost, ZPPSubmitName("back_to_create")]
+        [ValidateAntiForgeryToken]
+        [ZPPAuthorize(RolesArray = new[] { Roles.ADMINISTRATOR, Roles.COMPANY })]
+        public ActionResult CreateBack()
+        {
+            CreateCourseViewModel model = TempData[Keys.CREATE_COURSE_MODEL] as CreateCourseViewModel;
+            if (model == null)
+                return RedirectToAction("Create");
+
+            if (ZPPUserRoleHelper.IsAdministrator(UserRoleId))
+                model.Companies = GetCompanies();
+            if (ZPPUserRoleHelper.IsCompany(UserRoleId))
+                model.Teachers = GetCompanyTeachers(UserRoleId, true);
+            return View("Create", model);
         }
 
         /// <summary>
         /// The last step in creating course - commiting
         /// This method trust that everything were validated before
         /// </summary>
-        private ActionResult CreateCourse(CreateCourseViewModel model, List<V_Lecture> lectures)
+        private ActionResult CreateCourse(CreateCourseViewModel model, V_Company company, V_Teacher teacher)
         {
             //TODO
-            return View("Index");
+            V_Course course = new V_Course()
+            {
+                IdCompany = company.IdCompany,
+                DateEnd = model.DateEnd,
+                DateStart = model.DateStart,
+                Description = model.Description,
+                Lectures = model.Lectures == null? 0: model.Lectures.Length,
+                Name = model.Name,
+                State = (int)States.CourseState.Created,
+            };
+            if (teacher != null)
+                course.IdTeacher = teacher.IdTeacher;
+            DbContext.Entry(course).State = EntityState.Added;
+            DbContext.SaveChanges();
+
+            if (model.Lectures != null)
+            {
+                List<V_Lecture> lectures = DbContext.FindLecturesByCourseId(course.IdCourse).ToList();
+                if (lectures.Count > 0)
+                {
+
+                }
+                else
+                {
+                    foreach (LectureCreateEditItemViewModel item in model.Lectures)
+                    {
+                        V_Lecture lecture = new V_Lecture()
+                        {
+                            IdCourse = course.IdCourse,
+                            LectureDate = item.Date
+                        };
+                        int id = 0;
+                        if (!(string.IsNullOrWhiteSpace(item.IdTeacher) || item.IdTeacher == "none") && int.TryParse(item.IdTeacher, out id))
+                            lecture.IdTeacher = id;
+                        DbContext.Entry(lecture).State = EntityState.Added;
+                    }
+                }
+                DbContext.SaveChanges();
+            }
+
+            return RedirectToLocal("Index");
         }
 
         #endregion

@@ -26,7 +26,7 @@ namespace ZPP_Project.Models
         public string Name { get; set; }
 
         [DisplayName("Lectures")]
-        public int Lectures { get; set; }
+        public LectureCreateEditItemViewModel[] Lectures { get; set; }
 
         [StringLength(4096, ErrorMessage = "Description is too long")]
         [DisplayName("Description")]
@@ -41,6 +41,20 @@ namespace ZPP_Project.Models
         public IEnumerable<System.Web.Mvc.SelectListItem> Teachers { get; set; }
 
         public IEnumerable<System.Web.Mvc.SelectListItem> Companies { get; set; }
+    }
+
+    public class LectureCreateEditItemViewModel
+    {
+        public int Index { get; set; }
+
+        public Nullable<System.DateTime> Date { get; set; }
+
+        [DisplayName("Teacher")]
+        public string IdTeacher { get; set; }
+
+        public IEnumerable<System.Web.Mvc.SelectListItem> Teachers { get; set; }
+
+        public bool Edit { get; set; }
     }
 
     public class V_CourseExtended : V_Course

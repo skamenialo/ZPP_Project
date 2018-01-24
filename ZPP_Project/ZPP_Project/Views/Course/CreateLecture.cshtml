@@ -1,0 +1,21 @@
+﻿@model ZPP_Project.Models.LectureCreateEditItemViewModel
+
+@{
+    ViewBag.Title = "Add lecture";
+}
+
+<h2>@ViewBag.Title</h2>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.EditorFor(model => model)
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" name="confirm_lecture" value="Confirm" class="btn btn-default" />
+                <input type="submit" name="back_to_create" value="Cancel" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}

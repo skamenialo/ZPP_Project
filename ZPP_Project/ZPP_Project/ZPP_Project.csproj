@@ -451,6 +451,9 @@
     <Content Include="Views\Course\AttendanceEdit.cshtml" />
     <Content Include="Views\Course\EditorTemplates\LectureAttendanceItemEditViewModel.cshtml" />
     <Content Include="Views\Course\Create.cshtml" />
+    <Content Include="Views\Course\CreateNoLectures.cshtml" />
+    <Content Include="Views\Course\CreateLecture.cshtml" />
+    <Content Include="Views\Course\EditorTemplates\LectureCreateEditItemViewModel.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

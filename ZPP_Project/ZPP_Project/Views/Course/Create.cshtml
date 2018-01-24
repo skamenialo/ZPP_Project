@@ -6,10 +6,10 @@
 
 <h2>@ViewBag.Title</h2>
 
-@using (Html.BeginForm()) 
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
@@ -23,7 +23,7 @@
                 </div>
             </div>
         }
-        
+
         @if (ZPPUserRoleHelper.IsCompany(ViewBag.UserRoleId) || !string.IsNullOrWhiteSpace(Model.IdTeacher))
         {
             <div class="form-group">
@@ -79,8 +79,20 @@
         <div class="form-group">
             @Html.LabelFor(model => model.Lectures, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DisplayFor(model => model.Lectures, null)
-                <input type="submit" name="lectures" value="Add lectures" class="btn btn-default" />
+                <div class="row">
+                    <div class="col-md-2">
+                        @Html.LabelFor(model => model.Lectures[0].Date, htmlAttributes: new { @class = "control-label col-md-2" })
+                    </div>
+                    <div class="col-md-2">
+                        @Html.LabelFor(model => model.Lectures[0].IdTeacher, htmlAttributes: new { @class = "control-label col-md-2" })
+                    </div>
+                </div>
+                <div class="row">
+                    @Html.EditorFor(model => model.Lectures)
+                </div>
+                <div class="row">
+                    <input type="submit" name="add_lectures" value="Add lecture" class="btn btn-default" />
+                </div>
             </div>
         </div>
 
@@ -88,7 +100,7 @@
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
                 <input type="submit" name="create" value="Create" class="btn btn-default" />
-                @Html.ActionLink("Cancel", "Index", null, new { @class="btn btn-default" })
+                @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-default" })
             </div>
         </div>
     </div>
