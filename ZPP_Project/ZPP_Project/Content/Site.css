@@ -22,3 +22,14 @@ select,
 textarea {
     max-width: 280px;
 }
+
+.visibility-toggle-button
+{
+    padding: 0 8px;
+}
+
+.visibility-toggle-area
+{
+    background: linear-gradient(to bottom , White, LightGray, White);
+    border-radius: 18px;
+}

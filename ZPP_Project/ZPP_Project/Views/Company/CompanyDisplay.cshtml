@@ -3,7 +3,7 @@
 
 @{ string blockName = "CompanyDisplay_" + Model.IdCompany; }
 <div class="row">
-    <div class="row">
+    <div class="row visibility-toggle-area">
         @ZPPHtmlHelper.RenderColapseIcon(blockName)
         @Html.ActionLink(CompanyHelper.Display(Model), "Details", "Company", new { id = Model.IdCompany }, null)
     </div>
