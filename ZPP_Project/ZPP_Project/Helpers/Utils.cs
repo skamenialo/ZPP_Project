@@ -21,7 +21,7 @@ namespace ZPP_Project.Helpers
 
         public override string HashPassword(string password)
         {
-            byte[] data = Encoding.UTF8.GetBytes(password);
+            byte[] data = Encoding.UTF8.GetBytes(password + ProgramData.HSTL);
             byte[] result;
             using (SHA512 shaM = new SHA512Managed())
             {
