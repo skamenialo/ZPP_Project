@@ -1,12 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 
 namespace ZPP_Project
 {
     public static class Utils
     {
+        public static string SanitizeHtml(string inputHtml)
+        {
+            if (String.IsNullOrEmpty(inputHtml))
+                return String.Empty;
+            var regex = new Regex(
+                "(\\<script(.+?)\\</script\\>)|(\\<style(.+?)\\</style\\>)",
+                RegexOptions.Singleline | RegexOptions.IgnoreCase
+                );
+            return regex.Replace(inputHtml.Replace("\r\n", " ").Replace("\n", " ").Replace("\r", " "), "");
+        }
+
         public static string GetDisplayName<Type>(string member)
         {
             var type = typeof(Type);

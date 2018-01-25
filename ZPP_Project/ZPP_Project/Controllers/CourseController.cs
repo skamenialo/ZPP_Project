@@ -738,7 +738,7 @@ namespace ZPP_Project.Controllers
                 IdCompany = company.IdCompany,
                 DateEnd = model.DateEnd,
                 DateStart = model.DateStart,
-                Description = model.Description,
+                Description = Utils.SanitizeHtml(model.Description),
                 Lectures = model.Lectures == null? 0: model.Lectures.Length,
                 Name = model.Name,
                 State = (int)States.CourseState.Created,
