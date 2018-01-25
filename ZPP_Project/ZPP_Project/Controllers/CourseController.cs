@@ -561,10 +561,7 @@ namespace ZPP_Project.Controllers
             TempData.Remove(Keys.CREATE_COURSE_MODEL);
 
             CreateCourseViewModel model = new CreateCourseViewModel() { Lectures = new LectureCreateEditItemViewModel[0] };
-            if (ZPPUserRoleHelper.IsAdministrator(UserRoleId))
-                model.Companies = GetCompanies();
-            if (ZPPUserRoleHelper.IsCompany(UserRoleId))
-                model.Teachers = GetCompanyTeachers(UserRoleId, true);
+            AddDataToCreateCourseViewModel(model);
             return View(model);
         }
 
@@ -618,14 +615,11 @@ namespace ZPP_Project.Controllers
                 }
             }
 
-            if (ZPPUserRoleHelper.IsAdministrator(UserRoleId))
-                model.Companies = GetCompanies();
-            if (ZPPUserRoleHelper.IsCompany(UserRoleId))
-                model.Teachers = GetCompanyTeachers(UserRoleId, true);
+            AddDataToCreateCourseViewModel(model);
             return View(model);
         }
 
-        [HttpPost, ZPPSubmitName("add_lectures")]
+        [HttpPost, ZPPSubmitName("add_lecture")]
         [ValidateAntiForgeryToken]
         [ZPPAuthorize(RolesArray = new[] { Roles.ADMINISTRATOR, Roles.COMPANY })]
         public ActionResult CreateAddLectures(CreateCourseViewModel model)
@@ -640,8 +634,9 @@ namespace ZPP_Project.Controllers
         [HttpPost, ZPPSubmitName("confirm_lecture")]
         [ValidateAntiForgeryToken]
         [ZPPAuthorize(RolesArray = new[] { Roles.ADMINISTRATOR, Roles.COMPANY })]
-        public ActionResult CreateAddLectures(LectureCreateEditItemViewModel model)
+        public ActionResult CreateAddLectures(LectureCreateEditItemViewModel model, int? id)
         {
+            ModelState.Remove("id");
             CreateCourseViewModel createModel = TempData[Keys.CREATE_COURSE_MODEL] as CreateCourseViewModel;
             if (createModel == null)
                 return RedirectToAction("Create");
@@ -655,19 +650,65 @@ namespace ZPP_Project.Controllers
                     lectures = new List<LectureCreateEditItemViewModel>();
                 else
                     lectures = createModel.Lectures.ToList();
-                model.Index = lectures.Count;
-                lectures.Add(model);
+                if (id.HasValue && id < lectures.Count)
+                {
+                    lectures[id.Value] = model;
+                }
+                else
+                {
+                    model.Index = lectures.Count;
+                    lectures.Add(model);
+                }
                 createModel.Lectures = lectures.ToArray();
 
-                if (ZPPUserRoleHelper.IsAdministrator(UserRoleId))
-                    createModel.Companies = GetCompanies();
-                if (ZPPUserRoleHelper.IsCompany(UserRoleId))
-                    createModel.Teachers = GetCompanyTeachers(UserRoleId, true);
+                AddDataToCreateCourseViewModel(createModel);
                 return View("Create", createModel);
             }
             model.Teachers = GetCompanyTeachers(UserRoleId);
             model.Edit = true;
             return View("CreateLecture", model);
+        }
+
+        [HttpPost, ZPPSubmitName("edit_lecture")]
+        [ValidateAntiForgeryToken]
+        [ZPPAuthorize(RolesArray = new[] { Roles.ADMINISTRATOR, Roles.COMPANY })]
+        public ActionResult EditLecture(CreateCourseViewModel model, int? id)
+        {
+            if (id == null || model.Lectures == null || model.Lectures.Length <= id.Value)
+            {
+                AddDataToCreateCourseViewModel(model);
+                return View("Create", model);
+            }
+
+            CreateCourseViewModel createModel = TempData.Peek(Keys.CREATE_COURSE_MODEL) as CreateCourseViewModel;
+            if (createModel == null)
+                TempData[Keys.CREATE_COURSE_MODEL] = model;
+            //TODO admin
+            return View("CreateLecture", new LectureCreateEditItemViewModel()
+            {
+                Index = id.Value,
+                Date = model.Lectures[id.Value].Date,
+                IdTeacher = model.Lectures[id.Value].IdTeacher,
+                Teachers = GetCompanyTeachers(UserRoleId, true),
+                Edit = true
+            });
+        }
+
+        [HttpPost, ZPPSubmitName("remove_lecture")]
+        [ValidateAntiForgeryToken]
+        [ZPPAuthorize(RolesArray = new[] { Roles.ADMINISTRATOR, Roles.COMPANY })]
+        public ActionResult RemoveLecture(CreateCourseViewModel model, int? id)
+        {
+            AddDataToCreateCourseViewModel(model);
+            if (id == null || model.Lectures == null || model.Lectures.Length < id.Value)
+                return View("Create", model);
+
+            List<LectureCreateEditItemViewModel> lectures = model.Lectures.ToList();
+            lectures.RemoveAt(id.Value);
+            for (int i = 0; i < lectures.Count; i++)
+                lectures[i].Index = i;
+            model.Lectures = lectures.ToArray();
+            return View("Create", model);
         }
 
         [HttpPost, ZPPSubmitName("no_lectures")]
@@ -707,7 +748,10 @@ namespace ZPP_Project.Controllers
             if (ModelState.IsValid)
                 return CreateCourse(model, company, teacher);
             else
+            {
+                AddDataToCreateCourseViewModel(model);
                 return View("Create", model);
+            }
         }
 
         [HttpPost, ZPPSubmitName("back_to_create")]
@@ -719,10 +763,7 @@ namespace ZPP_Project.Controllers
             if (model == null)
                 return RedirectToAction("Create");
 
-            if (ZPPUserRoleHelper.IsAdministrator(UserRoleId))
-                model.Companies = GetCompanies();
-            if (ZPPUserRoleHelper.IsCompany(UserRoleId))
-                model.Teachers = GetCompanyTeachers(UserRoleId, true);
+            AddDataToCreateCourseViewModel(model);
             return View("Create", model);
         }
 
@@ -774,6 +815,14 @@ namespace ZPP_Project.Controllers
             }
 
             return RedirectToLocal("Index");
+        }
+
+        private void AddDataToCreateCourseViewModel(CreateCourseViewModel model)
+        {
+            if (ZPPUserRoleHelper.IsAdministrator(UserRoleId))
+                model.Companies = GetCompanies();
+            if (ZPPUserRoleHelper.IsCompany(UserRoleId))
+                model.Teachers = GetCompanyTeachers(UserRoleId, true);
         }
 
         #endregion

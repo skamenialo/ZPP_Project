@@ -45,7 +45,7 @@ namespace ZPP_Project.Models
 
     public class LectureCreateEditItemViewModel
     {
-        public int Index { get; set; }
+        public int? Index { get; set; }
 
         public Nullable<System.DateTime> Date { get; set; }
 
