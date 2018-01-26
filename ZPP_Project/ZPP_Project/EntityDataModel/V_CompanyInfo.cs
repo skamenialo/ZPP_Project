@@ -19,7 +19,7 @@ namespace ZPP_Project.EntityDataModel
         public string Address { get; set; }
         public string Email { get; set; }
         public string Website { get; set; }
-        [System.Web.Mvc.AllowHtmlwHtml]
+        [System.Web.Mvc.AllowHtml]
         public string Description { get; set; }
     }
 }
