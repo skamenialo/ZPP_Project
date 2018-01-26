@@ -22,6 +22,7 @@ namespace ZPP_Project.EntityDataModel
         public string EmailUser { get; set; }
         public string EmailCompany { get; set; }
         public string Website { get; set; }
+        [System.Web.Mvc.AllowHtml]
         public string Description { get; set; }
     }
 }

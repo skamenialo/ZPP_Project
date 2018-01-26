@@ -20,6 +20,7 @@ namespace ZPP_Project.EntityDataModel
         public string Name { get; set; }
         public int Lectures { get; set; }
         public int State { get; set; }
+        [System.Web.Mvc.AllowHtml]
         public string Description { get; set; }
         public Nullable<System.DateTime> DateStart { get; set; }
         public Nullable<System.DateTime> DateEnd { get; set; }

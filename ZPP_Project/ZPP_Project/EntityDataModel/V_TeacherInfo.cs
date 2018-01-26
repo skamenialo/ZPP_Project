@@ -21,6 +21,7 @@ namespace ZPP_Project.EntityDataModel
         public string Address { get; set; }
         public string Degree { get; set; }
         public string Website { get; set; }
+        [System.Web.Mvc.AllowHtml]
         public string Description { get; set; }
     }
 }

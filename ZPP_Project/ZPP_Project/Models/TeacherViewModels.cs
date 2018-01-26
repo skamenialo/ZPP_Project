@@ -36,6 +36,7 @@ namespace ZPP_Project.Models
         [DisplayName("Website")]
         public string Website { get; set; }
         [DisplayName("Description")]
+        [System.Web.Mvc.AllowHtml]
         public string Description { get; set; }
     }
 
@@ -81,6 +82,7 @@ namespace ZPP_Project.Models
         [Url]
         public string Website { get; set; }
 
+        [System.Web.Mvc.AllowHtml]
         public string Description { get; set; }
 
         [Required]

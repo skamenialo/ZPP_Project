@@ -29,6 +29,7 @@ namespace ZPP_Project.Models
         [Url]
         public string Website { get; set; }
 
+        [System.Web.Mvc.AllowHtml]
         public string Description { get; set; }
 
         public int IdCompany { get; set; }
@@ -130,6 +131,7 @@ namespace ZPP_Project.Models
         [Url]
         public string Website { get; set; }
 
+        [System.Web.Mvc.AllowHtml]
         public string Description { get; set; }
     }
 
@@ -148,6 +150,7 @@ namespace ZPP_Project.Models
         [Url]
         public string Website { get; set; }
 
+        [System.Web.Mvc.AllowHtml]
         public string Description { get; set; }
     }
 }

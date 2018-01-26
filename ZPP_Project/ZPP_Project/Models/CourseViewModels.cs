@@ -32,6 +32,7 @@ namespace ZPP_Project.Models
 
         [StringLength(4096, ErrorMessage = "Description is too long")]
         [DisplayName("Description")]
+        [System.Web.Mvc.AllowHtml]
         public string Description { get; set; }
 
         [DisplayName("Start date")]
@@ -114,6 +115,7 @@ namespace ZPP_Project.Models
         public string Name { get; set; }
 
         [Display(Name = "Description")]
+        [System.Web.Mvc.AllowHtml]
         public string Description { get; set; }
 
         [Display(Name = "Lectures")]
