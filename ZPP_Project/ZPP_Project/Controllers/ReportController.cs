@@ -19,6 +19,7 @@ namespace ZPP_Project.Controllers
             return View();
         }
 
+        [ZPPAuthorize(RolesArray = new[] { Roles.COMPANY, Roles.ADMINISTRATOR })]
         [Route("Report/CoursesDetails/{page?}/{pageSize?}")]
         public ActionResult CoursesDetails(int? page, int? pageSize)
         {
@@ -55,6 +56,7 @@ namespace ZPP_Project.Controllers
             return RedirectToAction("Index");
         }
 
+        [ZPPAuthorize(RolesArray = new[] { Roles.COMPANY, Roles.ADMINISTRATOR })]
         [Route("Report/CoursesAttendance/{page?}/{pageSize?}")]
         public ActionResult CoursesAttendance( int? page, int? pageSize)
         {
@@ -75,7 +77,12 @@ namespace ZPP_Project.Controllers
                             reportAttendance.Add(new ReportAttendanceViewModel()
                             {
                                 StudentFullName = StudentHelper.Display(attendance.IdStudent),
-                                State = lecture.LectureDate != null && lecture.LectureDate <= DateTime.Now ? attendance.Attended ? "Present" : "Absent" : ""
+                                State = lecture.LectureDate != null
+                                    && lecture.LectureDate <= DateTime.Now
+                                        ? attendance.Attended
+                                            ? ProgramData.SIGN_YES
+                                            : ProgramData.SIGN_NO
+                                        : String.Empty,
                             });
                         }
                         reportLectures.Add(new ReportLectureViewModel()
