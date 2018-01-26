@@ -184,6 +184,7 @@
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\StudentController.cs" />
     <Compile Include="Controllers\TeacherController.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -265,6 +266,7 @@
     <Compile Include="Models\GlobalData.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\ReportViewModels.cs" />
     <Compile Include="Models\SharedViewModel.cs" />
     <Compile Include="Models\StudentViewModels.cs" />
     <Compile Include="Models\TeacherViewModels.cs" />
@@ -455,6 +457,9 @@
     <Content Include="Views\Course\CreateLecture.cshtml" />
     <Content Include="Views\Course\EditorTemplates\LectureCreateEditItemViewModel.cshtml" />
     <Content Include="Views\Course\ChangeState.cshtml" />
+    <Content Include="Views\Report\CoursesDetails.cshtml" />
+    <Content Include="Views\Report\Index.cshtml" />
+    <Content Include="Views\Report\CoursesAttendance.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

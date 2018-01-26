@@ -200,5 +200,13 @@
                 <p><a class="btn btn-default" href="@href">Courses</a></p>
             </dd>
         }
+        @if (ZPP_Project.Helpers.ZPPUserRoleHelper.IsCompany(ViewBag.UserRoleId))
+        {
+            <dt>Reports:</dt>
+            <dd>
+                @Html.ActionLink("Courses details", "CoursesDetails", "Report", null, new { @class = "btn btn-default" })
+                @Html.ActionLink("Courses attendance", "CoursesAttendance", "Report", null, new { @class = "btn btn-default" })
+            </dd>
+        }
     </dl>
 </div>

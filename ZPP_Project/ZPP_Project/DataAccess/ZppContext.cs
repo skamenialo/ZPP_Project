@@ -107,6 +107,11 @@ namespace ZPP_Project.DataAccess
             return Lectures.Where(l => l.IdCourse == id);
         }
 
+        public IQueryable<V_Attendance> FindAttendanceByLectureId(int id)
+        {
+            return Attendance.Where(a => a.IdLecture == id);
+        }
+
 #endregion
 
     }
