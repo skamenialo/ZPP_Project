@@ -232,17 +232,35 @@ namespace ZPP_Project.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ZppUser { UserName = model.UserName, Email = model.Email, UserType = Roles.STUDENT_NR };
-                var result = await UserManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
-                {
+                if (UserManager.FindByName(model.UserName) == null)
+                    if (UserManager.FindByEmail(model.Email) == null)
+                    {
+                        ZppUser user = new ZppUser { UserName = model.UserName, Email = model.Email, UserType = Roles.STUDENT_NR };
 
-                    //await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false
-                    //return RedirectToAction("Index", "Home");
+                        var res = await UserManager.UserValidator.ValidateAsync(user);
+                        var result = await UserManager.CreateAsync(user, model.Password);
+                        if (result.Succeeded)
+                        {
+                            DbContext.Entry(new V_StudentData()
+                            {
+                                IdUser = user.Id,
+                                LastName = " ",
+                                FirstName = " ",
+                                Address = " "
+                            }).State = System.Data.Entity.EntityState.Added;
+                            DbContext.SaveChanges();
+                            //await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false
+                            //return RedirectToAction("Index", "Home");
 
-                    return await GenerateEmailConfirmation(user.Id);
-                }
-                AddErrors(result);
+                            return await GenerateEmailConfirmation(user.Id);
+                        }
+                        else
+                            AddErrors(result);
+                    }
+                    else
+                        AddError("Email already taken");
+                else
+                    AddError("User name already taken");
             }
 
             // If we got this far, something failed, redisplay form
