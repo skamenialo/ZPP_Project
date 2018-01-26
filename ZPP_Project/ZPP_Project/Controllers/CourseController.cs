@@ -266,7 +266,7 @@ namespace ZPP_Project.Controllers
                     LectureDate = lectures.FirstOrDefault(l => l.IdLecture == a.IdLecture).LectureDate
                 }).ToList()
             };
-
+            attendanceModel.Lectures.Sort((l1, l2) => DateTime.Compare(l1.LectureDate ?? DateTime.MinValue, l2.LectureDate ?? DateTime.MinValue));
             return View(attendanceModel);
         }
 
@@ -498,6 +498,7 @@ namespace ZPP_Project.Controllers
                 }
                 model.Items.Add(entry);
             }
+            model.Items.Sort((l1, l2) => DateTime.Compare(l1.LectureDate??DateTime.MinValue, l2.LectureDate??DateTime.MinValue));
             return View(model);
         }
 
