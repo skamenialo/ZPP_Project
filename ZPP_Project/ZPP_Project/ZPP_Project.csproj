@@ -458,6 +458,7 @@
     <Content Include="Views\Course\EditorTemplates\LectureCreateEditItemViewModel.cshtml" />
     <Content Include="Views\Report\CoursesDetails.cshtml" />
     <Content Include="Views\Report\Index.cshtml" />
+    <Content Include="Views\Report\CoursesAttendance.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

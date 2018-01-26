@@ -39,5 +39,15 @@ namespace ZPP_Project.Models
 
         [DisplayName("Teacher")]
         public string TeacherFullName { get; set; }
+
+        public IEnumerable<ReportAttendanceViewModel> Attendance { get; set; }
+    }
+
+    public class ReportAttendanceViewModel
+    {
+        [DisplayName("Student")]
+        public string StudentFullName { get; set; }
+
+        public string State { get; set; }
     }
 }

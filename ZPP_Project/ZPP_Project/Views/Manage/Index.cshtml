@@ -204,7 +204,8 @@
         {
             <dt>Reports:</dt>
             <dd>
-                <p>@Html.ActionLink("Courses details", "CoursesDetails", "Report", null, new{@class="btn btn-default"})</p>
+                @Html.ActionLink("Courses details", "CoursesDetails", "Report", null, new { @class = "btn btn-default" })
+                @Html.ActionLink("Courses attendance", "CoursesAttendance", "Report", null, new { @class = "btn btn-default" })
             </dd>
         }
     </dl>
