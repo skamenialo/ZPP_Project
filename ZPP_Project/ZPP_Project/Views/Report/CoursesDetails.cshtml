@@ -1,0 +1,76 @@
+﻿@using PagedList.Mvc;
+@model PagedList.IPagedList<ZPP_Project.Models.ReportCourseViewModel>
+
+@{
+    ViewBag.Title = "Reports - Courses details";
+}
+
+<h2>@ViewBag.Title</h2>
+
+
+<table class="table">
+    <tr>
+        <th>
+            Nr
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model[0].Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model[0].Lectures)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model[0].TeacherFullName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model[0].State)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model[0].StudentsCount)
+        </th>
+    </tr>
+    @{int i = 1;}
+    @foreach (var course in Model)
+    {
+        <tr>
+            <td>
+                @i.
+                @{i++;}
+            </td>
+            <td>
+                <p>@Html.DisplayFor(modelItem => course.Name)</p>
+                <p>@Html.DisplayFor(modelItem => course.DateStart)
+                -
+                    @Html.DisplayFor(modelItem => course.DateEnd)
+
+            </p>
+            </td>
+
+            <td>
+                <p>@course.Lectures.Count()</p>
+                @foreach (var lecture in course.Lectures)
+                {
+                    <p>@Html.DisplayFor(modelItem => lecture.Date)</p>
+                }
+            </td>
+            <td>
+                <p>@Html.DisplayFor(modelItem => course.TeacherFullName)</p>
+                @foreach (var lecture in course.Lectures)
+                {
+                    <p>@Html.DisplayFor(modelItem => lecture.TeacherFullName)</p>
+                }
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => course.State)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => course.StudentsCount)
+            </td>
+        </tr>
+    }
+</table>
+
+<div class="row">
+    <p>Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount</p>
+    @Html.PagedListPager(Model, page => Url.Action("CoursesDetails", new { page, pageSize = Model.PageSize }))
+</div>
