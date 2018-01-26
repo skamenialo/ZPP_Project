@@ -1,15 +1,20 @@
 ﻿@using ZPP_Project.Helpers;
-@model ZPP_Project.Models.CreateCourseViewModel
+@model ZPP_Project.Models.CreateEditCourseViewModel
 @{
-    ViewBag.Title = "Create Course";
+    ViewBag.Title = ViewBag.CourseAction + " course";
+    string actionName = ViewBag.CourseAction;
 }
 
 <h2>@ViewBag.Title</h2>
 
-@using (Html.BeginForm("Create", "Course", FormMethod.Post, new { id = "form-create", role = "form" }))
+@using (Html.BeginForm(actionName, "Course", null, FormMethod.Post, htmlAttributes: new { id = "form-" + actionName.ToLower(), role = "form" }))
 {
     @Html.AntiForgeryToken()
-
+    if (Model.IdCourse.HasValue)
+    {
+        @Html.HiddenFor(model => model.IdCourse);
+    }
+    
     <div class="form-horizontal">
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
@@ -91,13 +96,13 @@
                     @Html.EditorFor(model => model.Lectures)
                 </div>
                 <div class="row">
-                    <input type="submit" name="add_lecture" value="Add lecture" class="btn btn-default" onclick="ClearGet('#form-create', 'Create')" />
+                    <input type="submit" name="add_lecture" value="Add lecture" class="btn btn-default" onclick="ClearGet('#form-@actionName', @actionName)" />
                 </div>
             </div>
         </div>
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" name="create" value="Create" class="btn btn-default" />
+                <input type="submit" name="@actionName.ToLower()" value="@actionName" class="btn btn-default" />
                 @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-default" })
             </div>
         </div>
