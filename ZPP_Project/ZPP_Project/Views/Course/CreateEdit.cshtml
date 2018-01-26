@@ -29,21 +29,21 @@
             </div>
         }
 
-        @if (ZPPUserRoleHelper.IsCompany(ViewBag.UserRoleId) || !string.IsNullOrWhiteSpace(Model.IdTeacher))
+        @if (ZPPUserRoleHelper.IsCompany(ViewBag.UserRoleId) || !string.IsNullOrWhiteSpace(Model.IdMainTeacher))
         {
             <div class="form-group">
-                @Html.LabelFor(model => model.IdTeacher, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.IdMainTeacher, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
                     @if (ZPPUserRoleHelper.IsCompany(ViewBag.UserRoleId))
                     {
-                        @Html.DropDownListFor(m => m.IdTeacher, new SelectList(Model.Teachers, "Value", "Text"), new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.IdTeacher, "", new { @class = "text-danger" })
+                        @Html.DropDownListFor(m => m.IdMainTeacher, new SelectList(Model.Teachers, "Value", "Text"), new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.IdMainTeacher, "", new { @class = "text-danger" })
                     }
                     else
                     {
-                        TeacherHelper.Display(Model.IdTeacher);
-                        @Html.HiddenFor(m => m.IdTeacher, htmlAttributes: new { @class = "control-label col-md-2" })
-                        @Html.ValidationMessageFor(model => model.IdTeacher, "", new { @class = "text-danger" })
+                        TeacherHelper.Display(Model.IdMainTeacher);
+                        @Html.HiddenFor(m => m.IdMainTeacher, htmlAttributes: new { @class = "control-label col-md-2" })
+                        @Html.ValidationMessageFor(model => model.IdMainTeacher, "", new { @class = "text-danger" })
                     }
                 </div>
             </div>
@@ -96,7 +96,7 @@
                     @Html.EditorFor(model => model.Lectures)
                 </div>
                 <div class="row">
-                    <input type="submit" name="add_lecture" value="Add lecture" class="btn btn-default" onclick="ClearGet('#form-@actionName', @actionName)" />
+                    <input type="submit" name="add_lecture" value="Add lecture" class="btn btn-default" onclick="ClearGet('#form-@actionName.ToLower()', '@actionName')" />
                 </div>
             </div>
         </div>

@@ -594,9 +594,9 @@ namespace ZPP_Project.Controllers
                 {
                     id = 0;
                     V_Teacher teacher = null;
-                    if (company != null && string.IsNullOrWhiteSpace(model.IdTeacher) && !model.IdTeacher.Equals("none"))
+                    if (!string.IsNullOrWhiteSpace(model.IdMainTeacher) && !model.IdMainTeacher.Equals("none"))
                     {
-                        if (int.TryParse(model.IdTeacher, out id))
+                        if (int.TryParse(model.IdMainTeacher, out id))
                         {
                             teacher = DbContext.Teachers.FirstOrDefault(t => t.IdCompany == company.IdCompany && t.IdTeacher == id);
                             if (teacher == null)
@@ -654,8 +654,14 @@ namespace ZPP_Project.Controllers
 
             CreateEditCourseViewModel model = CreateEditCourseViewModel.GetFromV_Course(course);
             List<LectureCreateEditItemViewModel> lectures = new List<LectureCreateEditItemViewModel>();
+            int i = 0;
             foreach (V_Lecture lecture in DbContext.FindLecturesByCourseId(course.IdCourse))
-                lectures.Add(LectureCreateEditItemViewModel.GetFromV_Lecture(lecture));
+                lectures.Add(new LectureCreateEditItemViewModel()
+                    {
+                        Index = i++,
+                        IdTeacher = lecture.IdTeacher.HasValue ? lecture.IdTeacher.ToString() : "none",
+                        Date = lecture.LectureDate
+                    });
             model.Lectures = lectures.ToArray();
             AddDataToCreateCourseViewModel(model);
 
@@ -704,9 +710,9 @@ namespace ZPP_Project.Controllers
 
                     id = 0;
                     V_Teacher teacher = null;
-                    if (string.IsNullOrWhiteSpace(model.IdTeacher) && !model.IdTeacher.Equals("none"))
+                    if (!string.IsNullOrWhiteSpace(model.IdMainTeacher) && !model.IdMainTeacher.Equals("none"))
                     {
-                        if (int.TryParse(model.IdTeacher, out id))
+                        if (int.TryParse(model.IdMainTeacher, out id))
                         {
                             teacher = DbContext.Teachers.FirstOrDefault(t => t.IdCompany == company.IdCompany && t.IdTeacher == id);
                             if (teacher == null)
@@ -756,7 +762,7 @@ namespace ZPP_Project.Controllers
         [ZPPAuthorize(RolesArray = new[] { Roles.ADMINISTRATOR, Roles.COMPANY })]
         public ActionResult AddLecture(CreateEditCourseViewModel model)
         {
-            return CreateEditLecture(model, new LectureCreateEditItemViewModel() { Teachers = GetCompanyTeachers(UserRoleId, true), Edit = true });
+            return CreateEditLecture(model, new LectureCreateEditItemViewModel() { Teachers = GetCompanyTeachers(ViewBag.IdCompany, true), Edit = true });
         }
 
         [HttpPost, ZPPSubmitName("edit_lecture")]
@@ -776,7 +782,7 @@ namespace ZPP_Project.Controllers
                 Index = id.Value,
                 Date = model.Lectures[id.Value].Date,
                 IdTeacher = model.Lectures[id.Value].IdTeacher,
-                Teachers = GetCompanyTeachers(UserRoleId, true),
+                Teachers = GetCompanyTeachers(ViewBag.IdCompany, true),
                 Edit = true
             });
         }
@@ -842,7 +848,7 @@ namespace ZPP_Project.Controllers
                 AddDataToCreateCourseViewModel(createEditModel);
                 return View("CreateEdit", createEditModel);
             }
-            model.Teachers = GetCompanyTeachers(UserRoleId);
+            model.Teachers = GetCompanyTeachers(ViewBag.IdCompany);
             model.Edit = true;
             return View("CreateEditLecture", model);
         }
@@ -899,9 +905,9 @@ namespace ZPP_Project.Controllers
             {
                 id = 0;
                 V_Teacher teacher = null;
-                if (string.IsNullOrWhiteSpace(createEditModel.IdTeacher) && !createEditModel.IdTeacher.Equals("none"))
+                if (!string.IsNullOrWhiteSpace(createEditModel.IdMainTeacher) && !createEditModel.IdMainTeacher.Equals("none"))
                 {
-                    if (int.TryParse(createEditModel.IdTeacher, out id))
+                    if (int.TryParse(createEditModel.IdMainTeacher, out id))
                     {
                         teacher = DbContext.Teachers.FirstOrDefault(t => t.IdCompany == company.IdCompany && t.IdTeacher == id);
                         if (teacher == null)
@@ -1027,7 +1033,7 @@ namespace ZPP_Project.Controllers
             if (ZPPUserRoleHelper.IsAdministrator(UserRoleId))
                 model.Companies = GetCompanies();
             if (ZPPUserRoleHelper.IsCompany(UserRoleId))
-                model.Teachers = GetCompanyTeachers(UserRoleId, true);
+                model.Teachers = GetCompanyTeachers(ViewBag.IdCompany, true);
         }
 
         #endregion

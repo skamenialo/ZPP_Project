@@ -1,6 +1,6 @@
 ﻿@using ZPP_Project.Helpers;
 @model ZPP_Project.Models.LectureCreateEditItemViewModel
-
+@{ string actionName = ViewBag.CourseAction; }
 <div class="row form-horizontal">
     @if (Model.Edit)
     {
@@ -34,8 +34,8 @@
             }
         </div>
         <div class="col-md-2">
-            <input type="submit" name="edit_lecture" value="Edit" class="btn btn-default" onclick="AddIdToGet('#form-create', @Model.Index);" />
-            <input type="submit" name="remove_lecture" value="Remove" class="btn btn-default" onclick="AddIdToGet('#form-create', @Model.Index);" />
+            <input type="submit" name="edit_lecture" value="Edit" class="btn btn-default" onclick="AddIdToGet('#form-@actionName.ToLower()', @Model.Index);" />
+            <input type="submit" name="remove_lecture" value="Remove" class="btn btn-default" onclick="AddIdToGet('#form-@actionName.ToLower()', @Model.Index);" />
         </div>
         @Html.HiddenFor(model => model.Date, new { name = "model.Lectures[" + Model.Index + "].Date" })
         @Html.HiddenFor(model => model.IdTeacher, new { name = "model.Lectures[" + Model.Index + "].IdTeacher" })

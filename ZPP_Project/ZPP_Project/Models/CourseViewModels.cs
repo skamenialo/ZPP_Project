@@ -18,7 +18,7 @@ namespace ZPP_Project.Models
         public int? IdCourse { get; set; }
 
         [DisplayName("Teacher")]
-        public string IdTeacher { get; set; }
+        public string IdMainTeacher { get; set; }
 
         [DisplayName("Company")]
         public string IdCompany { get; set; }
@@ -49,7 +49,7 @@ namespace ZPP_Project.Models
             return new CreateEditCourseViewModel()
             {
                 IdCourse = course.IdCourse,
-                IdTeacher = course.IdTeacher.HasValue ? course.IdTeacher.ToString() : "none",
+                IdMainTeacher = course.IdTeacher.HasValue ? course.IdTeacher.ToString() : "none",
                 Name = course.Name,
                 DateEnd = course.DateEnd,
                 DateStart = course.DateStart,
@@ -71,16 +71,6 @@ namespace ZPP_Project.Models
         public IEnumerable<System.Web.Mvc.SelectListItem> Teachers { get; set; }
 
         public bool Edit { get; set; }
-
-        public static LectureCreateEditItemViewModel GetFromV_Lecture(V_Lecture lecture)
-        {
-            return new LectureCreateEditItemViewModel()
-            {
-                Index = lecture.IdCourse,
-                IdTeacher = lecture.IdTeacher.HasValue ? lecture.IdTeacher.ToString() : "none",
-                Date = lecture.LectureDate
-            };
-        }
     }
 
     public class V_CourseExtended : V_Course
