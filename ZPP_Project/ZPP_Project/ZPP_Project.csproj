@@ -454,6 +454,7 @@
     <Content Include="Views\Course\CreateNoLectures.cshtml" />
     <Content Include="Views\Course\CreateLecture.cshtml" />
     <Content Include="Views\Course\EditorTemplates\LectureCreateEditItemViewModel.cshtml" />
+    <Content Include="Views\Course\ChangeState.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

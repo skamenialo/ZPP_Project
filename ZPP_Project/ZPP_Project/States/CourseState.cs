@@ -9,7 +9,7 @@ namespace ZPP_Project.States
     ///0101. state == closed | opened -&gt; created &amp;&amp; !started &amp;&amp; can(Start) &lt;- Cancelled<para />
     ///0110. state == closed | started -&gt; created &amp;&amp; opened &amp;&amp; can(Start) &lt;- Interrupted<para />
     /// </summary>
-    public enum CourseState : byte
+    public enum CourseState : int
     {
         /// <summary>
         /// !opened &amp;&amp; !stared &amp;&amp; !closed &amp;&amp; can(Start)

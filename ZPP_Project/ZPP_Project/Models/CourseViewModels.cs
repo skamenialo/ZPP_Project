@@ -219,4 +219,10 @@ namespace ZPP_Project.Models
         public int IdAttendance { get; set; }
 
     }
+
+    public class ChangeCourseStateViewModel
+    {
+        public int IdCourse { get; set; }
+        public int CurrentState { get; set; }
+    }
 }

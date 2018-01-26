@@ -113,10 +113,11 @@ else
             }
         </div>
         
-        @if (ZPP_Project.Helpers.ZPPUserRoleHelper.IsCompany(ViewBag.UserRoleId) && Model.IdCompany == ViewBag.IdCompany) 
+        @if (ZPP_Project.Helpers.ZPPUserRoleHelper.IsCompany(ViewBag.UserRoleId) && Model.IdCompany == ViewBag.IdCompany || ZPP_Project.Helpers.ZPPUserRoleHelper.IsAdministrator(ViewBag.UserRoleId)) 
         { 
             <div class="row">
                 @Html.ActionLink("Edit", "Edit", new { id = Model.IdCourse }, new { @class = "btn btn-default" })
+                @Html.ActionLink("Change state", "ChangeState", new { id = Model.IdCourse }, new { @class = "btn btn-default" })
             </div>
         }
 

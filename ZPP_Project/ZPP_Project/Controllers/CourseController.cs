@@ -10,6 +10,7 @@ using PagedList;
 using ZPP_Project.EntityDataModel;
 using ZPP_Project.Helpers;
 using System.Data.Entity;
+using ZPP_Project.States;
 
 namespace ZPP_Project.Controllers
 {
@@ -751,6 +752,73 @@ namespace ZPP_Project.Controllers
             ViewBag.CourseAction = "Edit";
             AddDataToCreateCourseViewModel(model);
             return View("CreateEdit", model);
+        }
+        
+        [ZPPAuthorize(RolesArray = new[] { Roles.ADMINISTRATOR, Roles.COMPANY })]
+        public ActionResult ChangeState(int id)
+        {
+            var course = DbContext.Courses.Where(c => c.IdCourse == id).FirstOrDefault();
+            if (course == null)
+                return View("Error");
+            if (ZPPUserRoleHelper.IsCompany(this.UserRoleId))
+            {
+                var company = DbContext.FindCompanyByUserId(User.Identity.GetUserId<int>());
+                if (company == null || company.IdCompany != course.IdCompany)
+                    return View("Error");
+            }
+            var model = new ChangeCourseStateViewModel()
+            {
+                IdCourse = course.IdCourse,
+                CurrentState = course.State,
+            };
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ZPPAuthorize(RolesArray = new[] { Roles.ADMINISTRATOR, Roles.COMPANY })]
+        public ActionResult ChangeState(ChangeCourseStateViewModel model)
+        {
+            var course = DbContext.Courses.Where(c => c.IdCourse == model.IdCourse).FirstOrDefault();
+            if (course == null)
+                return View("Error");
+            if (ZPPUserRoleHelper.IsCompany(this.UserRoleId))
+            {
+                var company = DbContext.FindCompanyByUserId(User.Identity.GetUserId<int>());
+                if (company == null || company.IdCompany != course.IdCompany)
+                    return View("Error");
+            }
+            string error = null;
+            if (model.CurrentState == 0)
+            {
+                error = "Pick a value!";
+            }
+            else if (course.State != model.CurrentState)
+            {
+                if (model.CurrentState == 1)
+                {
+                    var studentCount = DbContext.Groups.Where(g => g.IdCourse == course.IdCourse).Count();
+                    if (studentCount > 0)
+                        error = "You can't hide this course when there are students signed in to it!";
+                }
+            }
+            bool wasError = !String.IsNullOrEmpty(error);
+            if (!wasError)
+            {
+                course.State = model.CurrentState;
+                DbContext.SaveChanges();
+            }
+            return View("GenericMessage", new GenericViewModel()
+            {
+                Title = wasError
+                ? "State not changed"
+                : "State changed",
+                Message = wasError
+                ? error
+                : "State for this course was changed to " + (CourseState)course.State,
+                ButtonText = "Back to Courses",
+                ButtonHref = @"/Courses"
+            });
         }
 
         #endregion
