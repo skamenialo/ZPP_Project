@@ -1,12 +1,39 @@
-﻿@{
+﻿@using PagedList.Mvc;
+@model PagedList.IPagedList<ZPP_Project.EntityDataModel.V_Company>
+
+@{
     ViewBag.Title = "Reports";
 }
 
 <h2>@ViewBag.Title</h2>
+@if (ZPP_Project.Helpers.ZPPUserRoleHelper.IsCompany(ViewBag.UserRoleId))
+{
+    <div class="container">
+        <p>@Html.ActionLink("Courses details", "CoursesDetails", "Report", null, new { @class = "btn btn-default" })</p>
+    </div>
+    <div class="container">
+        <p>@Html.ActionLink("Courses attendance", "CoursesAttendance", "Report", null, new { @class = "btn btn-default" })</p>
+    </div>
+}
+else if (ZPP_Project.Helpers.ZPPUserRoleHelper.IsAdministrator(ViewBag.UserRoleId))
+{
+    <div class="container">
+        @foreach (var company in Model)
+        {
 
-<div class="container">
-    <p>@Html.ActionLink("Courses details", "CoursesDetails", "Report", null, new { @class = "btn btn-default" })</p>
-</div>
-<div class="container">
-    <p>@Html.ActionLink("Courses attendance", "CoursesAttendance", "Report", null, new { @class = "btn btn-default" })</p>
-</div>
+            <div class="row">
+                <div class="col-md-3">
+                    @ZPP_Project.Helpers.CompanyHelper.Display(company);
+                </div>
+                <div class="col-md-4">
+                    @Html.ActionLink("Courses details", "CoursesDetails", "Report", new { id = company.IdCompany }, new { @class = "btn btn-default" })
+                    @Html.ActionLink("Courses attendance", "CoursesAttendance", "Report", new { id = company.IdCompany }, new { @class = "btn btn-default" })
+                </div>
+            </div>
+        }
+        <div class="row">
+            <p>Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount</p>
+            @Html.PagedListPager(Model, page => Url.Action("CoursesDetails", new { page, pageSize = Model.PageSize }))
+        </div>
+    </div>
+}

@@ -40,5 +40,9 @@ else
                 @Html.Raw(Model.Description)
             </div>
         </div>
+        <div class="row">
+            @Html.ActionLink("Courses details", "CoursesDetails", "Report", null, new { @class = "btn btn-default" })
+            @Html.ActionLink("Courses attendance", "CoursesAttendance", "Report", null, new { @class = "btn btn-default" })
+        </div>
     </div>
 }

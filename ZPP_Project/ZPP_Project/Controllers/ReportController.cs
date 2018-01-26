@@ -14,16 +14,34 @@ namespace ZPP_Project.Controllers
     public class ReportController : ZPPController
     {
         // GET: Report
-        public ActionResult Index()
+        [Route("Reports/{page?}/{pageSize?}")]
+        public ActionResult Index(int? page, int? pageSize)
         {
+            if (ZPPUserRoleHelper.IsAdministrator(UserRoleId))
+            {
+                List<V_Company> companies = new List<V_Company>();
+                foreach (V_Company company in DbContext.Companies)
+                    companies.Add(company);
+                return View(companies.ToPagedList(page ?? 1, pageSize ?? ProgramData.DEFAULT_PAGE_SIZE));
+            }
             return View();
         }
 
         [ZPPAuthorize(RolesArray = new[] { Roles.COMPANY, Roles.ADMINISTRATOR })]
-        [Route("Report/CoursesDetails/{page?}/{pageSize?}")]
-        public ActionResult CoursesDetails(int? page, int? pageSize)
+        [Route("Report/CoursesDetails/{id?}/{page?}/{pageSize?}")]
+        public ActionResult CoursesDetails(int? id, int? page, int? pageSize)
         {
-            int? idCompany = ViewBag.IdCompany;
+            int? idCompany = null;
+            if(ZPPUserRoleHelper.IsCompany(UserRoleId)){
+                idCompany = ViewBag.IdCompany;
+                //update proper arguments
+                pageSize = page;
+                page = id;
+            }
+            else if (ZPPUserRoleHelper.IsAdministrator(UserRoleId))
+            {
+                idCompany = id;
+            }
             if (idCompany.HasValue)
             {
                 IQueryable<V_Course> courses = DbContext.FindCoursesByCompanyId(idCompany.Value);
@@ -57,10 +75,21 @@ namespace ZPP_Project.Controllers
         }
 
         [ZPPAuthorize(RolesArray = new[] { Roles.COMPANY, Roles.ADMINISTRATOR })]
-        [Route("Report/CoursesAttendance/{page?}/{pageSize?}")]
-        public ActionResult CoursesAttendance( int? page, int? pageSize)
+        [Route("Report/CoursesAttendance/{id?}/{page?}/{pageSize?}")]
+        public ActionResult CoursesAttendance(int? id, int? page, int? pageSize)
         {
-            int? idCompany = ViewBag.IdCompany;
+            int? idCompany = null;
+            if (ZPPUserRoleHelper.IsCompany(UserRoleId))
+            {
+                idCompany = ViewBag.IdCompany;
+                //update proper arguments
+                pageSize = page;
+                page = id;
+            }
+            else if (ZPPUserRoleHelper.IsAdministrator(UserRoleId))
+            {
+                idCompany = id;
+            }
             if (idCompany.HasValue)
             {
                 IQueryable<V_Course> courses = DbContext.FindCoursesByCompanyId(idCompany.Value);
