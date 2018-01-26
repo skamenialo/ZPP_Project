@@ -982,7 +982,7 @@ namespace ZPP_Project.Controllers
                 {
                     bool addLectures = lectures.Count < model.Lectures.Length; //otherwise remove
                     int lecturesCount = addLectures ? model.Lectures.Length : lectures.Count;
-                    for (int i = 0; i < lecturesCount; )
+                    for (int i = 0; i < lecturesCount; i++)
                     {
                         if ((addLectures && i < lectures.Count) || (!addLectures && i < model.Lectures.Length)) //modify
                             UpdateLectureInDB(lectures[i], model.Lectures[i], course.IdCourse);
