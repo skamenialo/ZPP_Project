@@ -104,5 +104,12 @@
                 }
             }
         </div>
+        @if (ZPP_Project.Helpers.ZPPUserRoleHelper.IsCompany(ViewBag.UserRoleId) && Model.IdCompany == ViewBag.IdCompany) 
+        { 
+            <div class="col-md-2">
+                @Html.ActionLink("Edit", "Edit", new { id = Model.IdCourse }) |
+                @Html.ActionLink("Details", "Details", new { id = Model.IdCourse })
+            </div>
+        }
     </div>
 </div>

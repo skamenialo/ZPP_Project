@@ -153,6 +153,19 @@ namespace ZPP_Project.Helpers
                 ClearSession();
             this.UserRoleId = ZPP_Project.Helpers.ZPPUserRoleHelper.GetUserRoleNumber(User.Identity.Name);
             ViewBag.UserRoleId = this.UserRoleId;
+
+            if (User.Identity.IsAuthenticated)
+            {
+                if (ZPPUserRoleHelper.IsCompany(this.UserRoleId))
+                    ViewBag.IdCompany = DbContext.FindCompanyByUserId(User.Identity.GetUserId<int>()).IdCompany;
+                else
+                {
+                    if (ZPPUserRoleHelper.IsStudent(this.UserRoleId))
+                        ViewBag.IdStudent = DbContext.FindStudentByUserId(User.Identity.GetUserId<int>()).IdStudent;
+                    if (ZPPUserRoleHelper.IsTeacher(this.UserRoleId))
+                        ViewBag.IdTeacher = DbContext.FindTeacherByUserId(User.Identity.GetUserId<int>()).IdTeacher;
+                }
+            }
         }
 
         #endregion
@@ -244,6 +257,18 @@ namespace ZPP_Project.Helpers
 #else
             return View("Login");
 #endif
+        }
+
+        protected string GetActionName(bool toLower){
+            if (ControllerContext != null && ControllerContext.RouteData != null && ControllerContext.RouteData.Values.ContainsKey("action"))
+            {
+                if (toLower)
+                    return ControllerContext.RouteData.Values["action"].ToString().ToLower();
+                else
+                    return ControllerContext.RouteData.Values["action"].ToString();
+            }
+            else
+                return String.Empty;
         }
     }
 }

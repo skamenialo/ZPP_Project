@@ -1,15 +1,20 @@
 ﻿@using ZPP_Project.Helpers;
-@model ZPP_Project.Models.CreateCourseViewModel
+@model ZPP_Project.Models.CreateEditCourseViewModel
 @{
-    ViewBag.Title = "Create Course";
+    ViewBag.Title = ViewBag.CourseAction + " course";
+    string actionName = ViewBag.CourseAction;
 }
 
 <h2>@ViewBag.Title</h2>
 
-@using (Html.BeginForm())
+@using (Html.BeginForm(actionName, "Course", null, FormMethod.Post, htmlAttributes: new { id = "form-" + actionName.ToLower(), role = "form" }))
 {
     @Html.AntiForgeryToken()
-
+    if (Model.IdCourse.HasValue)
+    {
+        @Html.HiddenFor(model => model.IdCourse);
+    }
+    
     <div class="form-horizontal">
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
@@ -24,21 +29,21 @@
             </div>
         }
 
-        @if (ZPPUserRoleHelper.IsCompany(ViewBag.UserRoleId) || !string.IsNullOrWhiteSpace(Model.IdTeacher))
+        @if (ZPPUserRoleHelper.IsCompany(ViewBag.UserRoleId) || !string.IsNullOrWhiteSpace(Model.IdMainTeacher))
         {
             <div class="form-group">
-                @Html.LabelFor(model => model.IdTeacher, htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.IdMainTeacher, htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
                     @if (ZPPUserRoleHelper.IsCompany(ViewBag.UserRoleId))
                     {
-                        @Html.DropDownListFor(m => m.IdTeacher, new SelectList(Model.Teachers, "Value", "Text"), new { @class = "form-control" })
-                        @Html.ValidationMessageFor(model => model.IdTeacher, "", new { @class = "text-danger" })
+                        @Html.DropDownListFor(m => m.IdMainTeacher, new SelectList(Model.Teachers, "Value", "Text"), new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.IdMainTeacher, "", new { @class = "text-danger" })
                     }
                     else
                     {
-                        TeacherHelper.Display(Model.IdTeacher);
-                        @Html.HiddenFor(m => m.IdTeacher, htmlAttributes: new { @class = "control-label col-md-2" })
-                        @Html.ValidationMessageFor(model => model.IdTeacher, "", new { @class = "text-danger" })
+                        TeacherHelper.Display(Model.IdMainTeacher);
+                        @Html.HiddenFor(m => m.IdMainTeacher, htmlAttributes: new { @class = "control-label col-md-2" })
+                        @Html.ValidationMessageFor(model => model.IdMainTeacher, "", new { @class = "text-danger" })
                     }
                 </div>
             </div>
@@ -91,15 +96,13 @@
                     @Html.EditorFor(model => model.Lectures)
                 </div>
                 <div class="row">
-                    <input type="submit" name="add_lectures" value="Add lecture" class="btn btn-default" />
+                    <input type="submit" name="add_lecture" value="Add lecture" class="btn btn-default" onclick="ClearGet('#form-@actionName.ToLower()', '@actionName')" />
                 </div>
             </div>
         </div>
-
-
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" name="create" value="Create" class="btn btn-default" />
+                <input type="submit" name="@actionName.ToLower()" value="@actionName" class="btn btn-default" />
                 @Html.ActionLink("Cancel", "Index", null, new { @class = "btn btn-default" })
             </div>
         </div>

@@ -1,42 +1,47 @@
 ﻿@using ZPP_Project.Helpers;
 @model ZPP_Project.Models.LectureCreateEditItemViewModel
-
+@{ string actionName = ViewBag.CourseAction; }
 <div class="row form-horizontal">
-    <div class="form-group">
-        @if (Model.Edit)
-        {
-            @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
-            </div>
-            @Html.LabelFor(model => model.IdTeacher, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownListFor(m => m.IdTeacher, new SelectList(Model.Teachers, "Value", "Text"), new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.IdTeacher, "", new { @class = "text-danger" })
-            </div>
-        }
-        else
-        {
-            <div class="col-md-1">
-                @(Model.Index+1).
-            </div>
-            <div class="col-md-1">
-                @Html.DisplayFor(model => model.Date, new { htmlAttributes = new { @class = "form-control", name = "model.Lectures[0].Date"} })
-            </div>
-            <div class="form-horizontal">
-                @if (!(string.IsNullOrWhiteSpace(Model.IdTeacher) || Model.IdTeacher == "none"))
-                {
-                    @TeacherHelper.Display(Model.IdTeacher)
-                }
-                else
-                {
-                    <span>Not selected</span>
-                }
-            </div>
-            @Html.HiddenFor(model => model.Index, new { name = "model.Lectures[" + Model.Index + "].Index" })
-            @Html.HiddenFor(model => model.Date, new { name = "model.Lectures[" + Model.Index + "].Date" })
-            @Html.HiddenFor(model => model.IdTeacher, new { name = "model.Lectures[" + Model.Index + "].IdTeacher" })
-        }
-    </div>
+    @if (Model.Edit)
+    {
+        @Html.LabelFor(model => model.Date, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.Date, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Date, "", new { @class = "text-danger" })
+        </div>
+        @Html.LabelFor(model => model.IdTeacher, htmlAttributes: new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.DropDownListFor(m => m.IdTeacher, new SelectList(Model.Teachers, "Value", "Text"), new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.IdTeacher, "", new { @class = "text-danger" })
+        </div>
+    }
+    else
+    {
+        <div class="col-md-1" style="width:1%">
+            @(Model.Index + 1).
+        </div>
+        <div class="col-md-2">
+            @Html.DisplayFor(model => model.Date, new { htmlAttributes = new { @class = "form-control", name = "model.Lectures[0].Date" } })
+        </div>
+        <div class="col-md-3">
+            @if (!(string.IsNullOrWhiteSpace(Model.IdTeacher) || Model.IdTeacher == "none"))
+            {
+                @TeacherHelper.Display(Model.IdTeacher)
+            }
+            else
+            {
+                <span>Not selected</span>
+            }
+        </div>
+        <div class="col-md-2">
+            <input type="submit" name="edit_lecture" value="Edit" class="btn btn-default" onclick="AddIdToGet('#form-@actionName.ToLower()', @Model.Index);" />
+            <input type="submit" name="remove_lecture" value="Remove" class="btn btn-default" onclick="AddIdToGet('#form-@actionName.ToLower()', @Model.Index);" />
+        </div>
+        @Html.HiddenFor(model => model.Date, new { name = "model.Lectures[" + Model.Index + "].Date" })
+        @Html.HiddenFor(model => model.IdTeacher, new { name = "model.Lectures[" + Model.Index + "].IdTeacher" })
+    }
+    @if (Model.Index.HasValue)
+    {
+        @Html.HiddenFor(model => model.Index, new { name = "model.Lectures[" + Model.Index + "].Index" })
+    }
 </div>

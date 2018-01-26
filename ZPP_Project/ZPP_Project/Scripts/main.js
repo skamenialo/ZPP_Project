@@ -12,3 +12,12 @@ function ToggleVisibilityState(regionName)
 	}
 	region.slideToggle( 200 )
 }
+
+function AddIdToGet(form, id) {
+    var action = $(form).attr('action').split('/');
+    $(form).attr('action', '/' + action[1] + '/' + action[2] + '/' + id).submit();
+}
+
+function ClearGet(form, action) {
+    $(form).attr('action', '/' + $(form).attr('action').split('/')[1] + '/' + action).submit();
+}

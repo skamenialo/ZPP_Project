@@ -13,10 +13,12 @@ namespace ZPP_Project.Models
     /// <summary>
     /// WARNING: this class should not be referenced, use V_Course instead
     /// </summary>
-    public class CreateCourseViewModel
+    public class CreateEditCourseViewModel
     {
+        public int? IdCourse { get; set; }
+
         [DisplayName("Teacher")]
-        public string IdTeacher { get; set; }
+        public string IdMainTeacher { get; set; }
 
         [DisplayName("Company")]
         public string IdCompany { get; set; }
@@ -41,11 +43,25 @@ namespace ZPP_Project.Models
         public IEnumerable<System.Web.Mvc.SelectListItem> Teachers { get; set; }
 
         public IEnumerable<System.Web.Mvc.SelectListItem> Companies { get; set; }
+
+        public static CreateEditCourseViewModel GetFromV_Course(V_Course course)
+        {
+            return new CreateEditCourseViewModel()
+            {
+                IdCourse = course.IdCourse,
+                IdMainTeacher = course.IdTeacher.HasValue ? course.IdTeacher.ToString() : "none",
+                Name = course.Name,
+                DateEnd = course.DateEnd,
+                DateStart = course.DateStart,
+                Description = course.Description,
+                IdCompany = course.IdCompany.ToString()
+            };
+        }
     }
 
     public class LectureCreateEditItemViewModel
     {
-        public int Index { get; set; }
+        public int? Index { get; set; }
 
         public Nullable<System.DateTime> Date { get; set; }
 
